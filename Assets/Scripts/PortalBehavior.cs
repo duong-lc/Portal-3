@@ -9,20 +9,51 @@ public class PortalBehavior : MonoBehaviour
     public GameObject edgeChecker;
     public GameObject viewport;
     [SerializeField] private GameObject _cam;
-    private string portalTag = "Portal";
+    private string _portalTag = "Portal", _portalableObjTag = "PortalableObject", _playerTag = "Player";
+    public float cooldownTimer = 0.5f;
+    public bool canTeleport = true;
+    //[HideInInspector] public float cooldownCounting;
 
     private void Start() {
+        canTeleport = true;
         outline.SetActive(false);
         viewport.SetActive(false);
     }
     void Update()
     {
-        if(Input.GetKeyDown("l"))
+        
+    }
+
+    public IEnumerator CountingDownCooldown()
+    {
+        var countdown = cooldownTimer;
+        if(countdown >= 0f)
         {
-            print($"{gameObject.name} {CheckPerimeter()} {CheckNormalOverlap()}" );
+            canTeleport = false;
+            countdown -= Time.deltaTime;
+            yield return null;
         }
     }
 
+    private void OnTriggerEnter(Collider other) {
+        if((other.tag == _portalableObjTag || other.tag == _playerTag) && canTeleport)
+        {
+            var registry = gameObject.transform.parent.GetComponent<PortalRegistry>();
+            if(registry.portalArray[0] == this)
+            {
+                print($"{registry.portalArray[0].gameObject.name}");
+                other.gameObject.transform.position = registry.portalArray[1].gameObject.transform.position;
+                registry.portalArray[1].StartCoroutine(registry.portalArray[1].CountingDownCooldown());
+            }else
+            {
+                print($"{registry.portalArray[0].gameObject.name}");
+                other.gameObject.transform.position = registry.portalArray[0].gameObject.transform.position;
+                registry.portalArray[0].StartCoroutine(registry.portalArray[0].CountingDownCooldown());
+            }
+        }
+    }
+
+    #region PortalPlacement
     public void AttemptPlacingPortal()
     {
         if(CheckPerimeter() && CheckNormalOverlap())
@@ -93,7 +124,7 @@ public class PortalBehavior : MonoBehaviour
 
             for(int j = 0; j < portalCol.Length; ++j)
             {
-                if(portalCol[j].tag == portalTag)
+                if(portalCol[j].tag == _portalTag)
                 {
                     //print($"found different");
                     //portalCol[j].gameObject.transform.position = new Vector3(0,0,0);
@@ -149,7 +180,7 @@ public class PortalBehavior : MonoBehaviour
         }
         return canPlace;
     }
-
+    #endregion
 
     private void OnDrawGizmosSelected()
     {

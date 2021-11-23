@@ -134,7 +134,6 @@ GameObject:
   - component: {fileID: 24548116}
   - component: {fileID: 24548119}
   - component: {fileID: 24548118}
-  - component: {fileID: 24548117}
   m_Layer: 0
   m_Name: viewport
   m_TagString: Untagged
@@ -156,20 +155,6 @@ Transform:
   m_Father: {fileID: 2129608962}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 90, z: 90}
---- !u!64 &24548117
-MeshCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 24548115}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 4
-  m_Convex: 0
-  m_CookingOptions: 30
-  m_Mesh: {fileID: 10210, guid: 0000000000000000e000000000000000, type: 0}
 --- !u!23 &24548118
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -538,7 +523,7 @@ BoxCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 3.5, y: 5, z: 1}
+  m_Size: {x: 2.5, y: 4, z: 1.5}
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &600256274
 GameObject:
@@ -554,7 +539,7 @@ GameObject:
   - component: {fileID: 600256278}
   m_Layer: 0
   m_Name: FPS_Player
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1522,7 +1507,6 @@ GameObject:
   - component: {fileID: 813449480}
   - component: {fileID: 813449483}
   - component: {fileID: 813449482}
-  - component: {fileID: 813449481}
   m_Layer: 0
   m_Name: viewport
   m_TagString: Untagged
@@ -1544,20 +1528,6 @@ Transform:
   m_Father: {fileID: 597684271}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 90, z: 90}
---- !u!64 &813449481
-MeshCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 813449479}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 4
-  m_Convex: 0
-  m_CookingOptions: 30
-  m_Mesh: {fileID: 10210, guid: 0000000000000000e000000000000000, type: 0}
 --- !u!23 &813449482
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -2560,7 +2530,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh21032
+  m_Name: pb_Mesh21044
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -14464,7 +14434,7 @@ BoxCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 3.5, y: 5, z: 1}
+  m_Size: {x: 2.5, y: 4, z: 1.5}
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!1001 &1424177663934270133
 PrefabInstance:
