@@ -4,24 +4,21 @@ using UnityEngine;
 
 public class PortalBehavior : MonoBehaviour
 {
-    RaycastHit _hit;
     public GameObject outline;
     public GameObject edgeChecker;
     public GameObject viewport;
-    [SerializeField] private GameObject _cam;
-    private string _portalTag = "Portal", _portalableObjTag = "PortalableObject", _playerTag = "Player";
     public float cooldownTimer = 0.5f;
     public bool canTeleport = true;
+    
+    [SerializeField] private GameObject _cam;
+    private string _portalTag = "Portal", _portalableObjTag = "PortalableObject", _playerTag = "Player";
+    
     //[HideInInspector] public float cooldownCounting;
 
     private void Start() {
         canTeleport = true;
         outline.SetActive(false);
         viewport.SetActive(false);
-    }
-    void Update()
-    {
-        
     }
 
     public IEnumerator CountingDownCooldown()

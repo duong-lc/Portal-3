@@ -14,14 +14,14 @@ public class PlayerController : MonoBehaviour
     public float lookSpeed = 2.5f;
     public float lookXLimit = 80.0f;
 
-    CharacterController _controllerComponent;
-    Vector3 _moveDirection = Vector3.zero;
-    float _rotationX = 0;
+    private CharacterController _controllerComponent;
+    private Vector3 _moveDirection = Vector3.zero;
+    private float _rotationX = 0;
 
     [HideInInspector]
     public bool canMove = true;
 
-    void Start()
+    private void Start()
     {
         Instance = this;
         _controllerComponent = GetComponent<CharacterController>();
@@ -31,13 +31,13 @@ public class PlayerController : MonoBehaviour
         Cursor.visible = false;
     }
 
-    void Update()
+    private void Update()
     {
         PlayerLook();
         PlayerMovement();
     }
 
-    void PlayerLook()
+    private void PlayerLook()
     {
         // Player and Camera rotation
         if (canMove)
@@ -47,17 +47,19 @@ public class PlayerController : MonoBehaviour
             playerCam.transform.localRotation = Quaternion.Euler(_rotationX, 0, 0);
             transform.rotation *= Quaternion.Euler(0, Input.GetAxis("Mouse X") * lookSpeed, 0);
         }
+        else
+            return;
     }
-    void PlayerMovement()
+    private void PlayerMovement()
     {   
         //Calculate move direction based on 2 axes
-        Vector3 forward = transform.TransformDirection(Vector3.forward);
-        Vector3 right = transform.TransformDirection(Vector3.right);
+        var forward = transform.TransformDirection(Vector3.forward);
+        var right = transform.TransformDirection(Vector3.right);
         
         //Moving the player
-        float curSpeedX = canMove ?  walkingSpeed * Input.GetAxis("Vertical") : 0;
-        float curSpeedY = canMove ? walkingSpeed * Input.GetAxis("Horizontal") : 0;
-        float movementDirectionY = _moveDirection.y;
+        var curSpeedX = canMove ?  walkingSpeed * Input.GetAxis("Vertical") : 0;
+        var curSpeedY = canMove ? walkingSpeed * Input.GetAxis("Horizontal") : 0;
+        var movementDirectionY = _moveDirection.y;
         _moveDirection = (forward * curSpeedX) + (right * curSpeedY);
 
         if (Input.GetButton("Jump") && canMove && _controllerComponent.isGrounded)
