@@ -2,10 +2,8 @@
 <Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <LangVersion>latest</LangVersion>
-    <_TargetFrameworkDirectories>non_empty_path_generated_by_unity.rider.package</_TargetFrameworkDirectories>
-    <_FullFrameworkReferenceAssemblyPaths>non_empty_path_generated_by_unity.rider.package</_FullFrameworkReferenceAssemblyPaths>
-    <DisableHandlePackageFileConflicts>true</DisableHandlePackageFileConflicts>
-  <CodeAnalysisRuleSet></CodeAnalysisRuleSet>
+    <CscToolPath>E:\Unity\2020.3.18f1\Editor\Data\Tools\RoslynScripts</CscToolPath>
+    <CscToolExe>unity_csc.bat</CscToolExe>
   </PropertyGroup>
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -13,8 +11,7 @@
     <ProductVersion>10.0.20506</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <RootNamespace></RootNamespace>
-    <ProjectGuid>{3e16b04e-b893-bda0-e829-c22d0196ab7b}</ProjectGuid>
-    <ProjectTypeGuids>{E097FAD1-6243-4DAD-9C02-E9B9EFC3FFC1};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <ProjectGuid>{4EB0163E-93B8-A0BD-E829-C22D0196AB7B}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <AssemblyName>Unity.VisualEffectGraph.Runtime</AssemblyName>
@@ -30,9 +27,8 @@
     <DefineConstants>DEBUG;TRACE;UNITY_2020_3_18;UNITY_2020_3;UNITY_2020;UNITY_5_3_OR_NEWER;UNITY_5_4_OR_NEWER;UNITY_5_5_OR_NEWER;UNITY_5_6_OR_NEWER;UNITY_2017_1_OR_NEWER;UNITY_2017_2_OR_NEWER;UNITY_2017_3_OR_NEWER;UNITY_2017_4_OR_NEWER;UNITY_2018_1_OR_NEWER;UNITY_2018_2_OR_NEWER;UNITY_2018_3_OR_NEWER;UNITY_2018_4_OR_NEWER;UNITY_2019_1_OR_NEWER;UNITY_2019_2_OR_NEWER;UNITY_2019_3_OR_NEWER;UNITY_2019_4_OR_NEWER;UNITY_2020_1_OR_NEWER;UNITY_2020_2_OR_NEWER;UNITY_2020_3_OR_NEWER;PLATFORM_ARCH_64;UNITY_64;UNITY_INCLUDE_TESTS;USE_SEARCH_ENGINE_API;SCENE_TEMPLATE_MODULE;ENABLE_AR;ENABLE_AUDIO;ENABLE_CACHING;ENABLE_CLOTH;ENABLE_EVENT_QUEUE;ENABLE_MICROPHONE;ENABLE_MULTIPLE_DISPLAYS;ENABLE_PHYSICS;ENABLE_TEXTURE_STREAMING;ENABLE_VIRTUALTEXTURING;ENABLE_UNET;ENABLE_LZMA;ENABLE_UNITYEVENTS;ENABLE_VR;ENABLE_WEBCAM;ENABLE_UNITYWEBREQUEST;ENABLE_WWW;ENABLE_CLOUD_SERVICES;ENABLE_CLOUD_SERVICES_COLLAB;ENABLE_CLOUD_SERVICES_COLLAB_SOFTLOCKS;ENABLE_CLOUD_SERVICES_ADS;ENABLE_CLOUD_SERVICES_USE_WEBREQUEST;ENABLE_CLOUD_SERVICES_CRASH_REPORTING;ENABLE_CLOUD_SERVICES_PURCHASING;ENABLE_CLOUD_SERVICES_ANALYTICS;ENABLE_CLOUD_SERVICES_UNET;ENABLE_CLOUD_SERVICES_BUILD;ENABLE_CLOUD_LICENSE;ENABLE_EDITOR_HUB_LICENSE;ENABLE_WEBSOCKET_CLIENT;ENABLE_DIRECTOR_AUDIO;ENABLE_DIRECTOR_TEXTURE;ENABLE_MANAGED_JOBS;ENABLE_MANAGED_TRANSFORM_JOBS;ENABLE_MANAGED_ANIMATION_JOBS;ENABLE_MANAGED_AUDIO_JOBS;INCLUDE_DYNAMIC_GI;ENABLE_MONO_BDWGC;ENABLE_SCRIPTING_GC_WBARRIERS;PLATFORM_SUPPORTS_MONO;RENDER_SOFTWARE_CURSOR;ENABLE_VIDEO;PLATFORM_STANDALONE;PLATFORM_STANDALONE_WIN;UNITY_STANDALONE_WIN;UNITY_STANDALONE;ENABLE_RUNTIME_GI;ENABLE_MOVIES;ENABLE_NETWORK;ENABLE_CRUNCH_TEXTURE_COMPRESSION;ENABLE_OUT_OF_PROCESS_CRASH_HANDLER;ENABLE_CLUSTER_SYNC;ENABLE_CLUSTERINPUT;PLATFORM_UPDATES_TIME_OUTSIDE_OF_PLAYER_LOOP;GFXDEVICE_WAITFOREVENT_MESSAGEPUMP;ENABLE_WEBSOCKET_HOST;ENABLE_MONO;NET_STANDARD_2_0;ENABLE_CUSTOM_RENDER_TEXTURE;ENABLE_DIRECTOR;ENABLE_LOCALIZATION;ENABLE_SPRITES;ENABLE_TERRAIN;ENABLE_TILEMAP;ENABLE_TIMELINE;ENABLE_LEGACY_INPUT_MANAGER;VFX_HAS_TIMELINE;VFX_HAS_TERRAINMODULE;VFX_HAS_UI;VFX_HAS_PHYSICS;VFX_HAS_AUDIO;CSHARP_7_OR_LATER;CSHARP_7_3_OR_NEWER</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <NoWarn></NoWarn>
+    <NoWarn>0169</NoWarn>
     <AllowUnsafeBlocks>False</AllowUnsafeBlocks>
-    <TreatWarningsAsErrors>False</TreatWarningsAsErrors>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -40,9 +36,8 @@
     <OutputPath>Temp\bin\Release\</OutputPath>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <NoWarn></NoWarn>
+    <NoWarn>0169</NoWarn>
     <AllowUnsafeBlocks>False</AllowUnsafeBlocks>
-    <TreatWarningsAsErrors>False</TreatWarningsAsErrors>
   </PropertyGroup>
   <PropertyGroup>
     <NoConfig>true</NoConfig>
@@ -93,134 +88,6 @@
      <Compile Include="Library\PackageCache\com.unity.visualeffectgraph@10.6.0\Runtime\Utilities\EventBinding\Implementation\VFXRigidBodyCollisionEventBinder.cs" />
      <Compile Include="Library\PackageCache\com.unity.visualeffectgraph@10.6.0\Runtime\Utilities\PropertyBinding\Implementation\VFXInputAxisBinder.cs" />
      <Compile Include="Library\PackageCache\com.unity.visualeffectgraph@10.6.0\Runtime\Utilities\PropertyBinding\Implementation\VFXRaycastBinder.cs" />
-     <None Include="Library\PackageCache\com.unity.visualeffectgraph@10.6.0\Editor Default Resources\uss\VFXFlow.uss" />
-     <None Include="Library\PackageCache\com.unity.visualeffectgraph@10.6.0\Shaders\ParticleLinesSW\Pass.template" />
-     <None Include="Library\PackageCache\com.unity.visualeffectgraph@10.6.0\Editor Default Resources\uss\VFXView-light.uss" />
-     <None Include="Library\PackageCache\com.unity.visualeffectgraph@10.6.0\Editor Default Resources\uss\VFXControlsLight.uss" />
-     <None Include="Library\PackageCache\com.unity.visualeffectgraph@10.6.0\Editor Default Resources\uss\VFXView-dark.uss" />
-     <None Include="Library\PackageCache\com.unity.visualeffectgraph@10.6.0\Shaders\RenderPipeline\Legacy\Templates\VFXParticleLinesSW.template" />
-     <None Include="Library\PackageCache\com.unity.visualeffectgraph@10.6.0\Shaders\ParticlePlanarPrimitives\PassForward.template" />
-     <None Include="Library\PackageCache\com.unity.visualeffectgraph@10.6.0\Unity.VisualEffectGraph.Runtime.asmdef" />
-     <None Include="Library\PackageCache\com.unity.visualeffectgraph@10.6.0\Shaders\ParticleHexahedron\PassBasicForward.template" />
-     <None Include="Library\PackageCache\com.unity.visualeffectgraph@10.6.0\Editor Default Resources\uss\VFXView.uss" />
-     <None Include="Library\PackageCache\com.unity.visualeffectgraph@10.6.0\Shaders\ParticleMeshes\PassSelection.template" />
-     <None Include="Library\PackageCache\com.unity.visualeffectgraph@10.6.0\Editor Default Resources\uss\VFXDataAnchor.uss" />
-     <None Include="Library\PackageCache\com.unity.visualeffectgraph@10.6.0\Editor Default Resources\uxml\VFXNode.uxml" />
-     <None Include="Library\PackageCache\com.unity.visualeffectgraph@10.6.0\Shaders\ParticleSpheres\PassShadowCaster.template" />
-     <None Include="Library\PackageCache\com.unity.visualeffectgraph@10.6.0\Shaders\VFXInit.template" />
-     <None Include="Library\PackageCache\com.unity.visualeffectgraph@10.6.0\Shaders\RenderPipeline\Universal\Templates\VFXParticleMeshes.template" />
-     <None Include="Library\PackageCache\com.unity.visualeffectgraph@10.6.0\Shaders\ParticleMeshes\PassDepth.template" />
-     <None Include="Library\PackageCache\com.unity.visualeffectgraph@10.6.0\Editor Default Resources\uss\VFXControls.uss" />
-     <None Include="Library\PackageCache\com.unity.visualeffectgraph@10.6.0\Shaders\RenderPipeline\Legacy\Templates\VFXParticlePoints.template" />
-     <None Include="Library\PackageCache\com.unity.visualeffectgraph@10.6.0\Shaders\RenderPipeline\Legacy\VFXCommon.hlsl" />
-     <None Include="Library\PackageCache\com.unity.visualeffectgraph@10.6.0\Editor Default Resources\uxml\VFXComponentBoard-event.uxml" />
-     <None Include="Library\PackageCache\com.unity.visualeffectgraph@10.6.0\Shaders\ParticleLines\PassSelection.template" />
-     <None Include="Library\PackageCache\com.unity.visualeffectgraph@10.6.0\Shaders\VFXCopyBuffer.compute" />
-     <None Include="Library\PackageCache\com.unity.visualeffectgraph@10.6.0\Editor Default Resources\uss\VFXBlackboard.uss" />
-     <None Include="Library\PackageCache\com.unity.visualeffectgraph@10.6.0\Shaders\ParticleDecals\PassForward.template" />
-     <None Include="Library\PackageCache\com.unity.visualeffectgraph@10.6.0\Shaders\RenderPipeline\Legacy\Templates\VFXParticleLinesHW.template" />
-     <None Include="Library\PackageCache\com.unity.visualeffectgraph@10.6.0\Shaders\RenderPipeline\Legacy\Templates\VFXParticleMeshes.template" />
-     <None Include="Library\PackageCache\com.unity.visualeffectgraph@10.6.0\Shaders\RenderPipeline\Universal\VFXDefines.hlsl" />
-     <None Include="Library\PackageCache\com.unity.visualeffectgraph@10.6.0\Shaders\RenderPipeline\Legacy\Templates\VFXParticlePlanarPrimitive.template" />
-     <None Include="Library\PackageCache\com.unity.visualeffectgraph@10.6.0\Shaders\VFXCommonOutput.hlsl" />
-     <None Include="Library\PackageCache\com.unity.visualeffectgraph@10.6.0\Shaders\ParticleLinesSW\PassForward.template" />
-     <None Include="Library\PackageCache\com.unity.visualeffectgraph@10.6.0\Shaders\ParticleHexahedron\Pass.template" />
-     <None Include="Library\PackageCache\com.unity.visualeffectgraph@10.6.0\Editor Default Resources\uss\VFXReorderableListDark.uss" />
-     <None Include="Library\PackageCache\com.unity.visualeffectgraph@10.6.0\Shaders\VFXParticleStripCommon.hlsl" />
-     <None Include="Library\PackageCache\com.unity.visualeffectgraph@10.6.0\Shaders\RenderPipeline\Legacy\VFXDefines.hlsl" />
-     <None Include="Library\PackageCache\com.unity.visualeffectgraph@10.6.0\Shaders\ParticlePlanarPrimitives\PassVelocity.template" />
-     <None Include="Library\PackageCache\com.unity.visualeffectgraph@10.6.0\Shaders\RenderPipeline\Universal\Templates\VFXParticleLinesSW.template" />
-     <None Include="Library\PackageCache\com.unity.visualeffectgraph@10.6.0\Shaders\ParticleMeshes\PassForward.template" />
-     <None Include="Library\PackageCache\com.unity.visualeffectgraph@10.6.0\Shaders\ParticleLines\PassForward.template" />
-     <None Include="Library\PackageCache\com.unity.visualeffectgraph@10.6.0\Shaders\RenderPipeline\Universal\Templates\VFXParticleBasicCube.template" />
-     <None Include="Library\PackageCache\com.unity.visualeffectgraph@10.6.0\Shaders\VFXFillIndirectArgs.compute" />
-     <None Include="Library\PackageCache\com.unity.visualeffectgraph@10.6.0\Shaders\ParticlePoints\PassDepth.template" />
-     <None Include="Library\PackageCache\com.unity.visualeffectgraph@10.6.0\Shaders\ParticleLinesSW\PassSelection.template" />
-     <None Include="Library\PackageCache\com.unity.visualeffectgraph@10.6.0\Shaders\VFXOutputUpdate.template" />
-     <None Include="Library\PackageCache\com.unity.visualeffectgraph@10.6.0\Shaders\ParticlePlanarPrimitives\PassGS.template" />
-     <None Include="Library\PackageCache\com.unity.visualeffectgraph@10.6.0\Editor Default Resources\uss\PropertyRMDark.uss" />
-     <None Include="Library\PackageCache\com.unity.visualeffectgraph@10.6.0\Shaders\ParticlePoints\PassDepthOrMV.template" />
-     <None Include="Library\PackageCache\com.unity.visualeffectgraph@10.6.0\Shaders\ParticleHexahedron\PassForward.template" />
-     <None Include="Library\PackageCache\com.unity.visualeffectgraph@10.6.0\Editor Default Resources\uxml\VFXEdgeDragInfo.uxml" />
-     <None Include="Library\PackageCache\com.unity.visualeffectgraph@10.6.0\Shaders\RenderPipeline\Universal\Templates\VFXParticleCube.template" />
-     <None Include="Library\PackageCache\com.unity.visualeffectgraph@10.6.0\Shaders\ParticlePoints\PassSelection.template" />
-     <None Include="Library\PackageCache\com.unity.visualeffectgraph@10.6.0\Shaders\RenderPipeline\Legacy\Templates\VFXParticleCube.template" />
-     <None Include="Library\PackageCache\com.unity.visualeffectgraph@10.6.0\Shaders\ParticleDecals\Pass.template" />
-     <None Include="Library\PackageCache\com.unity.visualeffectgraph@10.6.0\Shaders\Common\VFXCommonCompute.hlsl" />
-     <None Include="Library\PackageCache\com.unity.visualeffectgraph@10.6.0\Shaders\ParticlePoints\Pass.template" />
-     <None Include="Library\PackageCache\com.unity.visualeffectgraph@10.6.0\Shaders\VFXParticleHeader.template" />
-     <None Include="Library\PackageCache\com.unity.visualeffectgraph@10.6.0\Shaders\RenderPipeline\Universal\Templates\VFXParticlePoints.template" />
-     <None Include="Library\PackageCache\com.unity.visualeffectgraph@10.6.0\Shaders\ParticlePlanarPrimitives\PassDepthOrMV.template" />
-     <None Include="Library\PackageCache\com.unity.visualeffectgraph@10.6.0\Editor Default Resources\uss\VFXSystemBorder.uss" />
-     <None Include="Library\PackageCache\com.unity.visualeffectgraph@10.6.0\Editor Default Resources\uss\VFXControlsDark.uss" />
-     <None Include="Library\PackageCache\com.unity.visualeffectgraph@10.6.0\Shaders\ParticlePlanarPrimitives\PassDepth.template" />
-     <None Include="Library\PackageCache\com.unity.visualeffectgraph@10.6.0\Shaders\ParticleSpheres\PassDepth.template" />
-     <None Include="Library\PackageCache\com.unity.visualeffectgraph@10.6.0\Editor Default Resources\shader\GradientBorder.shader" />
-     <None Include="Library\PackageCache\com.unity.visualeffectgraph@10.6.0\Editor Default Resources\shader\Element3DGridShader.shader" />
-     <None Include="Library\PackageCache\com.unity.visualeffectgraph@10.6.0\Shaders\RenderPipeline\Universal\VFXCommon.hlsl" />
-     <None Include="Library\PackageCache\com.unity.visualeffectgraph@10.6.0\Editor Default Resources\shader\SystemInfo.shader" />
-     <None Include="Library\PackageCache\com.unity.visualeffectgraph@10.6.0\Shaders\VFXUpdate.template" />
-     <None Include="Library\PackageCache\com.unity.visualeffectgraph@10.6.0\Shaders\RenderPipeline\Universal\Templates\VFXParticleDecal.template" />
-     <None Include="Library\PackageCache\com.unity.visualeffectgraph@10.6.0\Editor Default Resources\uss\VFXReorderableList.uss" />
-     <None Include="Library\PackageCache\com.unity.visualeffectgraph@10.6.0\Shaders\ParticlePlanarPrimitives\PassShadowCaster.template" />
-     <None Include="Library\PackageCache\com.unity.visualeffectgraph@10.6.0\Shaders\RenderPipeline\Legacy\VFXPasses.template" />
-     <None Include="Library\PackageCache\com.unity.visualeffectgraph@10.6.0\Shaders\ParticleLines\PassDepth.template" />
-     <None Include="Library\PackageCache\com.unity.visualeffectgraph@10.6.0\Shaders\ParticleMeshes\PassVelocity.template" />
-     <None Include="Library\PackageCache\com.unity.visualeffectgraph@10.6.0\Editor Default Resources\uxml\VFXComponentBoard.uxml" />
-     <None Include="Library\PackageCache\com.unity.visualeffectgraph@10.6.0\Shaders\RenderPipeline\Legacy\Templates\VFXParticleDecal.template" />
-     <None Include="Library\PackageCache\com.unity.visualeffectgraph@10.6.0\Editor Default Resources\uss\VFXNodeUI.uss" />
-     <None Include="Library\PackageCache\com.unity.visualeffectgraph@10.6.0\Shaders\ParticlePoints\PassShadowCaster.template" />
-     <None Include="Library\PackageCache\com.unity.visualeffectgraph@10.6.0\Shaders\VFXNoise.hlsl" />
-     <None Include="Library\PackageCache\com.unity.visualeffectgraph@10.6.0\Editor Default Resources\uxml\VFXContext.uxml" />
-     <None Include="Library\PackageCache\com.unity.visualeffectgraph@10.6.0\Editor Default Resources\uss\PropertyRM.uss" />
-     <None Include="Library\PackageCache\com.unity.visualeffectgraph@10.6.0\Shaders\ParticleHexahedron\PassDepth.template" />
-     <None Include="Library\PackageCache\com.unity.visualeffectgraph@10.6.0\Editor Default Resources\uss\PropertyRMLight.uss" />
-     <None Include="Library\PackageCache\com.unity.visualeffectgraph@10.6.0\Editor Default Resources\uxml\VFXSystemBorder.uxml" />
-     <None Include="Library\PackageCache\com.unity.visualeffectgraph@10.6.0\Editor Default Resources\uss\VFXTypeColor.uss" />
-     <None Include="Library\PackageCache\com.unity.visualeffectgraph@10.6.0\Editor Default Resources\uss\VFXBlock.uss" />
-     <None Include="Library\PackageCache\com.unity.visualeffectgraph@10.6.0\Shaders\ParticleHexahedron\PassSelection.template" />
-     <None Include="Library\PackageCache\com.unity.visualeffectgraph@10.6.0\Shaders\ParticleHexahedron\PassVelocity.template" />
-     <None Include="Library\PackageCache\com.unity.visualeffectgraph@10.6.0\Shaders\Sort.compute" />
-     <None Include="Library\PackageCache\com.unity.visualeffectgraph@10.6.0\Shaders\VFXCameraSort.template" />
-     <None Include="Library\PackageCache\com.unity.visualeffectgraph@10.6.0\Editor Default Resources\uxml\VFXParameter.uxml" />
-     <None Include="Library\PackageCache\com.unity.visualeffectgraph@10.6.0\Editor Default Resources\uss\VFXComponentBoard.uss" />
-     <None Include="Library\PackageCache\com.unity.visualeffectgraph@10.6.0\Shaders\RenderPipeline\Universal\Templates\VFXParticleLinesHW.template" />
-     <None Include="Library\PackageCache\com.unity.visualeffectgraph@10.6.0\Editor Default Resources\uss\VFXFlowEdge.uss" />
-     <None Include="Library\PackageCache\com.unity.visualeffectgraph@10.6.0\Editor Default Resources\uss\VFXOperator.uss" />
-     <None Include="Library\PackageCache\com.unity.visualeffectgraph@10.6.0\Editor Default Resources\shader\TimeBar.shader" />
-     <None Include="Library\PackageCache\com.unity.visualeffectgraph@10.6.0\Editor Default Resources\uss\VFXEdgeDragInfo.uss" />
-     <None Include="Library\PackageCache\com.unity.visualeffectgraph@10.6.0\Shaders\ParticleMeshes\Pass.template" />
-     <None Include="Library\PackageCache\com.unity.visualeffectgraph@10.6.0\Editor Default Resources\uss\VFXNode.uss" />
-     <None Include="Library\PackageCache\com.unity.visualeffectgraph@10.6.0\Shaders\ParticleLines\PassShadowCaster.template" />
-     <None Include="Library\PackageCache\com.unity.visualeffectgraph@10.6.0\Shaders\RenderPipeline\Universal\VFXPasses.template" />
-     <None Include="Library\PackageCache\com.unity.visualeffectgraph@10.6.0\Shaders\ParticleHexahedron\PassShadowCaster.template" />
-     <None Include="Library\PackageCache\com.unity.visualeffectgraph@10.6.0\Shaders\ParticleLines\PassDepthOrMV.template" />
-     <None Include="Library\PackageCache\com.unity.visualeffectgraph@10.6.0\Editor Default Resources\shader\GradientDashedBorder.shader" />
-     <None Include="Library\PackageCache\com.unity.visualeffectgraph@10.6.0\Shaders\VFXCommon.hlsl" />
-     <None Include="Library\PackageCache\com.unity.visualeffectgraph@10.6.0\Shaders\ParticleLinesSW\PassShadowCaster.template" />
-     <None Include="Library\PackageCache\com.unity.visualeffectgraph@10.6.0\Shaders\ParticlePoints\PassForward.template" />
-     <None Include="Library\PackageCache\com.unity.visualeffectgraph@10.6.0\Shaders\ParticleLinesSW\PassDepth.template" />
-     <None Include="Library\PackageCache\com.unity.visualeffectgraph@10.6.0\Shaders\ParticlePlanarPrimitives\Pass.template" />
-     <None Include="Library\PackageCache\com.unity.visualeffectgraph@10.6.0\Editor Default Resources\uss\Selectable.uss" />
-     <None Include="Library\PackageCache\com.unity.visualeffectgraph@10.6.0\Shaders\DefaultStaticMeshOutput.shader" />
-     <None Include="Library\PackageCache\com.unity.visualeffectgraph@10.6.0\Editor Default Resources\uss\VFXLabeledField.uss" />
-     <None Include="Library\PackageCache\com.unity.visualeffectgraph@10.6.0\Shaders\VFXParticleCommon.template" />
-     <None Include="Library\PackageCache\com.unity.visualeffectgraph@10.6.0\Shaders\ParticleMeshes\PassShadowCaster.template" />
-     <None Include="Library\PackageCache\com.unity.visualeffectgraph@10.6.0\Editor Default Resources\uxml\VFXBlackboardSection.uxml" />
-     <None Include="Library\PackageCache\com.unity.visualeffectgraph@10.6.0\Shaders\ParticleMeshes\PassDepthOrMV.template" />
-     <None Include="Library\PackageCache\com.unity.visualeffectgraph@10.6.0\Shaders\ParticleLinesSW\PassDepthOrMV.template" />
-     <None Include="Library\PackageCache\com.unity.visualeffectgraph@10.6.0\Shaders\ParticlePlanarPrimitives\PassVS.template" />
-     <None Include="Library\PackageCache\com.unity.visualeffectgraph@10.6.0\Editor Default Resources\uss\VFXParameter.uss" />
-     <None Include="Library\PackageCache\com.unity.visualeffectgraph@10.6.0\Editor Default Resources\uss\VFXContext.uss" />
-     <None Include="Library\PackageCache\com.unity.visualeffectgraph@10.6.0\Shaders\ParticleDecals\PassSelection.template" />
-     <None Include="Library\PackageCache\com.unity.visualeffectgraph@10.6.0\Shaders\RenderPipeline\Legacy\Templates\VFXParticleBasicCube.template" />
-     <None Include="Library\PackageCache\com.unity.visualeffectgraph@10.6.0\Shaders\ParticlePlanarPrimitives\PassSelection.template" />
-     <None Include="Library\PackageCache\com.unity.visualeffectgraph@10.6.0\Shaders\ParticleSpheres\Pass.template" />
-     <None Include="Library\PackageCache\com.unity.visualeffectgraph@10.6.0\Shaders\UpdateStrips.compute" />
-     <None Include="Library\PackageCache\com.unity.visualeffectgraph@10.6.0\Shaders\RenderPipeline\Universal\Templates\VFXParticlePlanarPrimitive.template" />
-     <None Include="Library\PackageCache\com.unity.visualeffectgraph@10.6.0\Editor Default Resources\uss\VFXReorderableListLight.uss" />
-     <None Include="Library\PackageCache\com.unity.visualeffectgraph@10.6.0\Shaders\ParticleHexahedron\PassDepthOrMV.template" />
-     <None Include="Library\PackageCache\com.unity.visualeffectgraph@10.6.0\Shaders\ParticleLines\Pass.template" />
  <Reference Include="UnityEngine">
  <HintPath>E:/Unity/2020.3.18f1/Editor/Data/PlaybackEngines/WindowsStandaloneSupport/Variations/mono/Managed/UnityEngine.dll</HintPath>
  </Reference>
@@ -767,12 +634,14 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="Unity.Timeline.csproj">
-      <Project>{85e00740-7a3b-ee34-f77b-f3e78a6c3447}</Project>
+      <Project>{4007E085-3B7A-34EE-F77B-F3E78A6C3447}</Project>
       <Name>Unity.Timeline</Name>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
     </ProjectReference>
     <ProjectReference Include="UnityEngine.UI.csproj">
-      <Project>{214a26c3-9a53-fda0-6600-cf0aa21d5df7}</Project>
+      <Project>{C3264A21-539A-A0FD-6600-CF0AA21D5DF7}</Project>
       <Name>UnityEngine.UI</Name>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

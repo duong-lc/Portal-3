@@ -17,7 +17,8 @@ public class PlayerController : MonoBehaviour
     private CharacterController _controllerComponent;
     private Vector3 _moveDirection = Vector3.zero;
     private float _rotationX = 0;
-
+    [SerializeField] private Vector3 velocity;
+ 
     [HideInInspector]
     public bool canMove = true;
 
@@ -35,6 +36,15 @@ public class PlayerController : MonoBehaviour
     {
         PlayerLook();
         PlayerMovement();
+        velocity = _controllerComponent.velocity;
+
+        if(Input.GetKeyDown(KeyCode.Z))
+        {
+            print($"fly");
+            _controllerComponent.enabled = false;
+            gameObject.GetComponent<Rigidbody>().AddForce(Vector3.up * 100);
+            _controllerComponent.enabled = true;
+        }
     }
 
     private void PlayerLook()

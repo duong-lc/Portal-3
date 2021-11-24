@@ -11,6 +11,7 @@ public class PortalBehavior : MonoBehaviour
     public bool canTeleport = true;
     
     [SerializeField] private GameObject _cam;
+    [SerializeField] private float _speedOut;
     private string _portalTag = "Portal", _portalableObjTag = "PortalableObject", _playerTag = "Player";
     
     //[HideInInspector] public float cooldownCounting;
@@ -20,34 +21,74 @@ public class PortalBehavior : MonoBehaviour
         outline.SetActive(false);
         viewport.SetActive(false);
     }
+    private void Update() {
+        if(outline.activeInHierarchy && viewport.activeInHierarchy)
+        {
+            gameObject.GetComponent<Collider>().enabled = true;
+        }else
+            gameObject.GetComponent<Collider>().enabled = false;
+    }
+
 
     public IEnumerator CountingDownCooldown()
     {
-        var countdown = cooldownTimer;
-        if(countdown >= 0f)
+        canTeleport = false;
+        yield return new WaitForSeconds(cooldownTimer);
+        canTeleport = true;
+    }
+
+    private void OnTriggerStay(Collider other) {
+        //print($"{outline.activeInHierarchy} {viewport.activeInHierarchy} ");
+        if((other.CompareTag(_portalableObjTag) || other.CompareTag(_playerTag)) && canTeleport)
         {
-            canTeleport = false;
-            countdown -= Time.deltaTime;
-            yield return null;
+            var registry = gameObject.transform.parent.GetComponent<PortalRegistry>();
+            if(registry.portalArray[0] == this && registry.portalArray[1].GetComponent<Collider>().enabled)//portal blue
+            {
+                Teleport(registry.portalArray[1].gameObject.transform.position, 1, other, registry);
+            }
+            else if (registry.portalArray[1] == this && registry.portalArray[0].GetComponent<Collider>().enabled)//portal red
+            {
+                Teleport(registry.portalArray[0].gameObject.transform.position, 0, other, registry);
+            }
         }
     }
 
-    private void OnTriggerEnter(Collider other) {
-        if((other.tag == _portalableObjTag || other.tag == _playerTag) && canTeleport)
+    // private void OnTriggerExit(Collider other)
+    // {
+    //     if((other.CompareTag(_portalableObjTag) || other.CompareTag(_playerTag)))
+    //     {
+    //         canTeleport == true
+    //     }
+    // }
+
+    private void Teleport(Vector3 destination, int portalID, Collider col, PortalRegistry registry)
+    {
+        var portalDir = -registry.portalArray[portalID].gameObject.transform.forward;
+        //col.transform.forward = portalDir;//chaging rotation
+        if(col.CompareTag(_playerTag))//if the gameobject is a player
         {
-            var registry = gameObject.transform.parent.GetComponent<PortalRegistry>();
-            if(registry.portalArray[0] == this)
-            {
-                print($"{registry.portalArray[0].gameObject.name}");
-                other.gameObject.transform.position = registry.portalArray[1].gameObject.transform.position;
-                registry.portalArray[1].StartCoroutine(registry.portalArray[1].CountingDownCooldown());
-            }else
-            {
-                print($"{registry.portalArray[0].gameObject.name}");
-                other.gameObject.transform.position = registry.portalArray[0].gameObject.transform.position;
-                registry.portalArray[0].StartCoroutine(registry.portalArray[0].CountingDownCooldown());
-            }
+            var charController = col.gameObject.GetComponent<CharacterController>();
+
+            charController.enabled = false;
+            registry.portalArray[portalID].StartCoroutine(registry.portalArray[portalID].CountingDownCooldown());
+            col.gameObject.transform.position = registry.portalArray[portalID].gameObject.transform.position;
+            //Changing rotation of the player camera
+            col.GetComponentInChildren<Camera>().transform.forward = portalDir;
+
+            //adding velocity when exit portal
+            col.gameObject.GetComponent<Rigidbody>().AddForce(portalDir * _speedOut, ForceMode.Impulse);
+            Debug.DrawLine(col.transform.position, portalDir * _speedOut, Color.blue, 3f);
+            charController.enabled = true;
+            
+            
+        }else//if the gameobject is a teleportable obj
+        {
+            registry.portalArray[portalID].StartCoroutine(registry.portalArray[portalID].CountingDownCooldown());
+            col.gameObject.transform.position = registry.portalArray[portalID].gameObject.transform.position;
         }
+
+        
+        
     }
 
     #region PortalPlacement
@@ -78,10 +119,10 @@ public class PortalBehavior : MonoBehaviour
         //var vectorArray =  edgeChecker.GetComponentsInChildren<Transform>();
         var posPerimList = new List<Vector3>()
         {
-            new Vector3(-2, 0, 0),
-            new Vector3(2, 0, 0),
-            new Vector3(0, 3, 0),
-            new Vector3(0, -3, 0),
+            new Vector3(-1.2f, 0, 0),
+            new Vector3(1.2f, 0, 0),
+            new Vector3(0, 2, 0),
+            new Vector3(0, -2, 0),
             new Vector3(0, 0 , 0)
         };
 
@@ -143,16 +184,16 @@ public class PortalBehavior : MonoBehaviour
 
         var normalDrawPoints = new List<Vector3>()
         {
-            new Vector3 (-2, 3, -0.2f),//top left
-            new Vector3 (2, 3, -0.2f),//top right
-            new Vector3 (2, -3, -0.2f),//bottom right
-            new Vector3 (-2,-3,-0.2f)//bottom left
+            new Vector3 (-1.2f, 2, -0.2f),//top left
+            new Vector3 (1.2f, 2, -0.2f),//top right
+            new Vector3 (1.2f, -2, -0.2f),//bottom right
+            new Vector3 (-1.2f,-2,-0.2f)//bottom left
             
         };
 
         var normalDrawDists = new List<float>()
         {
-            4f, 6f, 4f, 6f
+            2.4f, 4f, 2.4f, 4f
         };
 
         var normalDirPoint = new List<Vector3>()
