@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 6900583127295568288}
   - component: {fileID: 3722933965156935201}
   - component: {fileID: 2501296680958821707}
+  - component: {fileID: 4120592942104734201}
   m_Layer: 0
   m_Name: Projectile
   m_TagString: Untagged
@@ -59,7 +60,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 9cb949a37e5b5c241b80f79356aa1749, type: 2}
+  - {fileID: 0}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -81,3 +82,18 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!114 &4120592942104734201
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7230893745530784919}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3d52be3b99e65034ca97903b56b10afb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  portalID: 0
+  _redMat: {fileID: 2100000, guid: 1cb18422c15830640a74f77812fa02ce, type: 2}
+  _blueMat: {fileID: 2100000, guid: 9cb949a37e5b5c241b80f79356aa1749, type: 2}

@@ -53,13 +53,6 @@ public class PortalBehavior : MonoBehaviour
         }
     }
 
-    // private void OnTriggerExit(Collider other)
-    // {
-    //     if((other.CompareTag(_portalableObjTag) || other.CompareTag(_playerTag)))
-    //     {
-    //         canTeleport == true
-    //     }
-    // }
 
     private void Teleport(Vector3 destination, int portalID, Collider col, PortalRegistry registry)
     {
