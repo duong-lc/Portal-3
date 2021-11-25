@@ -6,12 +6,16 @@ using UnityEngine;
 
 public class PortalPlacement : MonoBehaviour
 {
-    
+    [Header("Portal Placement Properties")]
     private PlayerController _controller;
     private Camera _playerCam;
     public LayerMask portalableSurfaceLayer;
     [SerializeField] private PortalRegistry _portalPair;
-    
+    [Header("Spawn Projectile Properties")]
+    [SerializeField] private GameObject _projectile;
+    [SerializeField] private Transform _spawnTransform;
+    [SerializeField] private float _bulletSpeed;
+
     private void Awake() 
     {
         _controller = GetComponent<PlayerController>();
@@ -29,11 +33,13 @@ public class PortalPlacement : MonoBehaviour
         {
             //Fire portal 1
             CreatePortal(0);
+            FireProjectile(0);
             
         }else if (Input.GetMouseButtonDown(1))
         {
             //Fire portal 2
             CreatePortal(1);
+            FireProjectile(1);
         }
         
     }
@@ -70,28 +76,35 @@ public class PortalPlacement : MonoBehaviour
                     //portal.transform.forward = -hit.normal;//print($"wall");   
                     portal.edgeChecker.transform.forward = -hit.normal;
                 }
-
                 _portalPair.portalArray[portalID].AttemptPlacingPortal();
-                // if(.CheckPerimeterOnEnable())
-                // {
-                //     //assigning portal transform if edge checker valid
-                //     portal.transform.position = portal.edgeChecker.transform.position;  
-                //     portal.transform.rotation = portal.edgeChecker.transform.rotation;
-                //     //reset edge checker position to in center of portal parent obj
-                //     portal.edgeChecker.transform.position = portal.transform.position;
-                //     portal.edgeChecker.transform.rotation = portal.transform.rotation;
-                // }
-
-
-
                 //portal.transform.position = new Vector3 ( Mathf.Round(portal.transform.position.x), Mathf.Round(portal.transform.position.y), Mathf.Round(portal.transform.position.z));
                 break;
             case false:
                 break;
 
         }
-       
-       
+    }
 
+    private void FireProjectile(int portalID)
+    {
+        RaycastHit hit;
+        Physics.Raycast(_playerCam.transform.position, _playerCam.transform.forward, out hit, Mathf.Infinity, portalableSurfaceLayer);
+        Debug.DrawLine(_playerCam.transform.position, hit.point, Color.red, 5f);
+
+
+        var proj = Instantiate(_projectile, _playerCam.gameObject.transform.position, Quaternion.identity);
+        proj.transform.forward = _spawnTransform.up;//update rotation
+        StartCoroutine(IProjectileLerp(hit, Time.time, proj));
+        
+
+    }
+
+    private IEnumerator IProjectileLerp(RaycastHit hit, float startTime, GameObject bullet)
+    {
+        var distTotal = hit.distance;
+        var distTravelled = (Time.time - startTime) * _bulletSpeed;
+
+        bullet.transform.position = Vector3.Lerp(_playerCam.transform.position, hit.point, distTravelled/distTotal);
+        yield return null;
     }
 }
