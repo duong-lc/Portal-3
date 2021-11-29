@@ -566,7 +566,8 @@ MonoBehaviour:
   playerCam: {fileID: 963194227}
   lookSpeed: 2
   lookXLimit: 80
-  velocity: {x: 0, y: 0, z: 0}
+  _horizontal: 0
+  _vertical: 0
   canMove: 1
 --- !u!4 &600256276
 Transform:
@@ -2742,7 +2743,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh21070
+  m_Name: pb_Mesh21072
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2

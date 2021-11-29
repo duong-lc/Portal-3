@@ -37,47 +37,49 @@ public class PortalBehavior : MonoBehaviour
         canTeleport = true;
     }
 
-    private void OnTriggerStay(Collider other) {
+    private void OnTriggerEnter(Collider other) {
         //print($"{outline.activeInHierarchy} {viewport.activeInHierarchy} ");
         if((other.CompareTag(_portalableObjTag) || other.CompareTag(_playerTag)) && canTeleport)
         {
             var registry = gameObject.transform.parent.GetComponent<PortalRegistry>();
             if(registry.portalArray[0] == this && registry.portalArray[1].GetComponent<Collider>().enabled)//portal blue
             {
-                Teleport(registry.portalArray[1].gameObject.transform.position, 1, other, registry);
+                Teleport(0, 1, other, registry);
             }
             else if (registry.portalArray[1] == this && registry.portalArray[0].GetComponent<Collider>().enabled)//portal red
             {
-                Teleport(registry.portalArray[0].gameObject.transform.position, 0, other, registry);
+                Teleport(1, 0, other, registry);
             }
         }
     }
 
 
-    private void Teleport(Vector3 destination, int portalID, Collider col, PortalRegistry registry)
+    private void Teleport(int beginPortalID, int endPortalID, Collider col, PortalRegistry registry)
     {
-        var portalDir = -registry.portalArray[portalID].gameObject.transform.forward;
+        var portalDir = -registry.portalArray[endPortalID].gameObject.transform.forward;
         //col.transform.forward = portalDir;//chaging rotation
         if(col.CompareTag(_playerTag))//if the gameobject is a player
         {
             var charController = col.gameObject.GetComponent<CharacterController>();
+            var teleportPos = registry.portalArray[endPortalID].gameObject.transform.TransformPoint(-Vector3.forward * registry.portalArray[endPortalID].gameObject.GetComponent<BoxCollider>().size.x/2);
 
             charController.enabled = false;
-            registry.portalArray[portalID].StartCoroutine(registry.portalArray[portalID].CountingDownCooldown());
-            col.gameObject.transform.position = registry.portalArray[portalID].gameObject.transform.position;
+            registry.portalArray[endPortalID].StartCoroutine(registry.portalArray[endPortalID].CountingDownCooldown());
+            var prePos = col.gameObject.transform.position;
+            col.gameObject.transform.position = teleportPos;
             //Changing rotation of the player camera
-            col.GetComponentInChildren<Camera>().transform.forward = portalDir;
+            RotateAfterTeleport(beginPortalID, endPortalID, col, registry, prePos);
 
             //adding velocity when exit portal
             col.gameObject.GetComponent<Rigidbody>().AddForce(portalDir * _speedOut, ForceMode.Impulse);
-            Debug.DrawLine(col.transform.position, portalDir * _speedOut, Color.blue, 3f);
+            //Debug.DrawLine(col.transform.position, portalDir * _speedOut, Color.blue, 3f);
             charController.enabled = true;
             
             
         }else//if the gameobject is a teleportable obj
         {
-            registry.portalArray[portalID].StartCoroutine(registry.portalArray[portalID].CountingDownCooldown());
-            col.gameObject.transform.position = registry.portalArray[portalID].gameObject.transform.position;
+            registry.portalArray[endPortalID].StartCoroutine(registry.portalArray[endPortalID].CountingDownCooldown());
+            col.gameObject.transform.position = registry.portalArray[endPortalID].gameObject.transform.position;
         }
 
         
@@ -212,6 +214,40 @@ public class PortalBehavior : MonoBehaviour
         return canPlace;
     }
     #endregion
+
+
+    private void RotateAfterTeleport(int startPortalID, int endPortalID, Collider col, PortalRegistry registry, Vector3 prePos)
+    {
+        //direction vector from player to starting portal
+        var portalStartT = registry.portalArray[startPortalID].gameObject.transform;
+        var portalEndT = registry.portalArray[endPortalID].gameObject.transform;
+        var preDir = (registry.portalArray[startPortalID].gameObject.transform.position - col.transform.position).normalized;
+        Debug.DrawLine(portalStartT.position, portalStartT.position + preDir * 5, Color.cyan, 5f);
+
+
+        //var portalRot = registry.portalArray[portalID].gameObject.transform.rotation;
+        //Quaternion rot = col.transform.rotation;
+
+        // col.transform.rotation = portalRot;
+        // //Rotate based on Verical Input
+        // if(Input.GetAxis("Vertical") > 0)//if not going backward
+        //     col.transform.Rotate(Vector3.up, 180);
+        
+        // //Resetting the look rotation to look perpendicular as portal's normal
+        // if(col.transform.rotation.eulerAngles.x != 0 || col.transform.rotation.eulerAngles.z != 0)
+        // {
+        //     rot.eulerAngles = new Vector3(0, col.transform.rotation.eulerAngles.y, 0);
+        //     col.transform.rotation = rot;
+        // }
+        // //Adjusting the look direction based on the walking vector the player is taking
+        //     //Based on Horizontal Input
+        // Debug.DrawLine(registry.portalArray[portalID].gameObject.transform.position, Vector3.up * 5, Color.blue, 5f);            
+        // if(Input.GetAxis("Horizontal") < 0) //rotate from left to right
+        //     col.transform.Rotate(Vector3.up, -90 * Input.GetAxis("Horizontal") + rot.eulerAngles.y);
+        // else if (Input.GetAxis("Horizontal") > 0) //rotate from right to left
+        //     col.transform.Rotate(Vector3.up, -90 * Input.GetAxis("Horizontal")+ rot.eulerAngles.y);
+        
+    }
 
     private void OnDrawGizmosSelected()
     {

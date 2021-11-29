@@ -17,7 +17,8 @@ public class PlayerController : MonoBehaviour
     private CharacterController _controllerComponent;
     private Vector3 _moveDirection = Vector3.zero;
     private float _rotationX = 0;
-    [SerializeField] private Vector3 velocity;
+    [SerializeField] private float _horizontal;
+    [SerializeField] private float _vertical;
  
     [HideInInspector]
     public bool canMove = true;
@@ -36,7 +37,9 @@ public class PlayerController : MonoBehaviour
     {
         PlayerLook();
         PlayerMovement();
-        velocity = _controllerComponent.velocity;
+
+        _horizontal = Input.GetAxis("Horizontal");
+        _vertical = Input.GetAxis("Vertical");
 
         if(Input.GetKeyDown(KeyCode.Z))
         {
