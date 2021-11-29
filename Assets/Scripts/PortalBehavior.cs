@@ -221,24 +221,30 @@ public class PortalBehavior : MonoBehaviour
         //direction vector from player to starting portal
         var portalStartT = registry.portalArray[startPortalID].gameObject.transform;
         var portalEndT = registry.portalArray[endPortalID].gameObject.transform;
-        var preDir = (registry.portalArray[startPortalID].gameObject.transform.position - col.transform.position).normalized;
-        Debug.DrawLine(portalStartT.position, portalStartT.position + preDir * 5, Color.cyan, 5f);
+
+        var direction = -portalEndT.InverseTransformDirection(col.GetComponent<CharacterController>().velocity);
+        var tempT = portalEndT;
+        //tempT.RotateAround(direction, -portalEndT.forward, 180);
+        //Debug.Draw
+        //var angle = Vector3.Angle(-portalEndT.forward, direction);
+        //print($"{angle}");
+        Debug.DrawLine(portalEndT.position, portalEndT.position + direction * 5, Color.blue, 5f);
 
 
-        //var portalRot = registry.portalArray[portalID].gameObject.transform.rotation;
-        //Quaternion rot = col.transform.rotation;
+        var portalRot = registry.portalArray[endPortalID].gameObject.transform.rotation;
+        Quaternion rot = col.transform.rotation;
 
-        // col.transform.rotation = portalRot;
-        // //Rotate based on Verical Input
-        // if(Input.GetAxis("Vertical") > 0)//if not going backward
-        //     col.transform.Rotate(Vector3.up, 180);
+        col.transform.rotation = portalRot;
+        //Rotate based on Verical Input
+        if(Input.GetAxis("Vertical") > 0)//if not going backward
+            col.transform.Rotate(Vector3.up, 180);
         
-        // //Resetting the look rotation to look perpendicular as portal's normal
-        // if(col.transform.rotation.eulerAngles.x != 0 || col.transform.rotation.eulerAngles.z != 0)
-        // {
-        //     rot.eulerAngles = new Vector3(0, col.transform.rotation.eulerAngles.y, 0);
-        //     col.transform.rotation = rot;
-        // }
+        //Resetting the look rotation to look perpendicular as portal's normal
+        if(col.transform.rotation.eulerAngles.x != 0 || col.transform.rotation.eulerAngles.z != 0)
+        {
+            rot.eulerAngles = new Vector3(0, col.transform.rotation.eulerAngles.y, 0);
+            col.transform.rotation = rot;
+        }
         // //Adjusting the look direction based on the walking vector the player is taking
         //     //Based on Horizontal Input
         // Debug.DrawLine(registry.portalArray[portalID].gameObject.transform.position, Vector3.up * 5, Color.blue, 5f);            

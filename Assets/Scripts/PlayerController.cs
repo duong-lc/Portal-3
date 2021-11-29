@@ -35,6 +35,7 @@ public class PlayerController : MonoBehaviour
 
     private void Update()
     {
+        Debug.DrawLine(transform.position, transform.position + _controllerComponent.velocity * 3, Color.green, 0.1f);
         PlayerLook();
         PlayerMovement();
 
