@@ -85,6 +85,11 @@ public class PortalBehavior : MonoBehaviour
             charController.enabled = true;
             
             
+            if(col.transform.rotation.x != 0 && col.transform.rotation.z != 0)
+            {
+                col.transform.rotation = Quaternion.Euler(0, col.transform.rotation.y, 0);
+            }
+
         }else//if the gameobject is a teleportable obj
         {
             registry.portalArray[endPortalID].StartCoroutine(registry.portalArray[endPortalID].CountingDownCooldown());

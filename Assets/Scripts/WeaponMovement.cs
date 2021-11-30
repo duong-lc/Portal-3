@@ -11,7 +11,7 @@ public class WeaponMovement : MonoBehaviour
     [Header("Bob Properties")]
     [SerializeField] private float _bobAmount;
     [SerializeField] private float _bobSpeed = 1;
-    [SerializeField] private CharacterController _charController;
+    //[SerializeField] private CharacterController _charController;
     private Vector3 _originalWeaponPos;
     [Header("Recoil Properties")]
     [SerializeField] private float _recoilAmount = 0.35f;
@@ -42,7 +42,7 @@ public class WeaponMovement : MonoBehaviour
         var recoilMagnitude = WeaponRecoil();
         _weaponHolderT.localPosition += -Vector3.forward * recoilMagnitude;
         //Lerping back to original position
-        if(_charController.velocity == new Vector3(0,0,0))//lerping if not moving (whehter firing or not)
+        if(PlayerController.Instance.gameObject.GetComponent<Rigidbody>().velocity == new Vector3(0,0,0))//lerping if not moving (whehter firing or not)
         {
             _weaponHolderT.localPosition = Vector3.Lerp(_weaponHolderT.localPosition, _originalWeaponPos, _bobSpeed * Time.deltaTime);
             return;//return if not moving to not bob

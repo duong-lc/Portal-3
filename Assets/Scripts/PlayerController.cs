@@ -2,31 +2,33 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-[RequireComponent(typeof(CharacterController))]
 
 public class PlayerController : MonoBehaviour
 {
     public static PlayerController Instance;
     public float walkingSpeed = 10f;
     public float jumpForce = 10f;
-    public float gravity = 20.0f;
     public Camera playerCam;
     public float lookSpeed = 2.5f;
     public float lookXLimit = 80.0f;
 
-    private CharacterController _controllerComponent;
+    //private CharacterController _controllerComponent;
     private Vector3 _moveDirection = Vector3.zero;
     private float _rotationX = 0;
-    [SerializeField] private float _horizontal;
-    [SerializeField] private float _vertical;
+    private float _gravityAcceleration = 9.8f;
+    [Header("Ground Check Properties")]
+    [SerializeField] private GameObject _groundChecker; 
+    [SerializeField] private float _checkerRadius;
+    private bool canJump;
+    //[SerializeField] private float _horizontal;
+    //[SerializeField] private float _vertical;
  
-    [HideInInspector]
-    public bool canMove = true;
+    [HideInInspector] public bool canMove = true;
 
     private void Start()
     {
         Instance = this;
-        _controllerComponent = GetComponent<CharacterController>();
+        //_controllerComponent = GetComponent<CharacterController>();
 
         // Lock cursor
         Cursor.lockState = CursorLockMode.Locked;
@@ -35,21 +37,35 @@ public class PlayerController : MonoBehaviour
 
     private void Update()
     {
-        Debug.DrawLine(transform.position, transform.position + _controllerComponent.velocity * 3, Color.green, 0.1f);
+        //Debug.DrawLine(transform.position, transform.position + _controllerComponent.velocity * 3, Color.green, 0.1f);
+        CheckGround();
         PlayerLook();
         PlayerMovement();
 
-        _horizontal = Input.GetAxis("Horizontal");
-        _vertical = Input.GetAxis("Vertical");
+        //_horizontal = Input.GetAxis("Horizontal");
+        //_vertical = Input.GetAxis("Vertical");
 
         if(Input.GetKeyDown(KeyCode.Z))
         {
             print($"fly");
-            _controllerComponent.enabled = false;
-            gameObject.GetComponent<Rigidbody>().AddForce(Vector3.up * 100);
-            _controllerComponent.enabled = true;
+            //_controllerComponent.enabled = false;
+           // gameObject.GetComponent<Rigidbody>().AddForce(Vector3.up * 100);
+            //_controllerComponent.enabled = true;
         }
     }
+    private void CheckGround()
+    {
+        var colArr = Physics.SphereCastAll(_groundChecker.transform.position, _checkerRadius, Vector3.down, 0);
+        if(colArr.Length == 0)
+        {
+            canJump = false;
+            return;
+        }
+
+        canJump = true;
+        return;
+    }
+
 
     private void PlayerLook()
     {
@@ -76,16 +92,21 @@ public class PlayerController : MonoBehaviour
         var movementDirectionY = _moveDirection.y;
         _moveDirection = (forward * curSpeedX) + (right * curSpeedY);
 
-        if (Input.GetButton("Jump") && canMove && _controllerComponent.isGrounded)
+        if (Input.GetButton("Jump") && canMove && canJump)
             _moveDirection.y = jumpForce;
         else
             _moveDirection.y = movementDirectionY;
 
+
         //Damping vertical acceleration to simulate gravity
-        if (!_controllerComponent.isGrounded)
-            _moveDirection.y -= gravity * Time.deltaTime;
+        if (!canJump)
+            _moveDirection.y -= _gravityAcceleration * Time.deltaTime;
 
         // Move the controller
-        _controllerComponent.Move(_moveDirection * Time.deltaTime);
+        GetComponent<Rigidbody>().velocity = (_moveDirection * Time.deltaTime);
+    }
+
+    private void OnDrawGizmosSelected() {
+        Gizmos.DrawWireSphere(_groundChecker.transform.position, _checkerRadius);
     }
 }
