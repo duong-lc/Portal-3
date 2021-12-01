@@ -2,33 +2,48 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+[RequireComponent(typeof(CharacterController))]
 
 public class PlayerController : MonoBehaviour
 {
     public static PlayerController Instance;
-    public float walkingSpeed = 10f;
-    public float jumpForce = 10f;
+    private CharacterController _controller;
+
+    [Header("Movement Settings")]
+    [SerializeField] private float _walkingSpeed = 10f;
+    [SerializeField] private float _jumpForce = 10f;
+    //[SerializeField] private float _gravityScale = 1.0f;
+    private Vector3 _moveVector = Vector3.zero;
+    //private float _gravityAcceleration = 9.8f;
+
+
+    [Header("Look Settings")]
     public Camera playerCam;
     public float lookSpeed = 2.5f;
     public float lookXLimit = 80.0f;
-
-    //private CharacterController _controllerComponent;
-    private Vector3 _moveDirection = Vector3.zero;
     private float _rotationX = 0;
-    private float _gravityAcceleration = 9.8f;
-    [Header("Ground Check Properties")]
-    [SerializeField] private GameObject _groundChecker; 
-    [SerializeField] private float _checkerRadius;
-    private bool canJump;
-    //[SerializeField] private float _horizontal;
-    //[SerializeField] private float _vertical;
+    
+    [Header("Debug Menu")]
+    [SerializeField] private Vector3 _velocity;
+
+
+    // [Header("Ground Check Properties")]
+    // [SerializeField] private GameObject _groundChecker; 
+    // [SerializeField] private float _checkerRadius;
+    // [SerializeField] private bool _canJump;
+    
+    [HideInInspector]
+    public bool canMove = true;
  
-    [HideInInspector] public bool canMove = true;
+    //[HideInInspector] public bool canMove = true;
+    private Rigidbody _rgbd;
+    //Vector3 _inputs;
 
     private void Start()
     {
         Instance = this;
-        //_controllerComponent = GetComponent<CharacterController>();
+        _controller = GetComponent<CharacterController>();
+        //_rgbd = GetComponent<Rigidbody>();
 
         // Lock cursor
         Cursor.lockState = CursorLockMode.Locked;
@@ -37,36 +52,27 @@ public class PlayerController : MonoBehaviour
 
     private void Update()
     {
-        //Debug.DrawLine(transform.position, transform.position + _controllerComponent.velocity * 3, Color.green, 0.1f);
-        CheckGround();
+        //CheckGround();
         PlayerLook();
         PlayerMovement();
-
-        //_horizontal = Input.GetAxis("Horizontal");
-        //_vertical = Input.GetAxis("Vertical");
-
-        if(Input.GetKeyDown(KeyCode.Z))
-        {
-            print($"fly");
-            //_controllerComponent.enabled = false;
-           // gameObject.GetComponent<Rigidbody>().AddForce(Vector3.up * 100);
-            //_controllerComponent.enabled = true;
-        }
-    }
-    private void CheckGround()
-    {
-        var colArr = Physics.SphereCastAll(_groundChecker.transform.position, _checkerRadius, Vector3.down, 0);
-        if(colArr.Length == 0)
-        {
-            canJump = false;
-            return;
-        }
-
-        canJump = true;
-        return;
+        _velocity = _controller.velocity;
     }
 
-
+    // private void CheckGround()
+    // {
+    //     RaycastHit[] colArr = Physics.SphereCastAll(_groundChecker.transform.position, _checkerRadius, Vector3.down, 0);
+    //     for(int i = 0; i < colArr.Length; i++)
+    //     {
+    //         print($"{colArr[i].collider.tag}");
+    //         if(colArr[i].collider.tag != gameObject.tag)
+    //         {
+    //             _canJump = true;
+    //             return;  
+    //         }
+    //     }
+    //     _canJump = false;
+    //     return;
+    // }
     private void PlayerLook()
     {
         // Player and Camera rotation
@@ -87,26 +93,27 @@ public class PlayerController : MonoBehaviour
         var right = transform.TransformDirection(Vector3.right);
         
         //Moving the player
-        var curSpeedX = canMove ?  walkingSpeed * Input.GetAxis("Vertical") : 0;
-        var curSpeedY = canMove ? walkingSpeed * Input.GetAxis("Horizontal") : 0;
-        var movementDirectionY = _moveDirection.y;
-        _moveDirection = (forward * curSpeedX) + (right * curSpeedY);
+        var curSpeedX = canMove ?  _walkingSpeed * Input.GetAxis("Vertical") : 0;
+        var curSpeedY = canMove ? _walkingSpeed * Input.GetAxis("Horizontal") : 0;
+        var movementDirectionY = _moveVector.y;
+        _moveVector = (forward * curSpeedX) + (right * curSpeedY);
 
-        if (Input.GetButton("Jump") && canMove && canJump)
-            _moveDirection.y = jumpForce;
+        if (Input.GetButton("Jump") && canMove && _controller.isGrounded)
+            _moveVector.y = _jumpForce;
         else
-            _moveDirection.y = movementDirectionY;
-
+            _moveVector.y = movementDirectionY;
 
         //Damping vertical acceleration to simulate gravity
-        if (!canJump)
-            _moveDirection.y -= _gravityAcceleration * Time.deltaTime;
+        if (!_controller.isGrounded)
+            _moveVector.y -= 20f * Time.deltaTime;
 
         // Move the controller
-        GetComponent<Rigidbody>().velocity = (_moveDirection * Time.deltaTime);
+        _controller.Move(_moveVector * Time.deltaTime);
     }
 
     private void OnDrawGizmosSelected() {
-        Gizmos.DrawWireSphere(_groundChecker.transform.position, _checkerRadius);
+        //Gizmos.DrawWireSphere(_groundChecker.transform.position, _checkerRadius);
     }
+
+
 }
