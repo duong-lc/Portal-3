@@ -2,13 +2,15 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-[RequireComponent(typeof(CharacterController))]
+[RequireComponent(typeof(Rigidbody))]
 
 public class PlayerController : MonoBehaviour
 {
     public static PlayerController Instance;
     private CharacterController _controller;
+    [SerializeField] private GameObject _capsule;
 
+    [Space]
     [Header("Movement Settings")]
     [SerializeField] private float _walkingSpeed = 10f;
     [Space]
@@ -60,12 +62,18 @@ public class PlayerController : MonoBehaviour
         CheckGround();
         PlayerLook();
         PlayerMovement();
-
-        _velocity = _controller.velocity;
     }
 
-    private void LateUpdate() {
+    private void LateUpdate() 
+    {
         CustomGravity();
+        CapsuleReadjustment();
+    }
+
+    private void CapsuleReadjustment()
+    {
+        _capsule.transform.localPosition = new Vector3(0,0,0);
+        _capsule.transform.localRotation = Quaternion.identity;
     }
 
     private void CheckGround()
@@ -73,12 +81,12 @@ public class PlayerController : MonoBehaviour
         RaycastHit[] colArr = Physics.SphereCastAll(_groundChecker.transform.position, _checkerRadius, Vector3.down, 0);
         for(int i = 0; i < colArr.Length; i++)
         {
-            //print($"{colArr[i].collider.tag}");
             if(colArr[i].collider.tag != gameObject.tag)
             {
                 _canJump = true;
                 return;  
             }
+           
         }
         _canJump = false;
         return;

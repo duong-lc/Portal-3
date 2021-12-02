@@ -7,7 +7,7 @@ public class PortalBehavior : MonoBehaviour
     public GameObject outline;
     public GameObject edgeChecker;
     public GameObject viewport;
-    public float cooldownTimer = 0.5f;
+    public float cooldownTimer = 0.1f;
     public bool canTeleport = true;
     
     [SerializeField] private GameObject _cam;
@@ -38,7 +38,7 @@ public class PortalBehavior : MonoBehaviour
         canTeleport = true;
     }
 
-    private void OnTriggerEnter(Collider other) {
+    private void OnTriggerStay(Collider other) {
         //print($"{outline.activeInHierarchy} {viewport.activeInHierarchy} ");
         if((other.CompareTag(_portalableObjTag) || other.CompareTag(_playerTag)) && canTeleport)
         {
@@ -62,7 +62,7 @@ public class PortalBehavior : MonoBehaviour
 
         if(col.CompareTag(_playerTag))//if the gameobject is a player
         {
-            var charController = col.gameObject.GetComponent<CharacterController>();
+            //var charController = col.gameObject.GetComponent<CharacterController>();
             
             //charController.enabled = false;
 
@@ -72,33 +72,47 @@ public class PortalBehavior : MonoBehaviour
 
             //Update rotation of object
             var dotValue = Vector3.Dot(col.transform.forward, -beginTransform.forward);
-            if(dotValue > .01f || dotValue < -.01f)//if the player forward is not orthogonal to start portal forward
+            var dotValue1 = Vector3.Dot(col.transform.forward, -endTransform.forward);
+            print($"start {dotValue} || end {dotValue1}");
+            if((dotValue > .01f || dotValue < -.01f))//starting portal on a wall
             {
+                print($"yes");
                 Quaternion relativeRot = Quaternion.Inverse(beginTransform.rotation) * col.transform.rotation;
                 relativeRot = halfTurn * relativeRot;
                 col.transform.rotation = endTransform.rotation * relativeRot;
-            }else{
-                if(Input.GetAxis("Horizontal") < 0) //rotate from left to right
+            }else{//starting portal on the floor
+                print($"no");
+                if(Input.GetAxis("Horizontal") > 0)//facing away from the portal
                     col.transform.forward = endTransform.forward;
-                else if (Input.GetAxis("Horizontal") > 0) //rotate from right to left
+                else if (Input.GetAxis("Horizontal") <= 0) //facing same way as portal
                     col.transform.forward = -endTransform.forward;
             }
+
+            // Quaternion relativeRot = Quaternion.Inverse(beginTransform.rotation) * col.transform.rotation;
+            // relativeRot = halfTurn * relativeRot;
+            // col.transform.rotation = endTransform.rotation * relativeRot;
+            
+
+            if(col.transform.rotation.x != 0 || col.transform.rotation.z != 0)
+            {
+                print($"my parents beat me");
+                col.transform.rotation = Quaternion.Euler(0, col.transform.rotation.y, 0);
+            }
+            //if the starting portal is at 90 degree on wall || start portal at a degree on wall
+
                 
 
             //update velocity of rigidbody
-            Vector3 relativeVel = beginTransform.InverseTransformDirection(col.GetComponent<Rigidbody>().velocity);
+            Vector3 relativeVel = beginTransform.InverseTransformDirection(col.transform.GetComponent<Rigidbody>().velocity);
             relativeVel = halfTurn * relativeVel;
-            col.GetComponent<Rigidbody>().velocity = endTransform.TransformDirection(relativeVel);
+            col.transform.GetComponent<Rigidbody>().velocity = endTransform.TransformDirection(relativeVel);
 
 
             registry.portalArray[endPortalID].StartCoroutine(registry.portalArray[endPortalID].CountingDownCooldown());
             //charController.enabled = true;
             
             
-            if(col.transform.rotation.x != 0 && col.transform.rotation.z != 0)
-            {
-                col.transform.rotation = Quaternion.Euler(0, col.transform.rotation.y, 0);
-            }
+           
 
         }else//if the gameobject is a teleportable obj
         {
