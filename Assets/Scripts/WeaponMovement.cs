@@ -42,7 +42,7 @@ public class WeaponMovement : MonoBehaviour
         var recoilMagnitude = WeaponRecoil();
         _weaponHolderT.localPosition += -Vector3.forward * recoilMagnitude;
         //Lerping back to original position
-        if(PlayerController.Instance.gameObject.GetComponent<CharacterController>().velocity == new Vector3(0,0,0))//lerping if not moving (whehter firing or not)
+        if(Input.GetAxis("Horizontal") == 0 || Input.GetAxis("Vertical") == 0)//lerping if not moving (whehter firing or not)
         {
             _weaponHolderT.localPosition = Vector3.Lerp(_weaponHolderT.localPosition, _originalWeaponPos, _bobSpeed * Time.deltaTime);
             return;//return if not moving to not bob

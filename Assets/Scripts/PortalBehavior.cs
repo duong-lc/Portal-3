@@ -64,16 +64,26 @@ public class PortalBehavior : MonoBehaviour
         {
             var charController = col.gameObject.GetComponent<CharacterController>();
             
-            charController.enabled = false;
+            //charController.enabled = false;
 
             //Update position of object
             var teleportPos = endTransform.TransformPoint(-Vector3.forward * registry.portalArray[endPortalID].gameObject.GetComponent<BoxCollider>().size.x/2);
             col.gameObject.transform.position = teleportPos;
 
             //Update rotation of object
-            Quaternion relativeRot = Quaternion.Inverse(beginTransform.rotation) * col.transform.rotation;
-            relativeRot = halfTurn * relativeRot;
-            col.transform.rotation = endTransform.rotation * relativeRot;
+            var dotValue = Vector3.Dot(col.transform.forward, -beginTransform.forward);
+            if(dotValue > .01f || dotValue < -.01f)//if the player forward is not orthogonal to start portal forward
+            {
+                Quaternion relativeRot = Quaternion.Inverse(beginTransform.rotation) * col.transform.rotation;
+                relativeRot = halfTurn * relativeRot;
+                col.transform.rotation = endTransform.rotation * relativeRot;
+            }else{
+                if(Input.GetAxis("Horizontal") < 0) //rotate from left to right
+                    col.transform.forward = endTransform.forward;
+                else if (Input.GetAxis("Horizontal") > 0) //rotate from right to left
+                    col.transform.forward = -endTransform.forward;
+            }
+                
 
             //update velocity of rigidbody
             Vector3 relativeVel = beginTransform.InverseTransformDirection(col.GetComponent<Rigidbody>().velocity);
@@ -82,7 +92,7 @@ public class PortalBehavior : MonoBehaviour
 
 
             registry.portalArray[endPortalID].StartCoroutine(registry.portalArray[endPortalID].CountingDownCooldown());
-            charController.enabled = true;
+            //charController.enabled = true;
             
             
             if(col.transform.rotation.x != 0 && col.transform.rotation.z != 0)
