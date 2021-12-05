@@ -27,18 +27,21 @@ public class PlayerController : MonoBehaviour
     public float lookSpeed = 2.5f;
     public float lookXLimit = 80.0f;
     private float _rotationX = 0;
+    [HideInInspector] public Quaternion targetRotation { private set; get; }
     
-    [Header("Debug Menu")]
-    [SerializeField] private Vector3 _velocity;
-
 
     [Header("Ground Check Properties")]
     [SerializeField] private GameObject _groundChecker; 
     [SerializeField] private float _checkerRadius;
     [SerializeField] private bool _canJump;
     
-    [HideInInspector]
-    public bool canMove = true;
+    // [Space]
+    // [Header("Portal Interaction Settings")]
+    // public LayerMask playerLayer;
+    // public LayerMask surfaceLayer;
+    [HideInInspector] public bool canMove = true;
+    [Space]
+    public GameObject mainMapGeom;
  
     //[HideInInspector] public bool canMove = true;
     private Rigidbody _rgbd;
@@ -47,8 +50,10 @@ public class PlayerController : MonoBehaviour
     private void Start()
     {
         Instance = this;
+        targetRotation = transform.rotation;
         _controller = GetComponent<CharacterController>();
         _rgbd = GetComponent<Rigidbody>();
+        //mainMapGeom = GameObject.FindWithTag("MainMapGeom");
         
 
         _rgbd.useGravity = false;
@@ -100,6 +105,17 @@ public class PlayerController : MonoBehaviour
             _rotationX = Mathf.Clamp(_rotationX, -lookXLimit, lookXLimit);
             playerCam.transform.localRotation = Quaternion.Euler(_rotationX, 0, 0);
             transform.rotation *= Quaternion.Euler(0, Input.GetAxis("Mouse X") * lookSpeed, 0);
+            // var rotation = new Vector2(-Input.GetAxis("Mouse Y"), Input.GetAxis("Mouse X"));
+            // var targetEuler = targetRotation.eulerAngles + (Vector3)rotation * lookSpeed;
+            // if(targetEuler.x > 180.0f)
+            // {
+            //     targetEuler.x -= 360.0f;
+            // }
+            // targetEuler.x = Mathf.Clamp(targetEuler.x, -lookXLimit, lookXLimit);
+            // targetRotation = Quaternion.Euler(targetEuler);
+
+            // transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime * 15.0f);
+
         }
         else
             return;

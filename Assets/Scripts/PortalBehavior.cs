@@ -9,15 +9,21 @@ public class PortalBehavior : MonoBehaviour
     public GameObject viewport;
     public float cooldownTimer = 0.1f;
     public bool canTeleport = true;
+    public Vector3 portalNormalDir;
+
     
     [SerializeField] private GameObject _cam;
     [SerializeField] private float _speedOut;
     private string _portalTag = "Portal", _portalableObjTag = "PortalableObject", _playerTag = "Player";
     private static readonly Quaternion halfTurn = Quaternion.Euler(0.0f, 180.0f, 0.0f);
+    private PortalRegistry registry;
+
     
     //[HideInInspector] public float cooldownCounting;
 
     private void Start() {
+        registry = gameObject.transform.parent.GetComponent<PortalRegistry>();
+
         canTeleport = true;
         outline.SetActive(false);
         viewport.SetActive(false);
@@ -38,11 +44,17 @@ public class PortalBehavior : MonoBehaviour
         canTeleport = true;
     }
 
-    private void OnTriggerStay(Collider other) {
+    private void OnTriggerEnter(Collider other) {
+
+        // if(canTeleport && other.CompareTag(_playerTag) && registry.portalArray[1].GetComponent<Collider>().enabled && registry.portalArray[0].GetComponent<Collider>().enabled)
+        //     Physics.IgnoreLayerCollision(other.gameObject.layer, PlayerController.Instance.mainMapGeom.layer, true);
+        // else
+        //     Physics.IgnoreLayerCollision(other.gameObject.layer, PlayerController.Instance.mainMapGeom.layer, false);
+
         //print($"{outline.activeInHierarchy} {viewport.activeInHierarchy} ");
         if((other.CompareTag(_portalableObjTag) || other.CompareTag(_playerTag)) && canTeleport)
         {
-            var registry = gameObject.transform.parent.GetComponent<PortalRegistry>();
+            
             if(registry.portalArray[0] == this && registry.portalArray[1].GetComponent<Collider>().enabled)//portal blue
             {
                 Teleport(0, 1, other, registry);
@@ -71,21 +83,41 @@ public class PortalBehavior : MonoBehaviour
             col.gameObject.transform.position = teleportPos;
 
             //Update rotation of object
-            var dotValue = Vector3.Dot(col.transform.forward, -beginTransform.forward);
-            var dotValue1 = Vector3.Dot(col.transform.forward, -endTransform.forward);
-            print($"start {dotValue} || end {dotValue1}");
-            if((dotValue > .01f || dotValue < -.01f))//starting portal on a wall
+            var dotValueStart = Vector3.Dot(col.transform.forward, -beginTransform.forward);
+            var dotValueEnd = Vector3.Dot(col.transform.forward, -endTransform.forward);
+            print($"start {dotValueStart} || end {dotValueEnd}");
+
+            if((dotValueStart < .01f && dotValueStart > -.01f))//starting portal on the floor
             {
-                print($"yes");
+                //print($"no");
+                //if the end portal is on the floor
+                if((dotValueEnd < .01f && dotValueEnd > -.01f))
+                {
+                    Quaternion relativeRot = Quaternion.Inverse(beginTransform.rotation) * col.transform.rotation;
+                    relativeRot = halfTurn * relativeRot;
+                    col.transform.rotation = endTransform.rotation * relativeRot;
+                }
+                //if the end portal is on a wall
+                else
+                {
+                    if(Input.GetAxis("Horizontal") > 0)//facing away from the portal
+                    {
+                        print($"forward");
+                        col.transform.rotation = endTransform.rotation;
+                    }
+                    else if (Input.GetAxis("Horizontal") <= 0) //facing same way as portal
+                    {
+                        print($"backward");
+                        col.transform.rotation = Quaternion.Euler(endTransform.rotation.eulerAngles.x, endTransform.rotation.eulerAngles.y + 180f, endTransform.rotation.eulerAngles.z);
+                    }
+                }
+
+                
+            }else{//starting portal on a wall
+                //print($"yes");
                 Quaternion relativeRot = Quaternion.Inverse(beginTransform.rotation) * col.transform.rotation;
                 relativeRot = halfTurn * relativeRot;
                 col.transform.rotation = endTransform.rotation * relativeRot;
-            }else{//starting portal on the floor
-                print($"no");
-                if(Input.GetAxis("Horizontal") > 0)//facing away from the portal
-                    col.transform.forward = endTransform.forward;
-                else if (Input.GetAxis("Horizontal") <= 0) //facing same way as portal
-                    col.transform.forward = -endTransform.forward;
             }
 
             // Quaternion relativeRot = Quaternion.Inverse(beginTransform.rotation) * col.transform.rotation;
@@ -125,7 +157,7 @@ public class PortalBehavior : MonoBehaviour
     }
 
     #region PortalPlacement
-    public void AttemptPlacingPortal()
+    public void AttemptPlacingPortal(Vector3 normal)
     {
         if(CheckPerimeter() && CheckNormalOverlap())
         {
@@ -140,6 +172,7 @@ public class PortalBehavior : MonoBehaviour
             outline.GetComponentInChildren<ParticleSystem>().Simulate(0.1f, false, true, false);
             outline.GetComponentInChildren<ParticleSystem>().Play();
             viewport.SetActive(true);
+            this.portalNormalDir = normal;
         }else{
             
            _cam.GetComponent<CameraShake>().Shake(0.2f,0.1f);
@@ -252,46 +285,6 @@ public class PortalBehavior : MonoBehaviour
         return canPlace;
     }
     #endregion
-
-
-    // private void RotateAfterTeleport(int startPortalID, int endPortalID, Collider col, PortalRegistry registry, Vector3 prePos)
-    // {
-    //     //direction vector from player to starting portal
-    //     var beginTransform = registry.portalArray[startPortalID].gameObject.transform;
-    //     var endTransform = registry.portalArray[endPortalID].gameObject.transform;
-
-    //     // var direction = -portalEndT.InverseTransformDirection(col.GetComponent<CharacterController>().velocity);
-    //     // var tempT = portalEndT;
-    //     // //tempT.RotateAround(direction, -portalEndT.forward, 180);
-    //     // //Debug.Draw
-    //     // //var angle = Vector3.Angle(-portalEndT.forward, direction);
-    //     // //print($"{angle}");
-    //     // Debug.DrawLine(portalEndT.position, portalEndT.position + direction * 5, Color.blue, 5f);
-
-
-    //     // var portalRot = registry.portalArray[endPortalID].gameObject.transform.rotation;
-    //     // Quaternion rot = col.transform.rotation;
-
-    //     // col.transform.rotation = portalRot;
-    //     // //Rotate based on Verical Input
-    //     // if(Input.GetAxis("Vertical") > 0)//if not going backward
-    //     //     col.transform.Rotate(Vector3.up, 180);
-        
-    //     // //Resetting the look rotation to look perpendicular as portal's normal
-    //     // if(col.transform.rotation.eulerAngles.x != 0 || col.transform.rotation.eulerAngles.z != 0)
-    //     // {
-    //     //     rot.eulerAngles = new Vector3(0, col.transform.rotation.eulerAngles.y, 0);
-    //     //     col.transform.rotation = rot;
-    //     // }
-    //     // //Adjusting the look direction based on the walking vector the player is taking
-    //     //     //Based on Horizontal Input
-    //     // Debug.DrawLine(registry.portalArray[portalID].gameObject.transform.position, Vector3.up * 5, Color.blue, 5f);            
-    //     // if(Input.GetAxis("Horizontal") < 0) //rotate from left to right
-    //     //     col.transform.Rotate(Vector3.up, -90 * Input.GetAxis("Horizontal") + rot.eulerAngles.y);
-    //     // else if (Input.GetAxis("Horizontal") > 0) //rotate from right to left
-    //     //     col.transform.Rotate(Vector3.up, -90 * Input.GetAxis("Horizontal")+ rot.eulerAngles.y);
-        
-    // }
 
     private void OnDrawGizmosSelected()
     {
