@@ -65,7 +65,7 @@ public class PortalPlacement : MonoBehaviour
             //portal.transform.forward = -hit.normal;//print($"wall");   
             portal.edgeChecker.transform.forward = -hit.normal;
         }
-        _portalPair.portalArray[portalID].AttemptPlacingPortal(hit.normal);
+        _portalPair.portalArray[portalID].AttemptPlacingPortal();
         //portal.transform.position = new Vector3 ( Mathf.Round(portal.transform.position.x), Mathf.Round(portal.transform.position.y), Mathf.Round(portal.transform.position.z));
     }
 
