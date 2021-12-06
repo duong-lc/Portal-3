@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [RequireComponent(typeof(Rigidbody))]
+[RequireComponent(typeof(CapsuleCollider))]
+[RequireComponent(typeof(MeshRenderer))]
+[RequireComponent(typeof(MeshFilter))]
 
 public class PlayerController : MonoBehaviour
 {
@@ -33,17 +36,12 @@ public class PlayerController : MonoBehaviour
     [Header("Ground Check Properties")]
     [SerializeField] private GameObject _groundChecker; 
     [SerializeField] private float _checkerRadius;
-    [SerializeField] private bool _canJump;
+    private bool _canJump;
     
-    // [Space]
-    // [Header("Portal Interaction Settings")]
-    // public LayerMask playerLayer;
-    // public LayerMask surfaceLayer;
     [HideInInspector] public bool canMove = true;
     [Space]
     public GameObject mainMapGeom;
  
-    //[HideInInspector] public bool canMove = true;
     private Rigidbody _rgbd;
     //Vector3 _inputs;
 
@@ -80,7 +78,6 @@ public class PlayerController : MonoBehaviour
         _capsule.transform.localPosition = new Vector3(0,0,0);
         _capsule.transform.localRotation = Quaternion.identity;
     }
-
     private void CheckGround()
     {
         RaycastHit[] colArr = Physics.SphereCastAll(_groundChecker.transform.position, _checkerRadius, Vector3.down, 0);
@@ -105,17 +102,6 @@ public class PlayerController : MonoBehaviour
             _rotationX = Mathf.Clamp(_rotationX, -lookXLimit, lookXLimit);
             playerCam.transform.localRotation = Quaternion.Euler(_rotationX, 0, 0);
             transform.rotation *= Quaternion.Euler(0, Input.GetAxis("Mouse X") * lookSpeed, 0);
-            // var rotation = new Vector2(-Input.GetAxis("Mouse Y"), Input.GetAxis("Mouse X"));
-            // var targetEuler = targetRotation.eulerAngles + (Vector3)rotation * lookSpeed;
-            // if(targetEuler.x > 180.0f)
-            // {
-            //     targetEuler.x -= 360.0f;
-            // }
-            // targetEuler.x = Mathf.Clamp(targetEuler.x, -lookXLimit, lookXLimit);
-            // targetRotation = Quaternion.Euler(targetEuler);
-
-            // transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime * 15.0f);
-
         }
         else
             return;
@@ -130,7 +116,6 @@ public class PlayerController : MonoBehaviour
             moveVector.z = 0;
             _rgbd.AddForce(moveVector.normalized * _inertiaForce * _airControl_Intensity, ForceMode.Acceleration);
         }
-        //_rgbd.AddForce(moveVector*0.1f, ForceMode.VelocityChange);
 
 
         if(Input.GetKeyDown(KeyCode.Space) && _canJump)
@@ -138,17 +123,17 @@ public class PlayerController : MonoBehaviour
             _rgbd.AddForce(Vector3.up * _jumpForce, ForceMode.Impulse);
             _rgbd.AddForce(moveVector.normalized * _inertiaForce, ForceMode.Impulse);
         }
-            
-
-    
     }
-
     private void CustomGravity()
     {
         Vector3 gravityVector = -_gravityAcceleration * _gravityScale * Vector3.up;
         _rgbd.AddForce(gravityVector, ForceMode.Acceleration);
     }
 
+    private void ObjectInteration()
+    {
+        
+    }
     private void OnDrawGizmosSelected() {
         Gizmos.DrawWireSphere(_groundChecker.transform.position, _checkerRadius);
     }

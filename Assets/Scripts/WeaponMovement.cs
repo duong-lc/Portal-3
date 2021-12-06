@@ -42,7 +42,7 @@ public class WeaponMovement : MonoBehaviour
         var recoilMagnitude = WeaponRecoil();
         _weaponHolderT.localPosition += -Vector3.forward * recoilMagnitude;
         //Lerping back to original position
-        if(Input.GetAxis("Horizontal") == 0 || Input.GetAxis("Vertical") == 0)//lerping if not moving (whehter firing or not)
+        if(Input.GetAxis("Horizontal") == 0 && Input.GetAxis("Vertical") == 0)//lerping if not moving (whehter firing or not)
         {
             _weaponHolderT.localPosition = Vector3.Lerp(_weaponHolderT.localPosition, _originalWeaponPos, _bobSpeed * Time.deltaTime);
             return;//return if not moving to not bob
@@ -52,7 +52,6 @@ public class WeaponMovement : MonoBehaviour
         //Weapon bobling while moving
         var bobMagnitude = Mathf.Sin(counter += Time.deltaTime * _bobSpeed) * _bobAmount;
         _weaponHolderT.localPosition += Vector3.up * bobMagnitude;
-        
     }
     private void WeaponSway()
     {
