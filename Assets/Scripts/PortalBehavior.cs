@@ -54,12 +54,22 @@ public class PortalBehavior : MonoBehaviour
         {
             if(registry.portalArray[0] == this && registry.portalArray[1].GetComponent<Collider>().enabled)//portal blue
             {
+                Physics.IgnoreLayerCollision(other.gameObject.layer, PlayerController.Instance.mainMapGeom.layer, true);
                 Teleport(0, 1, other, registry);
             }
             else if (registry.portalArray[1] == this && registry.portalArray[0].GetComponent<Collider>().enabled)//portal red
             {
+                Physics.IgnoreLayerCollision(other.gameObject.layer, PlayerController.Instance.mainMapGeom.layer, true);
                 Teleport(1, 0, other, registry);
             }
+        }
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        if((other.CompareTag(_portalableObjTag) || other.CompareTag(_playerTag)) && canTeleport)
+        {
+            Physics.IgnoreLayerCollision(other.gameObject.layer, PlayerController.Instance.mainMapGeom.layer, false);
         }
     }
 
