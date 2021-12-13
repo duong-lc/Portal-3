@@ -572,6 +572,11 @@ MonoBehaviour:
   lookXLimit: 80
   _groundChecker: {fileID: 1947204783}
   _checkerRadius: 0.3
+  _holdT: {fileID: 1293069833}
+  _pickupRadius: 1.5
+  _pickUpLayer:
+    serializedVersion: 2
+    m_Bits: 2048
   canMove: 1
   mainMapGeom: {fileID: 2091063033}
 --- !u!4 &600256276
@@ -582,13 +587,12 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 600256274}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 6.97, y: 11.91, z: 18.16}
+  m_LocalPosition: {x: 6.97, y: 12.869, z: 18.16}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1550597760}
   - {fileID: 1947204784}
   - {fileID: 963194228}
-  - {fileID: 1293069833}
   m_Father: {fileID: 0}
   m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -2099,7 +2103,7 @@ Camera:
   m_Depth: 0
   m_CullingMask:
     serializedVersion: 2
-    m_Bits: 1527
+    m_Bits: 3575
   m_RenderingPath: -1
   m_TargetTexture: {fileID: 0}
   m_TargetDisplay: 0
@@ -2124,6 +2128,7 @@ Transform:
   m_Children:
   - {fileID: 1007188611}
   - {fileID: 908141377}
+  - {fileID: 1293069833}
   m_Father: {fileID: 600256276}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -2403,7 +2408,7 @@ GameObject:
   - component: {fileID: 1258420175}
   - component: {fileID: 1258420174}
   - component: {fileID: 1258420173}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: Cube
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2455,7 +2460,7 @@ MeshRenderer:
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 2
   m_RayTraceProcedural: 0
-  m_RenderingLayerMask: 1
+  m_RenderingLayerMask: 4294967295
   m_RendererPriority: 0
   m_Materials:
   - {fileID: 2100000, guid: 31321ba15b8f8eb4c954353edc038b1d, type: 2}
@@ -2496,7 +2501,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1258420172}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 20.585228, y: 4.527344, z: 18.90614}
+  m_LocalPosition: {x: 15.22, y: 12.53, z: 18.90614}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -2525,12 +2530,12 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1293069832}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.21, y: 0.773, z: 2.121}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0.221, y: -0.141, z: 2.518}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
-  m_Father: {fileID: 600256276}
-  m_RootOrder: 3
+  m_Father: {fileID: 963194228}
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1366757148
 GameObject:
@@ -15621,12 +15626,8 @@ MonoBehaviour:
   m_Mesh: {fileID: 1425633004}
   m_IsSelectable: 1
   m_SelectedFaces: 
-  m_SelectedEdges:
-  - a: 1221
-    b: 1222
-  - a: 1235
-    b: 1232
-  m_SelectedVertices: c5040000c6040000d3040000d0040000
+  m_SelectedEdges: []
+  m_SelectedVertices: 
 --- !u!4 &2091063038
 Transform:
   m_ObjectHideFlags: 0

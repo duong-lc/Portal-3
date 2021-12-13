@@ -38,11 +38,20 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float _checkerRadius;
     private bool _canJump;
     
+    [Header("Object Interaction Properties")]
+    [SerializeField] private Transform _holdT;
+    [SerializeField] private float _pickupRadius;
+    [SerializeField] private LayerMask _pickUpLayer;
+    private RaycastHit[] _objArr;
+    private GameObject _objectToHold;
+    private bool isInteract = false;
+
     [HideInInspector] public bool canMove = true;
     [Space]
     public GameObject mainMapGeom;
  
     private Rigidbody _rgbd;
+    
     //Vector3 _inputs;
 
     private void Start()
@@ -62,9 +71,12 @@ public class PlayerController : MonoBehaviour
 
     private void Update()
     {
+        //basic movements
         CheckGround();
         PlayerLook();
         PlayerMovement();
+        //basic interactions
+        ObjectInteraction();
     }
 
     private void LateUpdate() 
@@ -73,11 +85,7 @@ public class PlayerController : MonoBehaviour
         CapsuleReadjustment();
     }
 
-    private void CapsuleReadjustment()
-    {
-        _capsule.transform.localPosition = new Vector3(0,0,0);
-        _capsule.transform.localRotation = Quaternion.identity;
-    }
+    #region Basic Movement
     private void CheckGround()
     {
         RaycastHit[] colArr = Physics.SphereCastAll(_groundChecker.transform.position, _checkerRadius, Vector3.down, 0);
@@ -124,18 +132,49 @@ public class PlayerController : MonoBehaviour
             _rgbd.AddForce(moveVector.normalized * _inertiaForce, ForceMode.Impulse);
         }
     }
+    #endregion
+    #region Custom Realignment
     private void CustomGravity()
     {
         Vector3 gravityVector = -_gravityAcceleration * _gravityScale * Vector3.up;
         _rgbd.AddForce(gravityVector, ForceMode.Acceleration);
     }
+    private void CapsuleReadjustment()
+    {
+        _capsule.transform.localPosition = new Vector3(0,0,0);
+        _capsule.transform.localRotation = Quaternion.identity;
+    }
+    #endregion
 
-    private void ObjectInteration()
+    private void ObjectInteraction()
     {
         
+        if(Input.GetKeyDown(KeyCode.E))
+        {   
+            _objArr = Physics.SphereCastAll(_holdT.transform.position, _pickupRadius, Vector3.up, 0, _pickUpLayer);
+            print($"{_objArr.Length}");
+            if(_objArr.Length > 0)
+            {
+                if(_objArr[0].collider != null)
+                {
+                    _objectToHold = _objArr[0].collider.gameObject;
+                    isInteract = true;
+                }
+            }
+        }
+        if(Input.GetKey(KeyCode.E) && isInteract)
+        {
+            _objectToHold.transform.position = _holdT.position;
+        }
+        if(Input.GetKeyUp(KeyCode.E) && isInteract)
+        {
+            isInteract = false;
+            _objectToHold = null;
+        }
     }
     private void OnDrawGizmosSelected() {
         Gizmos.DrawWireSphere(_groundChecker.transform.position, _checkerRadius);
+        Gizmos.DrawWireSphere(_holdT.position, _pickupRadius);
     }
 
 
