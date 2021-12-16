@@ -21,7 +21,6 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float _airControl_Intensity = 2f;
     [SerializeField] private float _jumpForce = 10f;
     [SerializeField] private float _gravityScale = 1.0f;
-    //private Vector3 _moveVector = Vector3.zero;
     private float _gravityAcceleration = 9.8f;
 
 
@@ -39,12 +38,12 @@ public class PlayerController : MonoBehaviour
     private bool _canJump;
     
     [Header("Object Interaction Properties")]
-    [SerializeField] private Transform _holdT;
-    [SerializeField] private float _pickupRadius;
-    [SerializeField] private LayerMask _pickUpLayer;
-    private RaycastHit[] _objArr;
-    private GameObject _objectToHold;
-    private bool isInteract = false;
+    // [SerializeField] private Transform _holdT;
+    // [SerializeField] private float _pickupRadius;
+    // [SerializeField] private LayerMask _pickUpLayer;
+    // private RaycastHit[] _objArr;
+    // private GameObject _objectToHold;
+    // private bool isInteract = false;
 
     [HideInInspector] public bool canMove = true;
     [Space]
@@ -76,7 +75,7 @@ public class PlayerController : MonoBehaviour
         PlayerLook();
         PlayerMovement();
         //basic interactions
-        ObjectInteraction();
+        //ObjectInteraction();
     }
 
     private void LateUpdate() 
@@ -146,36 +145,36 @@ public class PlayerController : MonoBehaviour
     }
     #endregion
 
-    private void ObjectInteraction()
-    {
+    // private void ObjectInteraction()
+    // {
         
-        if(Input.GetKeyDown(KeyCode.E))
-        {   
-            _objArr = Physics.SphereCastAll(_holdT.transform.position, _pickupRadius, Vector3.up, 0, _pickUpLayer);
-            print($"{_objArr.Length}");
-            if(_objArr.Length > 0)
-            {
-                if(_objArr[0].collider != null)
-                {
-                    _objectToHold = _objArr[0].collider.gameObject;
-                    isInteract = true;
-                }
-            }
-        }
-        if(Input.GetKey(KeyCode.E) && isInteract)
-        {
-            _objectToHold.transform.position = _holdT.position;
-        }
-        if(Input.GetKeyUp(KeyCode.E) && isInteract)
-        {
-            isInteract = false;
-            _objectToHold = null;
-        }
-    }
-    private void OnDrawGizmosSelected() {
-        Gizmos.DrawWireSphere(_groundChecker.transform.position, _checkerRadius);
-        Gizmos.DrawWireSphere(_holdT.position, _pickupRadius);
-    }
+    //     if(Input.GetKeyDown(KeyCode.E))
+    //     {   
+    //         _objArr = Physics.SphereCastAll(_holdT.transform.position, _pickupRadius, Vector3.up, 0, _pickUpLayer);
+    //         print($"{_objArr.Length}");
+    //         if(_objArr.Length > 0)
+    //         {
+    //             if(_objArr[0].collider != null)
+    //             {
+    //                 _objectToHold = _objArr[0].collider.gameObject;
+    //                 isInteract = true;
+    //             }
+    //         }
+    //     }
+    //     if(Input.GetKey(KeyCode.E) && isInteract)
+    //     {
+    //         _objectToHold.transform.position = _holdT.position;
+    //     }
+    //     if(Input.GetKeyUp(KeyCode.E) && isInteract)
+    //     {
+    //         isInteract = false;
+    //         _objectToHold = null;
+    //     }
+    // }
+    // private void OnDrawGizmosSelected() {
+    //     Gizmos.DrawWireSphere(_groundChecker.transform.position, _checkerRadius);
+    //     Gizmos.DrawWireSphere(_holdT.position, _pickupRadius);
+    // }
 
 
 }

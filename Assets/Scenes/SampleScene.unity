@@ -538,6 +538,7 @@ GameObject:
   - component: {fileID: 600256275}
   - component: {fileID: 600256278}
   - component: {fileID: 600256280}
+  - component: {fileID: 600256283}
   - component: {fileID: 600256277}
   - component: {fileID: 600256282}
   - component: {fileID: 600256281}
@@ -565,18 +566,13 @@ MonoBehaviour:
   _walkingSpeed: 10
   _inertiaForce: 2
   _airControl_Intensity: 1
-  _jumpForce: 10
+  _jumpForce: 20
   _gravityScale: 1.7
   playerCam: {fileID: 963194227}
   lookSpeed: 2
   lookXLimit: 80
   _groundChecker: {fileID: 1947204783}
   _checkerRadius: 0.3
-  _holdT: {fileID: 1293069833}
-  _pickupRadius: 1.5
-  _pickUpLayer:
-    serializedVersion: 2
-    m_Bits: 2048
   canMove: 1
   mainMapGeom: {fileID: 2091063033}
 --- !u!4 &600256276
@@ -712,6 +708,30 @@ CapsuleCollider:
   m_Height: 2
   m_Direction: 1
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &600256283
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 600256274}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d36b7b8ebb1897d44bb18f6d6f05d1a8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _sphereCastRadius: 1
+  _interactableLayer:
+    serializedVersion: 2
+    m_Bits: 2048
+  _targetObj: {fileID: 0}
+  _pickupParent: {fileID: 1293069833}
+  _currPickedUpObj: {fileID: 0}
+  _minSpeed: 0
+  _maxSpeed: 300
+  _maxDistance: 10
+  _blindSightDistance: 4
+  _rotationSpeed: 100
 --- !u!43 &639800719
 Mesh:
   m_ObjectHideFlags: 0
@@ -2122,7 +2142,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 963194225}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0.005794357, y: 0.016257828, z: 0.0025814471, w: 0.99984777}
   m_LocalPosition: {x: 0, y: 0.64000034, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
@@ -2131,7 +2151,7 @@ Transform:
   - {fileID: 1293069833}
   m_Father: {fileID: 600256276}
   m_RootOrder: 2
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0.659, y: 1.865, z: 0.307}
 --- !u!114 &963194229
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2408,6 +2428,7 @@ GameObject:
   - component: {fileID: 1258420175}
   - component: {fileID: 1258420174}
   - component: {fileID: 1258420173}
+  - component: {fileID: 1258420178}
   m_Layer: 11
   m_Name: Cube
   m_TagString: Untagged
@@ -2507,6 +2528,21 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1258420178
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1258420172}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f0a337e1b61dcb24898b871ea0c86d28, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  waitOnPickup: 0.2
+  pickedUp: 0
+  playerInteraction: {fileID: 0}
 --- !u!1 &1293069832
 GameObject:
   m_ObjectHideFlags: 0
@@ -2941,7 +2977,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh22018
+  m_Name: pb_Mesh21094
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -15626,8 +15662,10 @@ MonoBehaviour:
   m_Mesh: {fileID: 1425633004}
   m_IsSelectable: 1
   m_SelectedFaces: 
-  m_SelectedEdges: []
-  m_SelectedVertices: 
+  m_SelectedEdges:
+  - a: 953
+    b: 955
+  m_SelectedVertices: b9030000bb030000
 --- !u!4 &2091063038
 Transform:
   m_ObjectHideFlags: 0
