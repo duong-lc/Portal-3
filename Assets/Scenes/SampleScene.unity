@@ -623,7 +623,7 @@ MonoBehaviour:
   portalableSurfaceLayer:
     serializedVersion: 2
     m_Bits: 64
-  _portalPair: {fileID: 1615410851}
+  portalPair: {fileID: 1615410851}
   _projectile: {fileID: 7230893745530784919, guid: eff58aeb92787134098ba54f41a38fb6, type: 3}
   _spawnTransform: {fileID: 976617415}
   _bulletSpeed: 200
@@ -728,9 +728,9 @@ MonoBehaviour:
   _pickupParent: {fileID: 1293069833}
   _currPickedUpObj: {fileID: 0}
   _minSpeed: 0
-  _maxSpeed: 300
+  _maxSpeed: 6000
   _maxDistance: 10
-  _blindSightDistance: 4
+  _blindSightRadius: 4
   _rotationSpeed: 100
 --- !u!43 &639800719
 Mesh:
@@ -2431,7 +2431,7 @@ GameObject:
   - component: {fileID: 1258420178}
   m_Layer: 11
   m_Name: Cube
-  m_TagString: Untagged
+  m_TagString: PortalableObject
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -2542,7 +2542,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   waitOnPickup: 0.2
   pickedUp: 0
-  playerInteraction: {fileID: 0}
 --- !u!1 &1293069832
 GameObject:
   m_ObjectHideFlags: 0
@@ -15662,10 +15661,8 @@ MonoBehaviour:
   m_Mesh: {fileID: 1425633004}
   m_IsSelectable: 1
   m_SelectedFaces: 
-  m_SelectedEdges:
-  - a: 953
-    b: 955
-  m_SelectedVertices: b9030000bb030000
+  m_SelectedEdges: []
+  m_SelectedVertices: 
 --- !u!4 &2091063038
 Transform:
   m_ObjectHideFlags: 0
