@@ -5,18 +5,18 @@ namespace TMPro.EditorUtilities
 {
     public class TMP_SDFShaderGUI : TMP_BaseShaderGUI
     {
-        static ShaderFeature s_OutlineFeature, s_UnderlayFeature, s_BevelFeature, s_GlowFeature, s_MaskFeature;
+        static ShaderFeature soutlineFeature, s_UnderlayFeature, s_BevelFeature, s_GlowFeature, s_MaskFeature;
 
-        static bool s_Face = true, s_Outline = true, s_Outline2, s_Underlay, s_Lighting, s_Glow, s_Bevel, s_Light, s_Bump, s_Env;
+        static bool s_Face = true, soutline = true, soutline2, s_Underlay, s_Lighting, s_Glow, s_Bevel, s_Light, s_Bump, s_Env;
 
         static string[]
             s_FaceUVSpeedName = { "_FaceUVSpeed" },
             s_FaceUvSpeedNames = { "_FaceUVSpeedX", "_FaceUVSpeedY" },
-            s_OutlineUvSpeedNames = { "_OutlineUVSpeedX", "_OutlineUVSpeedY" };
+            soutlineUvSpeedNames = { "outlineUVSpeedX", "outlineUVSpeedY" };
 
         static TMP_SDFShaderGUI()
         {
-            s_OutlineFeature = new ShaderFeature()
+            soutlineFeature = new ShaderFeature()
             {
                 undoLabel = "Outline",
                 keywords = new[] { "OUTLINE_ON" }
@@ -67,18 +67,18 @@ namespace TMPro.EditorUtilities
 
             EndPanel();
 
-            s_Outline = m_Material.HasProperty(ShaderUtilities.ID_OutlineTex) ? BeginPanel("Outline", s_Outline) : BeginPanel("Outline", s_OutlineFeature, s_Outline);
-            if (s_Outline)
+            soutline = m_Material.HasProperty(ShaderUtilities.IDoutlineTex) ? BeginPanel("Outline", soutline) : BeginPanel("Outline", soutlineFeature, soutline);
+            if (soutline)
             {
                 DoOutlinePanel();
             }
 
             EndPanel();
 
-            if (m_Material.HasProperty(ShaderUtilities.ID_Outline2Color))
+            if (m_Material.HasProperty(ShaderUtilities.IDoutline2Color))
             {
-                s_Outline2 = BeginPanel("Outline 2", s_OutlineFeature, s_Outline2);
-                if (s_Outline2)
+                soutline2 = BeginPanel("Outline 2", soutlineFeature, soutline2);
+                if (soutline2)
                 {
                     DoOutline2Panel();
                 }
@@ -219,9 +219,9 @@ namespace TMPro.EditorUtilities
                 DoSlider("_FaceSoftness", "X", "Softness");
             }
 
-            if (m_Material.HasProperty("_OutlineSoftness"))
+            if (m_Material.HasProperty("outlineSoftness"))
             {
-                DoSlider("_OutlineSoftness", "Softness");
+                DoSlider("outlineSoftness", "Softness");
             }
 
             if (m_Material.HasProperty(ShaderUtilities.ID_FaceDilate))
@@ -240,23 +240,23 @@ namespace TMPro.EditorUtilities
         void DoOutlinePanel()
         {
             EditorGUI.indentLevel += 1;
-            DoColor("_OutlineColor", "Color");
-            if (m_Material.HasProperty(ShaderUtilities.ID_OutlineTex))
+            DoColor("outlineColor", "Color");
+            if (m_Material.HasProperty(ShaderUtilities.IDoutlineTex))
             {
-                if (m_Material.HasProperty("_OutlineUVSpeedX"))
+                if (m_Material.HasProperty("outlineUVSpeedX"))
                 {
-                    DoTexture2D("_OutlineTex", "Texture", true, s_OutlineUvSpeedNames);
+                    DoTexture2D("outlineTex", "Texture", true, soutlineUvSpeedNames);
                 }
                 else
                 {
-                    DoTexture2D("_OutlineTex", "Texture", true);
+                    DoTexture2D("outlineTex", "Texture", true);
                 }
             }
 
-            DoSlider("_OutlineWidth", "Thickness");
-            if (m_Material.HasProperty("_OutlineShininess"))
+            DoSlider("outlineWidth", "Thickness");
+            if (m_Material.HasProperty("outlineShininess"))
             {
-                DoSlider("_OutlineShininess", "Gloss");
+                DoSlider("outlineShininess", "Gloss");
             }
 
             EditorGUI.indentLevel -= 1;
@@ -266,23 +266,23 @@ namespace TMPro.EditorUtilities
         void DoOutline2Panel()
         {
             EditorGUI.indentLevel += 1;
-            DoColor("_Outline2Color", "Color");
-            //if (m_Material.HasProperty(ShaderUtilities.ID_OutlineTex))
+            DoColor("outline2Color", "Color");
+            //if (m_Material.HasProperty(ShaderUtilities.IDoutlineTex))
             //{
-            //    if (m_Material.HasProperty("_OutlineUVSpeedX"))
+            //    if (m_Material.HasProperty("outlineUVSpeedX"))
             //    {
-            //        DoTexture2D("_OutlineTex", "Texture", true, s_OutlineUvSpeedNames);
+            //        DoTexture2D("outlineTex", "Texture", true, soutlineUvSpeedNames);
             //    }
             //    else
             //    {
-            //        DoTexture2D("_OutlineTex", "Texture", true);
+            //        DoTexture2D("outlineTex", "Texture", true);
             //    }
             //}
 
-            DoSlider("_Outline2Width", "Thickness");
-            //if (m_Material.HasProperty("_OutlineShininess"))
+            DoSlider("outline2Width", "Thickness");
+            //if (m_Material.HasProperty("outlineShininess"))
             //{
-            //    DoSlider("_OutlineShininess", "Gloss");
+            //    DoSlider("outlineShininess", "Gloss");
             //}
 
             EditorGUI.indentLevel -= 1;

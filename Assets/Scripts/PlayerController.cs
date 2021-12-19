@@ -30,8 +30,6 @@ public class PlayerController : MonoBehaviour
     public float lookXLimit = 80.0f;
     private float _rotationX = 0;
     [HideInInspector] public Quaternion targetRotation { private set; get; }
-    
-
     [Header("Ground Check Properties")]
     [SerializeField] private GameObject _groundChecker; 
     [SerializeField] private float _checkerRadius;
@@ -88,9 +86,9 @@ public class PlayerController : MonoBehaviour
     private void CheckGround()
     {
         RaycastHit[] colArr = Physics.SphereCastAll(_groundChecker.transform.position, _checkerRadius, Vector3.down, 0);
-        for(int i = 0; i < colArr.Length; i++)
+        foreach(RaycastHit hit in colArr)
         {
-            if(colArr[i].collider.tag != gameObject.tag)
+            if(hit.collider.tag != gameObject.tag)
             {
                 _canJump = true;
                 return;  

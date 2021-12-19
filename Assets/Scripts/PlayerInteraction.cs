@@ -14,7 +14,7 @@ public class PlayerInteraction : MonoBehaviour
     [Header("Pickup")]
     [SerializeField] private Transform _pickupParent;
     [SerializeField] GameObject _currPickedUpObj;
-    private Rigidbody _pickupRB;
+    [SerializeField] private Rigidbody _pickupRB;
 
     [Header("Pick Up Object Properties")]
     [SerializeField] private float _minSpeed = 0;
@@ -27,11 +27,11 @@ public class PlayerInteraction : MonoBehaviour
     [Header("Rotation Properties")]
     [SerializeField] private float _rotationSpeed = 100f;
     private Quaternion _lookRot;
-    private PortalBehavior[] _portaArray;
+    private PortalBehavior[] _portalArray;
     private void Start()
     {
         mainCamera = Camera.main;
-        _portaArray = GetComponent<PortalPlacement>().portalPair.portalArray;
+        _portalArray = GetComponent<PortalPlacement>().portalPair.portalArray;
     }
 
 
@@ -60,18 +60,32 @@ public class PlayerInteraction : MonoBehaviour
                 BreakConnection(_currPickedUpObj.GetComponent<ObjectInteraction>()); 
             }
         }
-
-      
     }
     private void FixedUpdate()
     {
         if (_currPickedUpObj == null)
             return;
         
+        //If the object goes past a threshold while being picked up, release it
+        if(_currentDist > _blindSightRadius)
+        {
+            // foreach(PortalBehavior portal in _portaArray)
+            // {
+            //     if(portal.canTeleport == false)
+            //     {
+            //         return;
+            //     }
+            // }
+            print($"too far, breaking");
+            BreakConnection(_currPickedUpObj.GetComponent<ObjectInteraction>());
+            return;
+        }
+
+
         //Setting Velocity of pick up object
         //getting distance from pickup object to the point where the pickup should be
         _currentDist = Vector3.Distance(_pickupParent.position, _pickupRB.position);
-        //smoothstep lerp elocity magnitude of pickup object relative to how far current distance is to max distance
+        //smooth step lerp velocity magnitude of pickup object relative to how far current distance is to max distance
         _currentSpeed = Mathf.SmoothStep(_minSpeed, _maxSpeed, _currentDist / _maxDistance);
         _currentSpeed *= Time.fixedDeltaTime;
         //Getting direction and apply that direction and speed to the rigid body of pickup
@@ -81,22 +95,12 @@ public class PlayerInteraction : MonoBehaviour
         //Setting rotation of pickup object
         //Getting the vector from object pickup to the camera
         _lookRot = Quaternion.LookRotation(mainCamera.transform.position - _pickupRB.position);
-        //alawys lerp that rotation so that the pickup object would alawys face that vector
+        //always lerp that rotation so that the pickup object would always face that vector
         _lookRot = Quaternion.Slerp(mainCamera.transform.rotation, _lookRot, _rotationSpeed * Time.fixedDeltaTime);
         _pickupRB.MoveRotation(_lookRot);
 
-        //If the object goes past a threshold while being picked up, release it
-        if(_currentDist > _blindSightRadius)
-        {
-            foreach(PortalBehavior portal in _portaArray)
-            {
-                if(portal.canTeleport == false)
-                {
-                    return;
-                }
-            }
-            BreakConnection(_currPickedUpObj.GetComponent<ObjectInteraction>());
-        }
+
+
         
         
 
@@ -105,10 +109,16 @@ public class PlayerInteraction : MonoBehaviour
     //Release the object
     public void BreakConnection(ObjectInteraction obj)
     {
+        _currPickedUpObj.tag = "PortalableObject";
+        //_currPickedUpObj.GetComponent<BoxCollider>().enabled = true;
+
         //De-Parent the obj after being dropped
         _currPickedUpObj.transform.parent = null;
         //Release all constraints of rigid body
         _pickupRB.constraints = RigidbodyConstraints.None;
+        //_pickupRB.velocity = Vector3.zero;
+        _targetObj = null;
+        _pickupRB = null;
         //Nullify the currPickedupObj is linked to
         _currPickedUpObj = null;
         //Set pickup status of object to false
@@ -122,6 +132,9 @@ public class PlayerInteraction : MonoBehaviour
         obj = _targetObj.GetComponentInChildren<ObjectInteraction>();
         _currPickedUpObj = _targetObj;
         
+        _currPickedUpObj.tag = "Player";
+        //_currPickedUpObj.GetComponent<BoxCollider>().enabled = false;
+
         //Setting parent of pickup Object to the player so that player can teleport with the object
         _currPickedUpObj.transform.SetParent(transform, true);
 

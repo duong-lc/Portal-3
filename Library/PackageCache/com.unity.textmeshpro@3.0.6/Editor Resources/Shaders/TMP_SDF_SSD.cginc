@@ -62,7 +62,7 @@ pixel_t VertShader(vertex_t input)
     float4 faceColor = float4(color.rgb, opacity) * _FaceColor;
     faceColor.rgb *= faceColor.a;
 
-    float4 outlineColor = _OutlineColor;
+    float4 outlineColor = outlineColor;
     outlineColor.a *= opacity;
     outlineColor.rgb *= outlineColor.a;
 
@@ -70,7 +70,7 @@ pixel_t VertShader(vertex_t input)
     output.faceColor = faceColor;
     output.outlineColor = outlineColor;
     output.texcoord0 = float2(input.texcoord0.xy);
-    output.param = float4(0.5 - weight, 1.3333 * _GradientScale * (_Sharpness + 1) / _MainTex_TexelSize.z , _OutlineWidth * _ScaleRatioA * 0.5, 0);
+    output.param = float4(0.5 - weight, 1.3333 * _GradientScale * (_Sharpness + 1) / _MainTex_TexelSize.z , outlineWidth * _ScaleRatioA * 0.5, 0);
     output.clipUV = clipUV;
 
     #if (UNDERLAY_ON || UNDERLAY_INNER)
@@ -100,7 +100,7 @@ float4 PixShader(pixel_t input) : SV_Target
     float layerBias = input.param.x * layerScale - .5 - ((_UnderlayDilate * _ScaleRatioC) * .5 * layerScale);
     #endif
 
-    scale /= 1 + (_OutlineSoftness * _ScaleRatioA * scale);
+    scale /= 1 + (outlineSoftness * _ScaleRatioA * scale);
 
     float4 faceColor = input.faceColor * saturate((d - input.param.x) * scale + 0.5);
 

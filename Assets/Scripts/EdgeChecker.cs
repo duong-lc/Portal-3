@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class EdgeChecker : MonoBehaviour
+public class edgeChecker : MonoBehaviour
 {
     public bool isClear = true;
     private void OnTriggerStay(Collider other) 

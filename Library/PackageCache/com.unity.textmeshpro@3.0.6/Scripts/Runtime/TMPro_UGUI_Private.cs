@@ -908,7 +908,7 @@ namespace TMPro
             }
 
             thickness = Mathf.Clamp01(thickness);
-            m_sharedMaterial.SetFloat(ShaderUtilities.ID_OutlineWidth, thickness);
+            m_sharedMaterial.SetFloat(ShaderUtilities.IDoutlineWidth, thickness);
             m_padding = GetPaddingForMaterial();
         }
 
@@ -937,7 +937,7 @@ namespace TMPro
             m_sharedMaterial = m_fontMaterial;
             m_padding = GetPaddingForMaterial();
 
-            m_sharedMaterial.SetColor(ShaderUtilities.ID_OutlineColor, color);
+            m_sharedMaterial.SetColor(ShaderUtilities.IDoutlineColor, color);
         }
 
 
