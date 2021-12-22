@@ -5,7 +5,8 @@ using UnityEngine;
 public class PortalRegistry : MonoBehaviour
 {
     public PortalBehavior[] portalArray {get; private set;}
-    void Awake()
+    public static PortalRegistry Instance;
+    private void Awake()
     {
         portalArray = GetComponentsInChildren<PortalBehavior>();
 
@@ -13,5 +14,21 @@ public class PortalRegistry : MonoBehaviour
         {
             Debug.LogError("not enough portals in game");
         }
+    }
+
+    private void Start()
+    {
+        Instance = this;
+    }
+
+    public bool GetIsAnyOnCoolDown()
+    {
+        foreach (PortalBehavior portal in portalArray)
+        {
+            if (!portal.canTeleport)
+                return true;
+        }
+
+        return false;
     }
 }

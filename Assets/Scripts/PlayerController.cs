@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 [RequireComponent(typeof(Rigidbody))]
@@ -10,7 +11,6 @@ using UnityEngine;
 public class PlayerController : MonoBehaviour
 {
     public static PlayerController Instance;
-    private CharacterController _controller;
     [SerializeField] private GameObject _capsule;
 
     [Space]
@@ -29,33 +29,24 @@ public class PlayerController : MonoBehaviour
     public float lookSpeed = 2.5f;
     public float lookXLimit = 80.0f;
     private float _rotationX = 0;
-    [HideInInspector] public Quaternion targetRotation { private set; get; }
+
     [Header("Ground Check Properties")]
+    [SerializeField] private LayerMask _groundLayer1;
+    [SerializeField] private LayerMask _groundLayer2;
     [SerializeField] private GameObject _groundChecker; 
     [SerializeField] private float _checkerRadius;
     private bool _canJump;
     
-    [Header("Object Interaction Properties")]
-    // [SerializeField] private Transform _holdT;
-    // [SerializeField] private float _pickupRadius;
-    // [SerializeField] private LayerMask _pickUpLayer;
-    // private RaycastHit[] _objArr;
-    // private GameObject _objectToHold;
-    // private bool isInteract = false;
 
     [HideInInspector] public bool canMove = true;
     [Space]
     public GameObject mainMapGeom;
- 
     private Rigidbody _rgbd;
     
-    //Vector3 _inputs;
 
     private void Start()
     {
         Instance = this;
-        targetRotation = transform.rotation;
-        _controller = GetComponent<CharacterController>();
         _rgbd = GetComponent<Rigidbody>();
         //mainMapGeom = GameObject.FindWithTag("MainMapGeom");
         
@@ -72,8 +63,6 @@ public class PlayerController : MonoBehaviour
         CheckGround();
         PlayerLook();
         PlayerMovement();
-        //basic interactions
-        //ObjectInteraction();
     }
 
     private void LateUpdate() 
@@ -85,18 +74,13 @@ public class PlayerController : MonoBehaviour
     #region Basic Movement
     private void CheckGround()
     {
-        RaycastHit[] colArr = Physics.SphereCastAll(_groundChecker.transform.position, _checkerRadius, Vector3.down, 0);
-        foreach(RaycastHit hit in colArr)
+        RaycastHit[] colArr = Physics.SphereCastAll(_groundChecker.transform.position, _checkerRadius, Vector3.down, 0, _groundLayer1|_groundLayer2);
+        if (colArr.Any(hit => !hit.collider.CompareTag(gameObject.tag)))
         {
-            if(hit.collider.tag != gameObject.tag)
-            {
-                _canJump = true;
-                return;  
-            }
-           
+            _canJump = true;
+            return;
         }
         _canJump = false;
-        return;
     }
     private void PlayerLook()
     {
@@ -142,37 +126,7 @@ public class PlayerController : MonoBehaviour
         _capsule.transform.localRotation = Quaternion.identity;
     }
     #endregion
-
-    // private void ObjectInteraction()
-    // {
-        
-    //     if(Input.GetKeyDown(KeyCode.E))
-    //     {   
-    //         _objArr = Physics.SphereCastAll(_holdT.transform.position, _pickupRadius, Vector3.up, 0, _pickUpLayer);
-    //         print($"{_objArr.Length}");
-    //         if(_objArr.Length > 0)
-    //         {
-    //             if(_objArr[0].collider != null)
-    //             {
-    //                 _objectToHold = _objArr[0].collider.gameObject;
-    //                 isInteract = true;
-    //             }
-    //         }
-    //     }
-    //     if(Input.GetKey(KeyCode.E) && isInteract)
-    //     {
-    //         _objectToHold.transform.position = _holdT.position;
-    //     }
-    //     if(Input.GetKeyUp(KeyCode.E) && isInteract)
-    //     {
-    //         isInteract = false;
-    //         _objectToHold = null;
-    //     }
-    // }
-    // private void OnDrawGizmosSelected() {
-    //     Gizmos.DrawWireSphere(_groundChecker.transform.position, _checkerRadius);
-    //     Gizmos.DrawWireSphere(_holdT.position, _pickupRadius);
-    // }
+    
 
 
 }

@@ -55,13 +55,14 @@
      <Compile Include="Assets\Scripts\PlayerController.cs" />
      <Compile Include="Assets\Scripts\PortalBehavior.cs" />
      <Compile Include="Assets\Scripts\PortalPlacement.cs" />
+     <Compile Include="Assets\Scripts\ObjectDropperInteraction.cs" />
      <Compile Include="Assets\Scripts\ObjectInteraction.cs" />
      <Compile Include="Assets\Scripts\PlayerInteraction.cs" />
      <Compile Include="Assets\Scripts\WeaponMovement.cs" />
+     <Compile Include="Assets\Scripts\ObjectExistBoundVolume.cs" />
      <Compile Include="Assets\Scripts\CameraShake.cs" />
      <Compile Include="Assets\Scripts\PortalProjectileBehavior.cs" />
      <Compile Include="Assets\Scripts\PortalRegistry.cs" />
-     <Compile Include="Assets\Scripts\EdgeChecker.cs" />
  <Reference Include="UnityEngine">
  <HintPath>E:/Unity/2020.3.18f1/Editor/Data/Managed/UnityEngine/UnityEngine.dll</HintPath>
  </Reference>

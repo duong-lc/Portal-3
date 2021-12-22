@@ -13,36 +13,49 @@ using UnityEngine.Serialization;
 public class PortalBehavior : MonoBehaviour
 {
     public bool canTeleport = true;
-    
+
     ///<summary>Primary Game Object of Portal, contains out line portal mesh, and particle system component</summary>
-    [FormerlySerializedAs( "outline")] [SerializeField] private GameObject _outline;
+    [FormerlySerializedAs("outline")] [SerializeField]
+    private GameObject _outline;
+
     ///<summary>Placed at Vector3.zero relative to portal parent transform calculate perimeter overlap for portal placement</summary>
     public GameObject edgeChecker;
+
     ///<summary>Surface of portal with Fresnel's swirling fx shader</summary>
-    [FormerlySerializedAs( "viewport")] [SerializeField] private GameObject _viewport;
+    [FormerlySerializedAs("viewport")] [SerializeField]
+    private GameObject _viewport;
+
     ///<summary>Cooldown timer for portal</summary>
-    [FormerlySerializedAs( "cooldownTimer")] [SerializeField] private float _cooldownTimer = 0.1f;
+    [FormerlySerializedAs("cooldownTimer")] [SerializeField]
+    private float _cooldownTimer = 0.1f;
+
     ///<summary>main Camera game object of the scene </summary>
     [SerializeField] private GameObject _cam;
+
     //const string tags
     private const string PortalTag = "Portal", PortalObjTag = "PortalableObject", PlayerTag = "Player";
+
     ///<summary>quaternion offset to rotate player or object's rotation or velocity direction after teleportation</summary>
     private static readonly Quaternion HalfTurn = Quaternion.Euler(0.0f, 180.0f, 0.0f);
+
     ///<summary>Registry of all the portal</summary>
     private PortalRegistry _registry;
-    
 
-    private void Start() {
-        _registry = gameObject.transform.parent.GetComponent<PortalRegistry>();//Getting portal registry
-        
+
+    private void Start()
+    {
+        _registry = gameObject.transform.parent.GetComponent<PortalRegistry>(); //Getting portal registry
+
         //Disable portal and Deactivate visual of portal at start
         canTeleport = true;
         _outline.SetActive(false);
         _viewport.SetActive(false);
     }
-    private void Update() {
+
+    private void Update()
+    {
         //If visual of portal is active, enable the collider for teleportation
-        if(_outline.activeInHierarchy && _viewport.activeInHierarchy)
+        if (_outline.activeInHierarchy && _viewport.activeInHierarchy)
             gameObject.GetComponent<Collider>().enabled = true;
         else
             gameObject.GetComponent<Collider>().enabled = false;
@@ -66,25 +79,32 @@ public class PortalBehavior : MonoBehaviour
     /// </para>
     /// </summary>
     /// <param name="other">Collider of Game Object that collides with portal's trigger collider</param>
-    private void OnTriggerEnter(Collider other) {
+    private void OnTriggerEnter(Collider other)
+    {
         //Comparing tag and make sure if current teleport can teleport
-        if((other.CompareTag(PortalObjTag) || other.CompareTag(PlayerTag)) && canTeleport)
+        if ((!other.CompareTag(PortalObjTag) && !other.CompareTag(PlayerTag)) || !canTeleport) return;
+        if (_registry.portalArray[0] == this &&
+            _registry.portalArray[1].GetComponent<Collider>().enabled) //portal blue
         {
-            if(_registry.portalArray[0] == this && _registry.portalArray[1].GetComponent<Collider>().enabled)//portal blue
-            {
-                //Disable collision between player layer and map geometry layer
-                Physics.IgnoreLayerCollision(other.gameObject.layer, PlayerController.Instance.mainMapGeom.layer, true);
-                //Call teleport method to teleport
-                Teleport(0, 1, other, _registry);
-            }
-            else if (_registry.portalArray[1] == this && _registry.portalArray[0].GetComponent<Collider>().enabled)//portal red
-            {
-                Physics.IgnoreLayerCollision(other.gameObject.layer, PlayerController.Instance.mainMapGeom.layer, true);
-                Teleport(1, 0, other, _registry);
-            }
+            //Disable collision between player layer and map geometry layer
+            // if (other.CompareTag("Player"))
+            // {
+            Physics.IgnoreLayerCollision(other.gameObject.layer, PlayerController.Instance.mainMapGeom.layer, true);
+            //}
+            //Call teleport method to teleport
+            Teleport(0, 1, other, _registry);
+        }
+        else if (_registry.portalArray[1] == this &&
+                 _registry.portalArray[0].GetComponent<Collider>().enabled) //portal red
+        {
+            // if (other.CompareTag("Player"))
+            // {
+            Physics.IgnoreLayerCollision(other.gameObject.layer, PlayerController.Instance.mainMapGeom.layer, true);
+            //}
+            Teleport(1, 0, other, _registry);
         }
     }
-    
+
     /// <summary>
     /// <para>  Handle game object's collider leaving portal's collider,
     ///         filter the incoming collider by player and portable-able objects.
@@ -93,7 +113,7 @@ public class PortalBehavior : MonoBehaviour
     /// <param name="other">Collider of Game Object that leaves the trigger collider of portal</param>
     private void OnTriggerExit(Collider other)
     {
-        if((other.CompareTag(PortalObjTag) || other.CompareTag(PlayerTag)))
+        if ((other.CompareTag(PortalObjTag) || other.CompareTag(PlayerTag)))
         {
             //reenable the collision between player layer and map geometry layer
             Physics.IgnoreLayerCollision(other.gameObject.layer, PlayerController.Instance.mainMapGeom.layer, false);
@@ -112,22 +132,24 @@ public class PortalBehavior : MonoBehaviour
     /// <param name="registry"> registry of all the available portals in the scene</param>
     private void Teleport(int beginPortalID, int endPortalID, Collider col, PortalRegistry registry)
     {
+        //Portal Teleport Cooldown
+        registry.portalArray[endPortalID].StartCoroutine(registry.portalArray[endPortalID].CountingDownCooldown());
         //Caching values
-        Transform beginTransform = registry.portalArray[beginPortalID].gameObject.transform;//transform of start portal
-        Transform endTransform = registry.portalArray[endPortalID].gameObject.transform;//transform of end portal
-        Vector3 playerFwd = PlayerController.Instance.gameObject.transform.forward;//forward vector of player
+        Transform beginTransform = registry.portalArray[beginPortalID].gameObject.transform; //transform of start portal
+        Transform endTransform = registry.portalArray[endPortalID].gameObject.transform; //transform of end portal
+        Vector3 playerFwd = PlayerController.Instance.gameObject.transform.forward; //forward vector of player
 
         //Getting Dot product of start and end portal to see the alignment of the portal to their surface
         float dotValueStart = Vector3.Dot(playerFwd, -beginTransform.forward);
         float dotValueEnd = Vector3.Dot(playerFwd, -endTransform.forward);
         
-        //Position to teleport the object to
-        var teleportPos = endTransform.TransformPoint(-Vector3.forward * registry.portalArray[endPortalID].gameObject.GetComponent<BoxCollider>().size.x/2);
-        //Teleport object in front of the teleport collision of portal with offset
-        col.gameObject.transform.position = teleportPos;
-
-        if(col.CompareTag(PlayerTag))//if the game object is a player
+        
+        if (col.CompareTag(PlayerTag)) //if the game object is a player
         {
+            //print($"tp player");
+            
+            //Teleport to position
+            SetPositionUpdateTP(endTransform, registry, endPortalID, col);
             /*
             Update rotation of object after teleport
             If the starting portal is on the ground, it's hard to convert the look direction player will have after teleportation 
@@ -137,25 +159,40 @@ public class PortalBehavior : MonoBehaviour
                 + on a wall
             -Otherwise, if starting portal on a wall surface, it's easy rotate and only have 1 case
             */
-            if((dotValueStart < .01f && dotValueStart > -.01f))//starting portal on the floor
+            if ((dotValueStart < .01f && dotValueStart > -.01f)) //starting portal on the floor
             {
                 //if the end portal is on the floor
-                if((dotValueEnd < .01f && dotValueEnd > -.01f)) { SetRotationUpdateTP(beginTransform, endTransform, col); }
+                if ((dotValueEnd < .01f && dotValueEnd > -.01f))
+                {
+                    SetRotationUpdateTP(beginTransform, endTransform, col);
+                }
                 //if the end portal is on a wall
                 else
                 {
                     //Based on the velocity of the player, if player moving backward, then face the portal, if not then away.
-                    if (Input.GetAxis("Vertical") < 0) {col.transform.rotation = endTransform.rotation;} //facing away from the portal
-                    else if (Input.GetAxis("Vertical") >= 0) {//facing same way as portal
+                    if (Input.GetAxis("Vertical") < 0)
+                    {
+                        col.transform.rotation = endTransform.rotation;
+                    } //facing away from the portal
+                    else if (Input.GetAxis("Vertical") >= 0)
+                    {
+                        //facing same way as portal
                         Quaternion endRot = endTransform.rotation;
-                        col.transform.rotation = Quaternion.Euler(endRot.eulerAngles.x, endRot.eulerAngles.y + 180f, endRot.eulerAngles.z);
+                        col.transform.rotation = Quaternion.Euler(endRot.eulerAngles.x, endRot.eulerAngles.y + 180f,
+                            endRot.eulerAngles.z);
                     }
                 }
             }
-            else {SetRotationUpdateTP(beginTransform, endTransform, col);}//starting portal on a wall
+            else
+            {
+                SetRotationUpdateTP(beginTransform, endTransform, col);
+            } //starting portal on a wall
 
             //Resetting the Y-axis rotation of the player if it's been changed
-            if(col.transform.rotation.x != 0 || col.transform.rotation.z != 0) { col.transform.rotation = Quaternion.Euler(0, col.transform.rotation.eulerAngles.y, 0); }
+            if (col.transform.rotation.x != 0 || col.transform.rotation.z != 0)
+            {
+                col.transform.rotation = Quaternion.Euler(0, col.transform.rotation.eulerAngles.y, 0);
+            }
 
             /*
              update velocity of rigidbody
@@ -163,37 +200,65 @@ public class PortalBehavior : MonoBehaviour
                 - One for when the object is on a 90 wall or on the floor
                 - Other is for when the object is on a != 90 degree wall
             */
-            if((dotValueEnd > .99f || dotValueEnd < -.99f) || (dotValueEnd < .01f && dotValueEnd > -.01f))//on 90 degree wall or on floor respectively
+            if ((dotValueEnd > .99f || dotValueEnd < -.99f) ||
+                (dotValueEnd < .01f && dotValueEnd > -.01f)) //on 90 degree wall or on floor respectively
             {
-                SetVelocityUpdateTP(beginTransform, endTransform, col); 
+                SetVelocityUpdateTP(beginTransform, endTransform, col);
             }
-            else//if on a tilted surface
+            else //if on a tilted surface
             {
                 float velocityMagnitude = col.transform.GetComponent<Rigidbody>().velocity.magnitude;
                 //this section to find direction is relatively dumb, i should go to programmer's hell for this line
-                Vector3 velocityDir = ((endTransform.position + -endTransform.forward * 3) - endTransform.position).normalized;
+                Vector3 velocityDir = ((endTransform.position + -endTransform.forward * 3) - endTransform.position)
+                    .normalized;
 
                 //This is the part where this mechanic is really dodgy. This is due to the fact that the player has the ability to air strafe.
                 //this led to very different result of velocity conversion after teleportation. So to somewhat make the two scenarios result in a same result, 
                 //there are 2 ways to handle this 'bug'.
                 //this could become problematic in the future, so I'll make sure to turn this into a feature since i can't figure out to fix this,
                 //and properly guide player around the mechanic in terms of manipulating air strafing. 
-                if(Input.GetAxis("Vertical") > .1f || Input.GetAxis("Vertical") < -.1f)//if player holding down w or s key while moving through
+                if (Input.GetAxis("Vertical") > .1f ||
+                    Input.GetAxis("Vertical") < -.1f) //if player holding down w or s key while moving through
                     col.transform.GetComponent<Rigidbody>().velocity = (velocityDir * velocityMagnitude * 1.4f);
                 else
-                    col.transform.GetComponent<Rigidbody>().AddForce(velocityDir * velocityMagnitude * 1.6f, ForceMode.VelocityChange);
+                    col.transform.GetComponent<Rigidbody>().AddForce(velocityDir * velocityMagnitude * 1.6f,
+                        ForceMode.VelocityChange);
             }
 
-            //Portal Teleport Cooldown
-            registry.portalArray[endPortalID].StartCoroutine(registry.portalArray[endPortalID].CountingDownCooldown());
+            var temp = col.GetComponent<PlayerInteraction>();
+            if (temp.isPickingUp)
+            {
+                temp.TeleportCurrPickedUpObj();
+            }
         }
-        else//if the game object is a teleport-able obj
+        else //if the game object is a teleport-able obj
         {
+            if (col.GetComponent<ObjectInteraction>().pickedUp)
+                return;
+            
+            SetPositionUpdateTP(endTransform, registry, endPortalID, col);
             SetRotationUpdateTP(beginTransform, endTransform, col);
             SetVelocityUpdateTP(beginTransform, endTransform, col);
-
-            registry.portalArray[endPortalID].StartCoroutine(registry.portalArray[endPortalID].CountingDownCooldown());
-        } 
+        }
+    }
+    
+    /// <summary>
+    /// <para>  Translate the position of portal-able object from starting portal to destination portal. <br/>
+    ///         - Note that the position to be teleported to is in front of the end portal's trigger volume
+    /// </para></summary>
+    /// <param name="endTransform">Transform of destination portal</param>
+    /// <param name="registry">Registry of all available portal in scene</param>
+    /// <param name="endPortalID">ID of destination portal</param>
+    /// <param name="col">collider of incoming portal-able object</param>
+    private Vector3 SetPositionUpdateTP(Transform endTransform, PortalRegistry registry, int endPortalID, Collider col)
+    {
+        //Position to teleport the object to
+        var teleportPos = endTransform.TransformPoint(-Vector3.forward *
+            registry.portalArray[endPortalID].gameObject.GetComponent<BoxCollider>().size.x / 2);
+        //Teleport object in front of the teleport collision of portal with offset
+        if(col != null)
+            col.gameObject.transform.position = teleportPos;
+        return teleportPos;
     }
 
     /// <summary>

@@ -14,10 +14,7 @@ public class PortalProjectileBehavior : MonoBehaviour
     private void Start()
     {
         //Setting the material for the projectile
-        if(portalID == 0)
-            gameObject.GetComponent<MeshRenderer>().material = _blueMat;
-        else
-            gameObject.GetComponent<MeshRenderer>().material = _redMat;
+        gameObject.GetComponent<MeshRenderer>().material = portalID == 0 ? _blueMat : _redMat;
     }
 
     public void OnTouchSurface(PortalPlacement placementScript, RaycastHit hit)
