@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEditor.Rendering;
 using UnityEngine;
 
@@ -20,6 +21,8 @@ public class LaserLineRenderer : MonoBehaviour
     private void Start()
     {
         _lineRenderer = GetComponentInChildren<LineRenderer>();
+        _lineRenderer.numCornerVertices = 10;
+        _lineRenderer.numCapVertices = 10;
     }
 
     // Update is called once per frame
@@ -46,11 +49,12 @@ public class LaserLineRenderer : MonoBehaviour
         bool isInf = true;
         while (isInf)
         {
-            RaycastHit[] hitArray = Physics.RaycastAll(_pos, _dir, Mathf.Infinity);
+            RaycastHit[] hitArray = Physics.RaycastAll(_pos, _dir, 200);
+            //Debug.DrawRay(_pos, _dir*30, Color.blue, 0.5f);
             if (hitArray.Length == 0)
             {
                 if(gameObject.CompareTag("LaserBlaster") || gameObject.CompareTag("Portal"))
-                    _posList.Add(_pos + _dir * 50);
+                    _posList.Add(_pos + _dir * 20);
                 break;//endloop if hit array doesn't touch anything
             }
             int closestTransformIndex = GetClosestObject(hitArray);//Getting the closest collider from point of raycast
@@ -115,20 +119,14 @@ public class LaserLineRenderer : MonoBehaviour
     {
         int closestObjIndex = 0;
         float minDist = 0;
-        for (int j = 0; j < hitArray.Count; ++j)
+        var distArray = new float[hitArray.Count];
+        for (int j = 0; j < hitArray.Count; j++)
         {
-            float currDist = Vector3.Distance(hitArray[j].collider.transform.position, _pos);
-            if (j == 0) //The first one is always the closest bc nothing to compare /w
-            {
-                minDist = currDist;
-                closestObjIndex = j;
-            }
-
-            if (!(currDist < minDist) || j <= 0) continue;
-            minDist = currDist;
-            closestObjIndex = j;
+            float currDist = Vector3.Distance(hitArray[j].point, _pos);
+            distArray[j] = currDist;
         }
-
+        minDist = distArray.Min();
+        closestObjIndex = Array.IndexOf(distArray, minDist);
         return closestObjIndex;
     }
     
