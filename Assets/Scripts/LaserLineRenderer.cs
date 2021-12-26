@@ -1,16 +1,18 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor.Rendering;
 using UnityEngine;
-using UnityEngine.Serialization;
-using UnityEngine.UIElements;
 
 public class LaserLineRenderer : MonoBehaviour
 {
+
     private LineRenderer _lineRenderer;
-    private Vector3[] _posArray = new Vector3[2];
+    //private Vector3[] _posList = new Vector3[2];
+    private List<Vector3> _posList = new List<Vector3>();
+    private List<Collider> _colList = new List<Collider>();
     [Header("Laser Settings")]
-    [SerializeField] private Transform _nose;//point where laser should start
+    //[SerializeField] private Transform _nose;//point where laser should start
 
     private Vector3 _pos, _dir;
 
@@ -18,39 +20,131 @@ public class LaserLineRenderer : MonoBehaviour
     private void Start()
     {
         _lineRenderer = GetComponentInChildren<LineRenderer>();
-        _posArray[0] = transform.TransformPoint(transform.position);
     }
 
     // Update is called once per frame
     private void Update()
     {
-        for (int i = 0; i < _posArray.Length; ++i)
+        //Reset the list
+        _posList = new List<Vector3> {transform.position};
+        _colList = new List<Collider> {GetComponent<Collider>()};
+        
+        if (gameObject.CompareTag("LaserBlaster"))
         {
-            _pos = _posArray[i];
-            if (i == 0)
-            {
-                _dir = _nose.position - transform.root.position;
-            }
-            else
-            {
-                _dir = _posArray[i] - _posArray[i - 1];
-            }
-            RaycastHit[] hitArray = Physics.RaycastAll(_pos, _dir, Mathf.Infinity);
-            if (hitArray.Length > 0)
-            {
-                _posArray[i] = hitArray[0].point;
-            }
+            UpdateLaser(transform.up);
+            return;
         }
-
-        _lineRenderer.positionCount = _posArray.Length;
-        _lineRenderer.SetPositions(_posArray);
-    }
-
-    private void LateUpdate()
-    {
+        UpdateLaser(-transform.forward);
         
     }
 
+    private void UpdateLaser(Vector3 initialDirection)
+    {
+        _pos = transform.position;
+        _dir = initialDirection;
 
-    //TODO: Add a function that expand the position array 
+        bool isInf = true;
+        while (isInf)
+        {
+            RaycastHit[] hitArray = Physics.RaycastAll(_pos, _dir, Mathf.Infinity);
+            if (hitArray.Length == 0)
+            {
+                if(gameObject.CompareTag("LaserBlaster") || gameObject.CompareTag("Portal"))
+                    _posList.Add(_pos + _dir * 50);
+                break;//endloop if hit array doesn't touch anything
+            }
+            int closestTransformIndex = GetClosestObject(hitArray);//Getting the closest collider from point of raycast
+            Collider colliderToAdd = hitArray[closestTransformIndex].collider;
+            
+            switch (closestTransformIndex < hitArray.Length)
+            {
+                case true when hitArray[closestTransformIndex].collider.GetComponent<ObjectLaserInteraction>():
+                {
+                    //posList Add 1
+                    Vector3 positionToAdd = hitArray[closestTransformIndex].collider.transform.position;
+                    if (_posList.Contains(positionToAdd))
+                    {
+                        positionToAdd = hitArray[closestTransformIndex].point;
+                        _posList.Add(positionToAdd);
+                        _colList.Add(colliderToAdd);
+                        isInf = false;
+                        break;
+                    }
+
+                    _posList.Add(positionToAdd);
+                    _colList.Add(colliderToAdd);
+                    _pos = positionToAdd;
+                    _dir = hitArray[closestTransformIndex].collider.transform.forward;
+                    break;
+                }
+                case true when hitArray[closestTransformIndex].collider.GetComponent<PortalBehavior>():
+                {
+                    //Activate line renderer on the other portal
+                    PortalRegistry.Instance.EnableLaserOnPortal(hitArray[closestTransformIndex].collider.GetComponent<PortalBehavior>());
+                    Vector3 positionToAdd = hitArray[closestTransformIndex].point;
+                    _posList.Add(positionToAdd);
+                    _colList.Add(colliderToAdd);
+                    isInf = false;
+                    break;
+                }
+                case true:
+                {
+                    Vector3 positionToAdd = hitArray[closestTransformIndex].point;
+                    _posList.Add(positionToAdd);
+                    _colList.Add(colliderToAdd);
+                    isInf = false;
+                    break;
+                }
+            }
+        }
+        
+        Collider portal1 = PortalRegistry.Instance.portalArray[0].transform.GetComponent<Collider>();
+        Collider portal2 = PortalRegistry.Instance.portalArray[1].transform.GetComponent<Collider>();
+
+        if (!_colList.Contains(portal1) && !_colList.Contains(portal2))//TODO fix this crap
+        {
+            PortalRegistry.Instance.DisableLaserOnAllPortal();
+        }
+        
+        _lineRenderer.positionCount = _posList.Count;
+        _lineRenderer.SetPositions(_posList.ToArray());
+    }
+    
+
+    private int GetClosestObject(IReadOnlyList<RaycastHit> hitArray)
+    {
+        int closestObjIndex = 0;
+        float minDist = 0;
+        for (int j = 0; j < hitArray.Count; ++j)
+        {
+            float currDist = Vector3.Distance(hitArray[j].collider.transform.position, _pos);
+            if (j == 0) //The first one is always the closest bc nothing to compare /w
+            {
+                minDist = currDist;
+                closestObjIndex = j;
+            }
+
+            if (!(currDist < minDist) || j <= 0) continue;
+            minDist = currDist;
+            closestObjIndex = j;
+        }
+
+        return closestObjIndex;
+    }
+    
+    private void OnDrawGizmosSelected()
+    {
+        Gizmos.color = Color.blue;
+        foreach (Vector3 point in _posList)
+        {
+            Gizmos.DrawWireSphere(point, 1);
+        }
+    }
+
+    public void ResetLaserRendererArray()
+    {
+        var temp = Array.Empty<Vector3>();
+        _lineRenderer.positionCount = temp.Length;
+        _lineRenderer.SetPositions(temp);
+    }
 }

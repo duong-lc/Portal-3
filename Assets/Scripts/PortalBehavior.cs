@@ -32,8 +32,11 @@ public class PortalBehavior : MonoBehaviour
     ///<summary>main Camera game object of the scene </summary>
     [SerializeField] private GameObject _cam;
 
+
+    
     //const string tags
     private const string PortalTag = "Portal", PortalObjTag = "PortalableObject", PlayerTag = "Player";
+
 
     ///<summary>quaternion offset to rotate player or object's rotation or velocity direction after teleportation</summary>
     private static readonly Quaternion HalfTurn = Quaternion.Euler(0.0f, 180.0f, 0.0f);
@@ -79,28 +82,28 @@ public class PortalBehavior : MonoBehaviour
     /// </para>
     /// </summary>
     /// <param name="other">Collider of Game Object that collides with portal's trigger collider</param>
-    private void OnTriggerEnter(Collider other)
+    private void OnTriggerStay(Collider other)
     {
+        int tpLayer = PortalRegistry.Instance.teleportLayer;
         //Comparing tag and make sure if current teleport can teleport
-        if ((!other.CompareTag(PortalObjTag) && !other.CompareTag(PlayerTag)) || !canTeleport) return;
+        if ((!other.CompareTag(PortalObjTag) && !other.CompareTag(PlayerTag))) return;
         if (_registry.portalArray[0] == this &&
             _registry.portalArray[1].GetComponent<Collider>().enabled) //portal blue
         {
+            other.gameObject.layer = tpLayer;
             //Disable collision between player layer and map geometry layer
-            // if (other.CompareTag("Player"))
-            // {
-            Physics.IgnoreLayerCollision(other.gameObject.layer, PlayerController.Instance.mainMapGeom.layer, true);
-            //}
+            Physics.IgnoreLayerCollision(tpLayer, PlayerController.Instance.mainMapGeom.layer, true);
+            
             //Call teleport method to teleport
+            if (!canTeleport) return;
             Teleport(0, 1, other, _registry);
         }
         else if (_registry.portalArray[1] == this &&
                  _registry.portalArray[0].GetComponent<Collider>().enabled) //portal red
         {
-            // if (other.CompareTag("Player"))
-            // {
-            Physics.IgnoreLayerCollision(other.gameObject.layer, PlayerController.Instance.mainMapGeom.layer, true);
-            //}
+            other.gameObject.layer = tpLayer;
+            Physics.IgnoreLayerCollision(tpLayer, PlayerController.Instance.mainMapGeom.layer, true);
+            if (!canTeleport) return;
             Teleport(1, 0, other, _registry);
         }
     }
@@ -113,11 +116,11 @@ public class PortalBehavior : MonoBehaviour
     /// <param name="other">Collider of Game Object that leaves the trigger collider of portal</param>
     private void OnTriggerExit(Collider other)
     {
-        if ((other.CompareTag(PortalObjTag) || other.CompareTag(PlayerTag)))
-        {
-            //reenable the collision between player layer and map geometry layer
-            Physics.IgnoreLayerCollision(other.gameObject.layer, PlayerController.Instance.mainMapGeom.layer, false);
-        }
+        if ((!other.CompareTag(PortalObjTag) && !other.CompareTag(PlayerTag))) return;
+        other.gameObject.layer = other.CompareTag(PortalObjTag) ? other.GetComponent<ObjectInteraction>().trueLayer : other.GetComponent<PlayerController>().trueLayer;
+        
+        //reenable the collision between player layer and map geometry layer
+        Physics.IgnoreLayerCollision(other.gameObject.layer, PlayerController.Instance.mainMapGeom.layer, false);
     }
 
     /// <summary>
@@ -229,6 +232,7 @@ public class PortalBehavior : MonoBehaviour
             if (temp.isPickingUp)
             {
                 temp.TeleportCurrPickedUpObj();
+                StartCoroutine(ColliderWarp(endTransform));
             }
         }
         else //if the game object is a teleport-able obj
@@ -240,6 +244,16 @@ public class PortalBehavior : MonoBehaviour
             SetRotationUpdateTP(beginTransform, endTransform, col);
             SetVelocityUpdateTP(beginTransform, endTransform, col);
         }
+    }
+
+    private IEnumerator ColliderWarp(Transform endTransform)
+    {
+        BoxCollider col = endTransform.GetComponent<BoxCollider>();
+        col.center = PortalRegistry.Instance.colliderCenterArr[1];
+        col.size = PortalRegistry.Instance.colliderSizeArr[1];
+        yield return new WaitForSeconds(2);
+        col.center = PortalRegistry.Instance.colliderCenterArr[0];
+        col.size = PortalRegistry.Instance.colliderSizeArr[0];
     }
     
     /// <summary>
@@ -254,7 +268,7 @@ public class PortalBehavior : MonoBehaviour
     {
         //Position to teleport the object to
         var teleportPos = endTransform.TransformPoint(-Vector3.forward *
-            registry.portalArray[endPortalID].gameObject.GetComponent<BoxCollider>().size.x / 2);
+            registry.portalArray[endPortalID].gameObject.GetComponent<BoxCollider>().size.x);
         //Teleport object in front of the teleport collision of portal with offset
         if(col != null)
             col.gameObject.transform.position = teleportPos;

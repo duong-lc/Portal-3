@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel.Design;
+using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 
 public class PlayerInteraction : MonoBehaviour
@@ -107,8 +108,9 @@ public class PlayerInteraction : MonoBehaviour
         _pickupRB.velocity = direction.normalized * _currentSpeed;
 
         //Setting rotation of pickup object
-        //Getting the vector from object pickup to the camera
-        _lookRot = Quaternion.LookRotation(mainCamera.transform.position - _pickupRB.position);
+        //Getting the vector from object pickup to the camera (cube.transform.back to face player)
+        _lookRot = Quaternion.LookRotation(mainCamera.transform.position - _pickupRB.position) * Quaternion.Euler(0,180,0);
+        _lookRot = Quaternion.Euler(0, _lookRot.eulerAngles.y, _lookRot.eulerAngles.z);
         //always lerp that rotation so that the pickup object would always face that vector
         _lookRot = Quaternion.Slerp(mainCamera.transform.rotation, _lookRot, _rotationSpeed * Time.fixedDeltaTime);
         _pickupRB.MoveRotation(_lookRot);
@@ -137,15 +139,15 @@ public class PlayerInteraction : MonoBehaviour
     {
         isPickingUp = true;
         _currPickedUpObj = obj.gameObject;
-        print($"{_currPickedUpObj}");
-        if(!isAfterTp)
+
+        if (!isAfterTp)
+        {
             _originalParent = _currPickedUpObj.transform.parent;
-        print($"{_originalParent}");
-        
-        
+        }
+
+
         //Setting parent of pickup Object to the player so that player can teleport with the object
         _currPickedUpObj.transform.SetParent(transform, true);
-
         //Getting the Rigidbody component
         _pickupRB = _currPickedUpObj.GetComponent<Rigidbody>();
         //Freeze rotation for rigid body

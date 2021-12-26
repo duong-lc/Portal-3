@@ -42,12 +42,14 @@ public class PlayerController : MonoBehaviour
     [Space]
     public GameObject mainMapGeom;
     private Rigidbody _rgbd;
+    [HideInInspector] public LayerMask trueLayer;
     
 
     private void Start()
     {
         Instance = this;
         _rgbd = GetComponent<Rigidbody>();
+        trueLayer = gameObject.layer;
         //mainMapGeom = GameObject.FindWithTag("MainMapGeom");
         
 
@@ -74,8 +76,8 @@ public class PlayerController : MonoBehaviour
     #region Basic Movement
     private void CheckGround()
     {
-        RaycastHit[] colArr = Physics.SphereCastAll(_groundChecker.transform.position, _checkerRadius, Vector3.down, 0, _groundLayer1|_groundLayer2);
-        if (colArr.Any(hit => !hit.collider.CompareTag(gameObject.tag)))
+        RaycastHit[] colArr = Physics.SphereCastAll(_groundChecker.transform.position, _checkerRadius, Vector3.down, 0);
+        if (colArr.Any(hit => (!hit.collider.CompareTag(gameObject.tag)) && !hit.collider.isTrigger))
         {
             _canJump = true;
             return;
