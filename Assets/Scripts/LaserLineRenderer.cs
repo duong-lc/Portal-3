@@ -49,26 +49,25 @@ public class LaserLineRenderer : MonoBehaviour
         bool isInf = true;
         while (isInf)
         {
-            RaycastHit[] hitArray = Physics.RaycastAll(_pos, _dir, 200);
-            //Debug.DrawRay(_pos, _dir*30, Color.blue, 0.5f);
-            if (hitArray.Length == 0)
+            Physics.Raycast(_pos, _dir, out var hit,  Mathf.Infinity);
+            if (hit.collider == null)
             {
                 if(gameObject.CompareTag("LaserBlaster") || gameObject.CompareTag("Portal"))
                     _posList.Add(_pos + _dir * 20);
                 break;//endloop if hit array doesn't touch anything
             }
-            int closestTransformIndex = GetClosestObject(hitArray);//Getting the closest collider from point of raycast
-            Collider colliderToAdd = hitArray[closestTransformIndex].collider;
+            //int closestTransform = hit.distance;//Getting the closest collider from point of raycast
+            Collider colliderToAdd = hit.collider;
             
-            switch (closestTransformIndex < hitArray.Length)
+            switch (hit.collider != null)
             {
-                case true when hitArray[closestTransformIndex].collider.GetComponent<ObjectLaserInteraction>():
+                case true when hit.collider.GetComponent<ObjectLaserInteraction>():
                 {
                     //posList Add 1
-                    Vector3 positionToAdd = hitArray[closestTransformIndex].collider.transform.position;
+                    Vector3 positionToAdd = hit.collider.transform.position;
                     if (_posList.Contains(positionToAdd))
                     {
-                        positionToAdd = hitArray[closestTransformIndex].point;
+                        positionToAdd = hit.point;
                         _posList.Add(positionToAdd);
                         _colList.Add(colliderToAdd);
                         isInf = false;
@@ -78,14 +77,14 @@ public class LaserLineRenderer : MonoBehaviour
                     _posList.Add(positionToAdd);
                     _colList.Add(colliderToAdd);
                     _pos = positionToAdd;
-                    _dir = hitArray[closestTransformIndex].collider.transform.forward;
+                    _dir = hit.collider.transform.forward;
                     break;
                 }
-                case true when hitArray[closestTransformIndex].collider.GetComponent<PortalBehavior>():
+                case true when hit.collider.GetComponent<PortalBehavior>():
                 {
                     //Activate line renderer on the other portal
-                    PortalRegistry.Instance.EnableLaserOnPortal(hitArray[closestTransformIndex].collider.GetComponent<PortalBehavior>());
-                    Vector3 positionToAdd = hitArray[closestTransformIndex].point;
+                    PortalRegistry.Instance.EnableLaserOnPortal(hit.collider.GetComponent<PortalBehavior>());
+                    Vector3 positionToAdd = hit.point;
                     _posList.Add(positionToAdd);
                     _colList.Add(colliderToAdd);
                     isInf = false;
@@ -93,7 +92,7 @@ public class LaserLineRenderer : MonoBehaviour
                 }
                 case true:
                 {
-                    Vector3 positionToAdd = hitArray[closestTransformIndex].point;
+                    Vector3 positionToAdd = hit.point;
                     _posList.Add(positionToAdd);
                     _colList.Add(colliderToAdd);
                     isInf = false;
@@ -115,20 +114,19 @@ public class LaserLineRenderer : MonoBehaviour
     }
     
 
-    private int GetClosestObject(IReadOnlyList<RaycastHit> hitArray)
-    {
-        int closestObjIndex = 0;
-        float minDist = 0;
-        var distArray = new float[hitArray.Count];
-        for (int j = 0; j < hitArray.Count; j++)
-        {
-            float currDist = Vector3.Distance(hitArray[j].point, _pos);
-            distArray[j] = currDist;
-        }
-        minDist = distArray.Min();
-        closestObjIndex = Array.IndexOf(distArray, minDist);
-        return closestObjIndex;
-    }
+    // private static int GetClosestObject(IReadOnlyList<RaycastHit> hitArray)
+    // {
+    //     int closestObjIndex = 0;
+    //     float minDist = 0;
+    //     var distArray = new float[hitArray.Count];
+    //     for (int j = 0; j < hitArray.Count; j++)
+    //     {
+    //         distArray[j] = hitArray[j].distance;
+    //     }
+    //     minDist = distArray.Min();
+    //     closestObjIndex = Array.IndexOf(distArray, minDist);
+    //     return closestObjIndex;
+    // }
     
     private void OnDrawGizmosSelected()
     {
