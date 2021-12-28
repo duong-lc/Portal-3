@@ -34,13 +34,13 @@ namespace TMPro
         public static int ID_WeightNormal;
         public static int ID_WeightBold;
 
-        public static int IDoutlineTex;
-        public static int IDoutlineWidth;
-        public static int IDoutlineSoftness;
-        public static int IDoutlineColor;
+        public static int ID_OutlineTex;
+        public static int ID_OutlineWidth;
+        public static int ID_OutlineSoftness;
+        public static int ID_OutlineColor;
 
-        public static int IDoutline2Color;
-        public static int IDoutline2Width;
+        public static int ID_Outline2Color;
+        public static int ID_Outline2Width;
 
         public static int ID_Padding;
         public static int ID_GradientScale;
@@ -94,7 +94,7 @@ namespace TMPro
         public static string Keyword_MASK_SOFT = "MASK_SOFT";
         public static string Keyword_MASK_HARD = "MASK_HARD";
         public static string Keyword_MASK_TEX = "MASK_TEX";
-        public static string Keywordoutline = "OUTLINE_ON";
+        public static string Keyword_Outline = "OUTLINE_ON";
 
         public static string ShaderTag_ZTestMode = "unity_GUIZTestMode";
         public static string ShaderTag_CullMode = "_CullMode";
@@ -171,13 +171,13 @@ namespace TMPro
                 ID_WeightNormal = Shader.PropertyToID("_WeightNormal");
                 ID_WeightBold = Shader.PropertyToID("_WeightBold");
 
-                IDoutlineTex = Shader.PropertyToID("outlineTex");
-                IDoutlineWidth = Shader.PropertyToID("outlineWidth");
-                IDoutlineSoftness = Shader.PropertyToID("outlineSoftness");
-                IDoutlineColor = Shader.PropertyToID("outlineColor");
+                ID_OutlineTex = Shader.PropertyToID("_OutlineTex");
+                ID_OutlineWidth = Shader.PropertyToID("_OutlineWidth");
+                ID_OutlineSoftness = Shader.PropertyToID("_OutlineSoftness");
+                ID_OutlineColor = Shader.PropertyToID("_OutlineColor");
 
-                IDoutline2Color = Shader.PropertyToID("outline2Color");
-                IDoutline2Width = Shader.PropertyToID("outline2Width");
+                ID_Outline2Color = Shader.PropertyToID("_Outline2Color");
+                ID_Outline2Width = Shader.PropertyToID("_Outline2Width");
 
                 ID_Padding = Shader.PropertyToID("_Padding");
                 ID_GradientScale = Shader.PropertyToID("_GradientScale");
@@ -252,8 +252,8 @@ namespace TMPro
             // Compute Ratio A
             float scale = mat.GetFloat(ID_GradientScale);
             float faceDilate = mat.GetFloat(ID_FaceDilate);
-            float outlineThickness = mat.GetFloat(IDoutlineWidth);
-            float outlineSoftness = mat.GetFloat(IDoutlineSoftness);
+            float outlineThickness = mat.GetFloat(ID_OutlineWidth);
+            float outlineSoftness = mat.GetFloat(ID_OutlineSoftness);
 
             float weight = Mathf.Max(mat.GetFloat(ID_WeightNormal), mat.GetFloat(ID_WeightBold)) / 4.0f;
 
@@ -320,7 +320,7 @@ namespace TMPro
 
             float scaleRatioA = material.GetFloat(ID_ScaleRatio_A);
             float faceDilate = material.GetFloat(ID_FaceDilate) * scaleRatioA;
-            float outlineThickness = material.GetFloat(IDoutlineWidth) * scaleRatioA;
+            float outlineThickness = material.GetFloat(ID_OutlineWidth) * scaleRatioA;
 
             float extent = Mathf.Min(1, faceDilate + outlineThickness);
             extent *= material.GetFloat(ID_GradientScale);
@@ -395,11 +395,11 @@ namespace TMPro
             if (material.HasProperty(ID_FaceDilate))
                 faceDilate = material.GetFloat(ID_FaceDilate) * scaleRatio_A;
 
-            if (material.HasProperty(IDoutlineSoftness))
-                faceSoftness = material.GetFloat(IDoutlineSoftness) * scaleRatio_A;
+            if (material.HasProperty(ID_OutlineSoftness))
+                faceSoftness = material.GetFloat(ID_OutlineSoftness) * scaleRatio_A;
 
-            if (material.HasProperty(IDoutlineWidth))
-                outlineThickness = material.GetFloat(IDoutlineWidth) * scaleRatio_A;
+            if (material.HasProperty(ID_OutlineWidth))
+                outlineThickness = material.GetFloat(ID_OutlineWidth) * scaleRatio_A;
 
             uniformPadding = outlineThickness + faceSoftness + faceDilate;
 
@@ -509,11 +509,11 @@ namespace TMPro
                 if (materials[i].HasProperty(ShaderUtilities.ID_FaceDilate))
                     faceDilate = materials[i].GetFloat(ShaderUtilities.ID_FaceDilate) * scaleRatio_A;
 
-                if (materials[i].HasProperty(ShaderUtilities.IDoutlineSoftness))
-                    faceSoftness = materials[i].GetFloat(ShaderUtilities.IDoutlineSoftness) * scaleRatio_A;
+                if (materials[i].HasProperty(ShaderUtilities.ID_OutlineSoftness))
+                    faceSoftness = materials[i].GetFloat(ShaderUtilities.ID_OutlineSoftness) * scaleRatio_A;
 
-                if (materials[i].HasProperty(ShaderUtilities.IDoutlineWidth))
-                    outlineThickness = materials[i].GetFloat(ShaderUtilities.IDoutlineWidth) * scaleRatio_A;
+                if (materials[i].HasProperty(ShaderUtilities.ID_OutlineWidth))
+                    outlineThickness = materials[i].GetFloat(ShaderUtilities.ID_OutlineWidth) * scaleRatio_A;
 
                 uniformPadding = outlineThickness + faceSoftness + faceDilate;
 

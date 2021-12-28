@@ -838,7 +838,7 @@ namespace TMPro
         protected override void SetOutlineThickness(float thickness)
         {
             thickness = Mathf.Clamp01(thickness);
-            m_renderer.material.SetFloat(ShaderUtilities.IDoutlineWidth, thickness);
+            m_renderer.material.SetFloat(ShaderUtilities.ID_OutlineWidth, thickness);
 
             if (m_fontMaterial == null)
                 m_fontMaterial = m_renderer.material;
@@ -864,7 +864,7 @@ namespace TMPro
         // This function will create an instance of the Font Material.
         protected override void SetOutlineColor(Color32 color)
         {
-            m_renderer.material.SetColor(ShaderUtilities.IDoutlineColor, color);
+            m_renderer.material.SetColor(ShaderUtilities.ID_OutlineColor, color);
 
             if (m_fontMaterial == null)
                 m_fontMaterial = m_renderer.material;

@@ -4,13 +4,13 @@ uniform float		_FaceUVSpeedX;
 uniform float		_FaceUVSpeedY;
 uniform fixed4		_FaceColor;					// RGBA : Color + Opacity
 uniform float		_FaceDilate;				// v[ 0, 1]
-uniform float		outlineSoftness;			// v[ 0, 1]
+uniform float		_OutlineSoftness;			// v[ 0, 1]
 
-uniform sampler2D	outlineTex;				// RGBA : Color + Opacity
-uniform float		outlineUVSpeedX;
-uniform float		outlineUVSpeedY;
-uniform fixed4		outlineColor;				// RGBA : Color + Opacity
-uniform float		outlineWidth;				// v[ 0, 1]
+uniform sampler2D	_OutlineTex;				// RGBA : Color + Opacity
+uniform float		_OutlineUVSpeedX;
+uniform float		_OutlineUVSpeedY;
+uniform fixed4		_OutlineColor;				// RGBA : Color + Opacity
+uniform float		_OutlineWidth;				// v[ 0, 1]
 
 uniform float		_Bevel;						// v[ 0, 1]
 uniform float		_BevelOffset;				// v[-1, 1]

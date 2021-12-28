@@ -409,22 +409,22 @@ namespace TMPro
 
 
         /// <summary>
-        /// Sets the color of the outlineColor property of the assigned material. Changing outline color will result in an instance of the material.
+        /// Sets the color of the _OutlineColor property of the assigned material. Changing outline color will result in an instance of the material.
         /// </summary>
         public Color32 outlineColor
         {
             get
             {
-                if (m_sharedMaterial == null) return moutlineColor;
+                if (m_sharedMaterial == null) return m_outlineColor;
 
-                moutlineColor = m_sharedMaterial.GetColor(ShaderUtilities.IDoutlineColor);
-                return moutlineColor;
+                m_outlineColor = m_sharedMaterial.GetColor(ShaderUtilities.ID_OutlineColor);
+                return m_outlineColor;
             }
 
-            set { if (moutlineColor.Compare(value)) return; SetOutlineColor(value); m_havePropertiesChanged = true; moutlineColor = value; SetVerticesDirty(); }
+            set { if (m_outlineColor.Compare(value)) return; SetOutlineColor(value); m_havePropertiesChanged = true; m_outlineColor = value; SetVerticesDirty(); }
         }
         //[SerializeField]
-        protected Color32 moutlineColor = Color.black;
+        protected Color32 m_outlineColor = Color.black;
 
 
         /// <summary>
@@ -434,14 +434,14 @@ namespace TMPro
         {
             get
             {
-                if (m_sharedMaterial == null) return moutlineWidth;
+                if (m_sharedMaterial == null) return m_outlineWidth;
 
-                moutlineWidth = m_sharedMaterial.GetFloat(ShaderUtilities.IDoutlineWidth);
-                return moutlineWidth;
+                m_outlineWidth = m_sharedMaterial.GetFloat(ShaderUtilities.ID_OutlineWidth);
+                return m_outlineWidth;
             }
-            set { if (moutlineWidth == value) return; SetOutlineThickness(value); m_havePropertiesChanged = true; moutlineWidth = value; SetVerticesDirty(); }
+            set { if (m_outlineWidth == value) return; SetOutlineThickness(value); m_havePropertiesChanged = true; m_outlineWidth = value; SetVerticesDirty(); }
         }
-        protected float moutlineWidth = 0.0f;
+        protected float m_outlineWidth = 0.0f;
 
 
         /// <summary>
