@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 3722933965156935201}
   - component: {fileID: 2501296680958821707}
   - component: {fileID: 4120592942104734201}
+  - component: {fileID: 7256373831380818118}
   m_Layer: 0
   m_Name: Projectile
   m_TagString: Untagged
@@ -95,5 +96,22 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   portalID: 0
+  surfaceNormal: {x: 0, y: 0, z: 0}
   _redMat: {fileID: 2100000, guid: 1cb18422c15830640a74f77812fa02ce, type: 2}
   _blueMat: {fileID: 2100000, guid: 9cb949a37e5b5c241b80f79356aa1749, type: 2}
+  _particlefx: {fileID: 6657932335151016352, guid: 521e378a70bfb4140bc822f120e03334, type: 3}
+  _blueColor: {r: 0.29067284, g: 0.85684633, b: 0.8679245, a: 1}
+  _redColor: {r: 0.745283, g: 0.20038268, b: 0.20038268, a: 1}
+--- !u!135 &7256373831380818118
+SphereCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7230893745530784919}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 0.5
+  m_Center: {x: 0, y: 0, z: 0}

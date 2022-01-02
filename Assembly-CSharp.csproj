@@ -63,8 +63,11 @@
      <Compile Include="Assets\Scripts\CameraShake.cs" />
      <Compile Include="Assets\Scripts\PortalProjectileBehavior.cs" />
      <Compile Include="Assets\Scripts\ObjectLaserInteraction.cs" />
+     <Compile Include="Assets\Scripts\ProjectileImpactBehavior.cs" />
      <Compile Include="Assets\Scripts\LaserLineRenderer.cs" />
      <Compile Include="Assets\Scripts\PortalRegistry.cs" />
+     <Compile Include="Assets\Scripts\ActivationButtonInteraction.cs" />
+     <Compile Include="Assets\Scripts\ActivationButtonInteractionEditor.cs" />
  <Reference Include="UnityEngine">
  <HintPath>E:/Unity/2020.3.18f1/Editor/Data/Managed/UnityEngine/UnityEngine.dll</HintPath>
  </Reference>
@@ -699,13 +702,13 @@
       <Project>{48372d7b-65d8-57d1-2af0-fa493567b8a6}</Project>
       <Name>Unity.ProBuilder.Editor</Name>
     </ProjectReference>
+    <ProjectReference Include="Unity.Postprocessing.Editor.csproj">
+      <Project>{c96a089e-bf50-a9d7-4e55-f2915c338408}</Project>
+      <Name>Unity.Postprocessing.Editor</Name>
+    </ProjectReference>
     <ProjectReference Include="UnityEditor.UI.csproj">
       <Project>{1618c0f0-b2a7-8752-ea7f-6270af1b3850}</Project>
       <Name>UnityEditor.UI</Name>
-    </ProjectReference>
-    <ProjectReference Include="Unity.PlasticSCM.Editor.csproj">
-      <Project>{6fc45390-33a4-d05b-d734-50e9985d3b94}</Project>
-      <Name>Unity.PlasticSCM.Editor</Name>
     </ProjectReference>
     <ProjectReference Include="Unity.Rider.Editor.csproj">
       <Project>{95ad5dd0-d9b5-462c-1292-bd789b220396}</Project>
@@ -723,6 +726,10 @@
       <Project>{214a26c3-9a53-fda0-6600-cf0aa21d5df7}</Project>
       <Name>UnityEngine.UI</Name>
     </ProjectReference>
+    <ProjectReference Include="Unity.PlasticSCM.Editor.csproj">
+      <Project>{6fc45390-33a4-d05b-d734-50e9985d3b94}</Project>
+      <Name>Unity.PlasticSCM.Editor</Name>
+    </ProjectReference>
     <ProjectReference Include="Unity.Mathematics.csproj">
       <Project>{72c11250-e756-2363-245e-657930d53bd6}</Project>
       <Name>Unity.Mathematics</Name>
@@ -730,6 +737,10 @@
     <ProjectReference Include="Unity.ShaderGraph.Editor.csproj">
       <Project>{0baf1ef6-a095-3ae4-6726-f9945fb25dd4}</Project>
       <Name>Unity.ShaderGraph.Editor</Name>
+    </ProjectReference>
+    <ProjectReference Include="Unity.Postprocessing.Runtime.csproj">
+      <Project>{4df56be5-060f-7ed9-f988-e6dbea4a63fa}</Project>
+      <Name>Unity.Postprocessing.Runtime</Name>
     </ProjectReference>
     <ProjectReference Include="Unity.RenderPipelines.Universal.Editor.csproj">
       <Project>{32158387-e4b7-6574-e3c4-555ffda83da1}</Project>
@@ -762,14 +773,6 @@
     <ProjectReference Include="Unity.RenderPipelines.Core.Editor.csproj">
       <Project>{6caca32c-c228-8b91-5617-080504ecc505}</Project>
       <Name>Unity.RenderPipelines.Core.Editor</Name>
-    </ProjectReference>
-    <ProjectReference Include="Unity.Postprocessing.Editor.csproj">
-      <Project>{c96a089e-bf50-a9d7-4e55-f2915c338408}</Project>
-      <Name>Unity.Postprocessing.Editor</Name>
-    </ProjectReference>
-    <ProjectReference Include="Unity.Postprocessing.Runtime.csproj">
-      <Project>{4df56be5-060f-7ed9-f988-e6dbea4a63fa}</Project>
-      <Name>Unity.Postprocessing.Runtime</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

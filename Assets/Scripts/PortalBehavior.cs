@@ -222,7 +222,7 @@ public class PortalBehavior : MonoBehaviour
                 //and properly guide player around the mechanic in terms of manipulating air strafing. 
                 if (Input.GetAxis("Vertical") > .1f ||
                     Input.GetAxis("Vertical") < -.1f) //if player holding down w or s key while moving through
-                    col.transform.GetComponent<Rigidbody>().velocity = (velocityDir * velocityMagnitude * 1.4f);
+                    col.transform.GetComponent<Rigidbody>().velocity = (velocityDir * velocityMagnitude * 1.2f);
                 else
                     col.transform.GetComponent<Rigidbody>().AddForce(velocityDir * velocityMagnitude * 1.6f,
                         ForceMode.VelocityChange);
@@ -264,15 +264,14 @@ public class PortalBehavior : MonoBehaviour
     /// <param name="registry">Registry of all available portal in scene</param>
     /// <param name="endPortalID">ID of destination portal</param>
     /// <param name="col">collider of incoming portal-able object</param>
-    private Vector3 SetPositionUpdateTP(Transform endTransform, PortalRegistry registry, int endPortalID, Collider col)
+    private void SetPositionUpdateTP(Transform endTransform, PortalRegistry registry, int endPortalID, Collider col)
     {
         //Position to teleport the object to
         var teleportPos = endTransform.TransformPoint(-Vector3.forward *
-            registry.portalArray[endPortalID].gameObject.GetComponent<BoxCollider>().size.x);
+            registry.colliderSizeArr[0].z * 2f);
         //Teleport object in front of the teleport collision of portal with offset
         if(col != null)
             col.gameObject.transform.position = teleportPos;
-        return teleportPos;
     }
 
     /// <summary>
@@ -347,11 +346,11 @@ public class PortalBehavior : MonoBehaviour
     public bool CheckPerimeter()
     {
         bool canPlace = true;
-        
+        var scale = transform.localScale.x;
         var posPerimList = new List<Vector3>()
         {
-            new Vector3(-1.2f, 0, 0),
-            new Vector3(1.2f, 0, 0),
+            new Vector3(-1.2f * scale, 0, 0),
+            new Vector3(1.2f * scale, 0, 0),
             new Vector3(0, 2, 0),
             new Vector3(0, -2, 0),
             new Vector3(0, 0 , 0)
@@ -413,19 +412,22 @@ public class PortalBehavior : MonoBehaviour
     public bool CheckNormalOverlap()    
     {
         bool canPlace = true;
-
+        
+        var scaleX = transform.localScale.x;
+        var scaleY = transform.localScale.y;
+        
         var normalDrawPoints = new List<Vector3>()
         {
-            new Vector3 (-1.2f, 2, -0.2f),//top left
-            new Vector3 (1.2f, 2, -0.2f),//top right
-            new Vector3 (1.2f, -2, -0.2f),//bottom right
-            new Vector3 (-1.2f,-2,-0.2f)//bottom left
+            new Vector3 (-1.2f * scaleX, 2 * scaleY, -0.2f),//top left
+            new Vector3 (1.2f * scaleX, 2 * scaleY, -0.2f),//top right
+            new Vector3 (1.2f * scaleX, -2 * scaleY, -0.2f),//bottom right
+            new Vector3 (-1.2f * scaleX,-2 * scaleY,-0.2f)//bottom left
             
         };
 
         var normalDrawDists = new List<float>()
         {
-            2.4f, 4f, 2.4f, 4f
+            2.4f * scaleX, 4f * scaleY, 2.4f * scaleX, 4f * scaleY
         };
 
         var normalDirPoint = new List<Vector3>()

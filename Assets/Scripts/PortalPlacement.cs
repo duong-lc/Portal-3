@@ -62,10 +62,9 @@ public class PortalPlacement : MonoBehaviour
 
     private void FireProjectile(int portalID)
     {
-        RaycastHit hit;
-        if(!Physics.Raycast(_playerCam.transform.position, _playerCam.transform.forward, out hit, Mathf.Infinity, portalableSurfaceLayer)) { return; }
+        if(!Physics.Raycast(_playerCam.transform.position, _playerCam.transform.forward, out var hit, Mathf.Infinity)) { return; }
         
-        Debug.DrawLine(_playerCam.transform.position, hit.point, Color.red, 5f);
+        //Debug.DrawLine(_playerCam.transform.position, hit.point, Color.red, 5f);
         //Destroy any same type bullet if that's in the scene if there's a new one about to spawn.
         var bulletScript = Object.FindObjectOfType<PortalProjectileBehavior>();
         if(bulletScript != null && portalID == bulletScript.portalID) 
@@ -73,7 +72,8 @@ public class PortalPlacement : MonoBehaviour
         //Instantiate the bullet
         var proj = Instantiate(_projectile, _playerCam.gameObject.transform.position, Quaternion.identity);
         proj.GetComponent<PortalProjectileBehavior>().portalID = portalID;
-        proj.transform.forward = _spawnTransform.up;//update rotation
+        proj.GetComponent<PortalProjectileBehavior>().surfaceNormal = hit.normal;
+        proj.transform.forward = _spawnTransform.forward;//update rotation
         StartCoroutine(IEProjectileLerp(hit, Time.time, proj));
         
 
@@ -92,7 +92,8 @@ public class PortalPlacement : MonoBehaviour
             distTravelled = (Time.time - startTime) * _bulletSpeed;
             yield return null;
         }
-        bullet.GetComponent<PortalProjectileBehavior>().OnTouchSurface(this, hit);
+        if(bullet != null )
+            bullet.GetComponent<PortalProjectileBehavior>().OnTouchSurface(this, hit);
         
     }
 }

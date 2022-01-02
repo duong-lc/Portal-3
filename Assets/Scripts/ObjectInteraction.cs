@@ -11,7 +11,7 @@ public class ObjectInteraction : MonoBehaviour
     public float waitOnPickup = 0.2f;
     //public float breakForce = 35f;
     public bool pickedUp = false;
-    public LayerMask trueLayer;
+    [HideInInspector] public LayerMask trueLayer;
 
     private void Start()
     {

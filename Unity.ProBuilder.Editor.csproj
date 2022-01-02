@@ -111,8 +111,8 @@
      <Compile Include="Library\PackageCache\com.unity.probuilder@4.5.2\Editor\MenuActions\Editors\OpenVertexColorEditor.cs" />
      <Compile Include="Library\PackageCache\com.unity.probuilder@4.5.2\Editor\MenuActions\Object\CenterPivot.cs" />
      <Compile Include="Library\PackageCache\com.unity.probuilder@4.5.2\Editor\EditorCore\SceneDragAndDropListener.cs" />
-     <Compile Include="Library\PackageCache\com.unity.probuilder@4.5.2\Editor\EditorCore\PolyShapeEditor.cs" />
      <Compile Include="Library\PackageCache\com.unity.probuilder@4.5.2\Editor\EditorCore\ProGridsInterface.cs" />
+     <Compile Include="Library\PackageCache\com.unity.probuilder@4.5.2\Editor\EditorCore\PolyShapeEditor.cs" />
      <Compile Include="Library\PackageCache\com.unity.probuilder@4.5.2\Editor\EditorCore\AutoUVEditor.cs" />
      <Compile Include="Library\PackageCache\com.unity.probuilder@4.5.2\Editor\EditorCore\StripProBuilderScripts.cs" />
      <Compile Include="Library\PackageCache\com.unity.probuilder@4.5.2\Editor\MenuActions\Object\TriangulateObject.cs" />

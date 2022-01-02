@@ -63,8 +63,11 @@
      <Compile Include="Assets\Scripts\CameraShake.cs" />
      <Compile Include="Assets\Scripts\PortalProjectileBehavior.cs" />
      <Compile Include="Assets\Scripts\ObjectLaserInteraction.cs" />
+     <Compile Include="Assets\Scripts\ProjectileImpactBehavior.cs" />
      <Compile Include="Assets\Scripts\LaserLineRenderer.cs" />
      <Compile Include="Assets\Scripts\PortalRegistry.cs" />
+     <Compile Include="Assets\Scripts\ActivationButtonInteraction.cs" />
+     <Compile Include="Assets\Scripts\ActivationButtonInteractionEditor.cs" />
  <Reference Include="UnityEngine">
  <HintPath>E:/Unity/2020.3.18f1/Editor/Data/PlaybackEngines/WindowsStandaloneSupport/Variations/mono/Managed/UnityEngine.dll</HintPath>
  </Reference>
@@ -281,17 +284,20 @@
  <Reference Include="Unity.ProBuilder.Editor">
  <HintPath>C:/Portal_Remake/Portal-3/Library/ScriptAssemblies/Unity.ProBuilder.Editor.dll</HintPath>
  </Reference>
+ <Reference Include="Unity.Postprocessing.Editor">
+ <HintPath>C:/Portal_Remake/Portal-3/Library/ScriptAssemblies/Unity.Postprocessing.Editor.dll</HintPath>
+ </Reference>
  <Reference Include="UnityEditor.UI">
  <HintPath>C:/Portal_Remake/Portal-3/Library/ScriptAssemblies/UnityEditor.UI.dll</HintPath>
- </Reference>
- <Reference Include="Unity.PlasticSCM.Editor">
- <HintPath>C:/Portal_Remake/Portal-3/Library/ScriptAssemblies/Unity.PlasticSCM.Editor.dll</HintPath>
  </Reference>
  <Reference Include="Unity.Rider.Editor">
  <HintPath>C:/Portal_Remake/Portal-3/Library/ScriptAssemblies/Unity.Rider.Editor.dll</HintPath>
  </Reference>
  <Reference Include="Unity.ProGrids.Editor">
  <HintPath>C:/Portal_Remake/Portal-3/Library/ScriptAssemblies/Unity.ProGrids.Editor.dll</HintPath>
+ </Reference>
+ <Reference Include="Unity.PlasticSCM.Editor">
+ <HintPath>C:/Portal_Remake/Portal-3/Library/ScriptAssemblies/Unity.PlasticSCM.Editor.dll</HintPath>
  </Reference>
  <Reference Include="Unity.ShaderGraph.Editor">
  <HintPath>C:/Portal_Remake/Portal-3/Library/ScriptAssemblies/Unity.ShaderGraph.Editor.dll</HintPath>
@@ -310,9 +316,6 @@
  </Reference>
  <Reference Include="Unity.RenderPipelines.Core.Editor">
  <HintPath>C:/Portal_Remake/Portal-3/Library/ScriptAssemblies/Unity.RenderPipelines.Core.Editor.dll</HintPath>
- </Reference>
- <Reference Include="Unity.Postprocessing.Editor">
- <HintPath>C:/Portal_Remake/Portal-3/Library/ScriptAssemblies/Unity.Postprocessing.Editor.dll</HintPath>
  </Reference>
  <Reference Include="netstandard">
  <HintPath>E:/Unity/2020.3.18f1/Editor/Data/NetStandard/ref/2.0.0/netstandard.dll</HintPath>
@@ -701,6 +704,10 @@
       <Project>{72c11250-e756-2363-245e-657930d53bd6}</Project>
       <Name>Unity.Mathematics</Name>
     </ProjectReference>
+    <ProjectReference Include="Unity.Postprocessing.Runtime.csproj">
+      <Project>{4df56be5-060f-7ed9-f988-e6dbea4a63fa}</Project>
+      <Name>Unity.Postprocessing.Runtime</Name>
+    </ProjectReference>
     <ProjectReference Include="Unity.RenderPipeline.Universal.ShaderLibrary.csproj">
       <Project>{cce6593a-d8ae-6d8a-2738-e31833273464}</Project>
       <Name>Unity.RenderPipeline.Universal.ShaderLibrary</Name>
@@ -712,10 +719,6 @@
     <ProjectReference Include="Unity.ProGrids.csproj">
       <Project>{39754926-0dc2-5fbd-1edb-1f41ffc9ba09}</Project>
       <Name>Unity.ProGrids</Name>
-    </ProjectReference>
-    <ProjectReference Include="Unity.Postprocessing.Runtime.csproj">
-      <Project>{4df56be5-060f-7ed9-f988-e6dbea4a63fa}</Project>
-      <Name>Unity.Postprocessing.Runtime</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

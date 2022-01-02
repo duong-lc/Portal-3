@@ -120,6 +120,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   waitOnPickup: 0.2
   pickedUp: 0
+  trueLayer:
+    serializedVersion: 2
+    m_Bits: 0
 --- !u!1 &4187617967749469823
 GameObject:
   m_ObjectHideFlags: 0
@@ -225,6 +228,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _objectSpawnTransform: {fileID: 4187617966791102089}
+  _fadeTimer: 0
 --- !u!1 &4187617968026433201
 GameObject:
   m_ObjectHideFlags: 0

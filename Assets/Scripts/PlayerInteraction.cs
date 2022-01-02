@@ -1,7 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel.Design;
-using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 
 public class PlayerInteraction : MonoBehaviour
@@ -27,6 +26,7 @@ public class PlayerInteraction : MonoBehaviour
     private float _currentSpeed = 0f;
     private float _currentDist = 0f;
     private Transform _originalParent;
+    private bool _canBreak = true;
 
     [Header("Object Spawn Button Properties")] 
     [SerializeField] private float _castDistance = 3f;
@@ -35,6 +35,7 @@ public class PlayerInteraction : MonoBehaviour
     [Header("Rotation Properties")]
     [SerializeField] private float _rotationSpeed = 100f;
     private Quaternion _lookRot;
+    
     private void Start()
     {
         mainCamera = Camera.main;
@@ -86,7 +87,7 @@ public class PlayerInteraction : MonoBehaviour
             return;
         
         //If the object goes past a threshold while being picked up, release it
-        if(_currentDist > _blindSightRadius)
+        if (_currentDist > _blindSightRadius && _canBreak)
         {
             if (!PortalRegistry.Instance.GetIsAnyOnCoolDown())//none of the portals on cooldown
             {
@@ -159,7 +160,17 @@ public class PlayerInteraction : MonoBehaviour
     public void TeleportCurrPickedUpObj()
     {
         _currPickedUpObj.transform.position = pickupParent.transform.position;
+        _pickupRB.velocity = Vector3.zero;
+        StartCoroutine(CannotBreak());
         PickUpObject(_currPickedUpObj.GetComponent<ObjectInteraction>(), true);
+        
+    }
+
+    private IEnumerator CannotBreak()
+    {
+        _canBreak = false;
+        yield return new WaitForSeconds(0.3f);
+        _canBreak = true;
     }
     
     private void OnDrawGizmos()
