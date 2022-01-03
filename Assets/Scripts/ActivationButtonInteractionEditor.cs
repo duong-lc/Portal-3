@@ -12,6 +12,12 @@ public class ActivationButtonInteractionEditor : Editor
         var buttonScript = target as ActivationButtonInteraction;
         buttonScript.activationType = (ActivationButtonInteraction.ActivationType)
             EditorGUILayout.EnumPopup("Activation Type: ", buttonScript.activationType);
+
+        buttonScript.buttonObject = (GameObject) EditorGUILayout.ObjectField("Button Object: ",
+            buttonScript.buttonObject, typeof(GameObject), true);
+        
+        buttonScript.activationMat = (Material) EditorGUILayout.ObjectField("Activation Material: ",
+            buttonScript.activationMat, typeof(Material), true);
         
         switch (buttonScript.activationType)
         {

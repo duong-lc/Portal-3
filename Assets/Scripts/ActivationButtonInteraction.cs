@@ -17,18 +17,31 @@ public class ActivationButtonInteraction : MonoBehaviour
     }
 
     private IEnumerator _moveAToBFalse, _moveAToBTrue;
+    private List<Collider> _colliderList = new List<Collider>();
+    private Material _unactivatedMat;
+    
     public ActivationType activationType = ActivationType.MoveAToB;
-
+    public GameObject buttonObject;
+    public Material activationMat;
+    
     public Vector3 startPos;
     public Vector3 endPos;
     public GameObject objectToMove;
     public float timeFromAToB;
+
+    private void Start()
+    {
+        _unactivatedMat = buttonObject.GetComponent<Renderer>().material;
+    }
     
     private void OnTriggerEnter(Collider other)
     {
         if (!other.GetComponent<ObjectInteraction>() && !other.GetComponent<PlayerController>()) return;
         if (objectToMove.transform.position == endPos) return;
+        if(!_colliderList.Contains(other)) {_colliderList.Add(other);}
+        if(_colliderList.Count > 1) {return;}
         
+        buttonObject.GetComponent<Renderer>().material = activationMat;
         if(_moveAToBTrue != null) StopCoroutine(_moveAToBTrue);
         switch (activationType)
         {
@@ -47,7 +60,10 @@ public class ActivationButtonInteraction : MonoBehaviour
     private void OnTriggerExit(Collider other)
     {
         if (!other.GetComponent<ObjectInteraction>() && !other.GetComponent<PlayerController>()) return;
-        
+        if (_colliderList.Contains(other)) { _colliderList.Remove(other);}
+        if (_colliderList.Count > 0) { return;}
+
+        buttonObject.GetComponent<Renderer>().material = _unactivatedMat;
         StopCoroutine(_moveAToBFalse);
         switch (activationType)
         {
@@ -79,11 +95,13 @@ public class ActivationButtonInteraction : MonoBehaviour
         }
         else
         {
+            Vector3 currPos = objectToMove.transform.position;
+            float percentage = (Vector3.Distance(currPos, endPos) / Vector3.Distance(endPos, startPos));
+            float totalTime = timeFromAToB * percentage;
             while (alpha <= 1)
             {
-                objectToMove.transform.position = Vector3.Lerp(startPos, endPos, alpha);
-                alpha = (Time.time - startTime)/ timeFromAToB;
-                print($"{alpha}");
+                objectToMove.transform.position = Vector3.Lerp(currPos, endPos, alpha);
+                alpha = (Time.time - startTime)/ totalTime;
                 yield return null;
             }
         }

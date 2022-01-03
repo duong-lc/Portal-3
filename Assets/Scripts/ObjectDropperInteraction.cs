@@ -3,7 +3,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-[RequireComponent(typeof(Collider))]
 public class ObjectDropperInteraction : MonoBehaviour
 {
     [field: Header("Cube Properties")]
@@ -52,7 +51,7 @@ public class ObjectDropperInteraction : MonoBehaviour
         
         //foreach (Material mat in _renderer.materials) { ToOpaqueMode(mat); }
         MainObject.transform.position = _objectSpawnTransform.position;
-        MainObject.GetComponent<Rigidbody>().isKinematic = true;
+        MainObject.GetComponent<Rigidbody>().useGravity = true;
         for (int i = 0; i < _renderer.materials.Length; ++i)
         {
             _renderer.materials[i].color = _originalColorArray[i];

@@ -12,9 +12,11 @@ public class ObjectInteraction : MonoBehaviour
     //public float breakForce = 35f;
     public bool pickedUp = false;
     [HideInInspector] public LayerMask trueLayer;
-
+    [HideInInspector] public ObjectDropperInteraction parentDropper;
+    
     private void Start()
     {
+        parentDropper = transform.parent.root.GetComponent<ObjectDropperInteraction>();
         trueLayer = gameObject.layer;
     }
     //this is used to prevent the connection from breaking when you just picked up the object as it sometimes fires a collision with the ground or whatever it is touching

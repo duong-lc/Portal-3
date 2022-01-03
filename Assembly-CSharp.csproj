@@ -53,6 +53,7 @@
   </PropertyGroup>
   <ItemGroup>
      <Compile Include="Assets\Scripts\PlayerController.cs" />
+     <Compile Include="Assets\Scripts\ActivationButtonInteractionEditor.cs" />
      <Compile Include="Assets\Scripts\PortalBehavior.cs" />
      <Compile Include="Assets\Scripts\PortalPlacement.cs" />
      <Compile Include="Assets\Scripts\ObjectDropperInteraction.cs" />
@@ -61,13 +62,14 @@
      <Compile Include="Assets\Scripts\WeaponMovement.cs" />
      <Compile Include="Assets\Scripts\ObjectExistBoundVolume.cs" />
      <Compile Include="Assets\Scripts\CameraShake.cs" />
+     <Compile Include="Assets\Scripts\ActivationButtonInteraction.cs" />
      <Compile Include="Assets\Scripts\PortalProjectileBehavior.cs" />
      <Compile Include="Assets\Scripts\ObjectLaserInteraction.cs" />
      <Compile Include="Assets\Scripts\ProjectileImpactBehavior.cs" />
      <Compile Include="Assets\Scripts\LaserLineRenderer.cs" />
      <Compile Include="Assets\Scripts\PortalRegistry.cs" />
-     <Compile Include="Assets\Scripts\ActivationButtonInteraction.cs" />
-     <Compile Include="Assets\Scripts\ActivationButtonInteractionEditor.cs" />
+     <Compile Include="Assets\Scripts\PlatformPingPong.cs" />
+     <Compile Include="Assets\Scripts\ForceFieldBehavior.cs" />
  <Reference Include="UnityEngine">
  <HintPath>E:/Unity/2020.3.18f1/Editor/Data/Managed/UnityEngine/UnityEngine.dll</HintPath>
  </Reference>
