@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 [RequireComponent(typeof(PlayerController))]
 
@@ -15,7 +16,7 @@ public class PortalPlacement : MonoBehaviour
     [SerializeField] private GameObject _projectile;
     [SerializeField] private Transform _spawnTransform;
     [SerializeField] private float _bulletSpeed;
-
+    [SerializeField] private LayerMask _triggerVolume;
     private void Awake()
     {
         _controller = GetComponent<PlayerController>();
@@ -62,8 +63,9 @@ public class PortalPlacement : MonoBehaviour
 
     private void FireProjectile(int portalID)
     {
-        if(!Physics.Raycast(_playerCam.transform.position, _playerCam.transform.forward, out var hit, Mathf.Infinity)) { return; }
-        
+        if(!Physics.Raycast(_playerCam.transform.position, _playerCam.transform.forward, out var hit, Mathf.Infinity, ~_triggerVolume)) { return; }
+        print($"{hit.collider.name}");
+
         //Debug.DrawLine(_playerCam.transform.position, hit.point, Color.red, 5f);
         //Destroy any same type bullet if that's in the scene if there's a new one about to spawn.
         var bulletScript = Object.FindObjectOfType<PortalProjectileBehavior>();

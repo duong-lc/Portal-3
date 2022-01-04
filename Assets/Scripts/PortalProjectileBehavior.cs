@@ -29,8 +29,9 @@ public class PortalProjectileBehavior : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        print($"hello");
+        print($"{other.gameObject.name}");
         if (other.gameObject.GetComponent<Collider>().isTrigger) return;
+        
         SpawnParticle();
         Destroy(gameObject);
         //spawn a cool hit particle fx

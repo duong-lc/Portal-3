@@ -52,8 +52,10 @@
     <ImplicitlyExpandDesignTimeFacades>false</ImplicitlyExpandDesignTimeFacades>
   </PropertyGroup>
   <ItemGroup>
+     <Compile Include="Assets\Scripts\PlayerHealth.cs" />
      <Compile Include="Assets\Scripts\PlayerController.cs" />
      <Compile Include="Assets\Scripts\ActivationButtonInteractionEditor.cs" />
+     <Compile Include="Assets\Scripts\PlatformPingPong.cs" />
      <Compile Include="Assets\Scripts\PortalBehavior.cs" />
      <Compile Include="Assets\Scripts\PortalPlacement.cs" />
      <Compile Include="Assets\Scripts\ObjectDropperInteraction.cs" />
@@ -65,11 +67,10 @@
      <Compile Include="Assets\Scripts\ActivationButtonInteraction.cs" />
      <Compile Include="Assets\Scripts\PortalProjectileBehavior.cs" />
      <Compile Include="Assets\Scripts\ObjectLaserInteraction.cs" />
+     <Compile Include="Assets\Scripts\ForceFieldBehavior.cs" />
      <Compile Include="Assets\Scripts\ProjectileImpactBehavior.cs" />
      <Compile Include="Assets\Scripts\LaserLineRenderer.cs" />
      <Compile Include="Assets\Scripts\PortalRegistry.cs" />
-     <Compile Include="Assets\Scripts\PlatformPingPong.cs" />
-     <Compile Include="Assets\Scripts\ForceFieldBehavior.cs" />
  <Reference Include="UnityEngine">
  <HintPath>E:/Unity/2020.3.18f1/Editor/Data/PlaybackEngines/WindowsStandaloneSupport/Variations/mono/Managed/UnityEngine.dll</HintPath>
  </Reference>

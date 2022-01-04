@@ -395,8 +395,6 @@ public class PortalBehavior : MonoBehaviour
             {
                 if(portalCol[j].tag == PortalTag)
                 {
-                    //print($"found different");
-                    //portalCol[j].gameObject.transform.position = new Vector3(0,0,0);
                     portalCol[j].gameObject.GetComponent<PortalBehavior>()._viewport.SetActive(false);
                     portalCol[j].gameObject.GetComponent<PortalBehavior>()._outline.SetActive(false);
                 }

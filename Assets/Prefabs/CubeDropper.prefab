@@ -209,6 +209,7 @@ MonoBehaviour:
   trueLayer:
     serializedVersion: 2
     m_Bits: 0
+  parentDropper: {fileID: 0}
 --- !u!1 &4187617967749469823
 GameObject:
   m_ObjectHideFlags: 0
@@ -271,7 +272,7 @@ GameObject:
   - component: {fileID: 4187617968026433200}
   - component: {fileID: 4187617968026433207}
   - component: {fileID: 4187617968026433206}
-  m_Layer: 0
+  m_Layer: 15
   m_Name: ExistBoundVolume
   m_TagString: Untagged
   m_Icon: {fileID: 0}
