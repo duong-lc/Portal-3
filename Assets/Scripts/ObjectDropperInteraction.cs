@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class ObjectDropperInteraction : MonoBehaviour
@@ -11,7 +12,7 @@ public class ObjectDropperInteraction : MonoBehaviour
 
     [SerializeField] private float _fadeTimer;
 
-    private Renderer _renderer;
+    private Renderer[] _rendererArray;
 
     private Color[] _originalColorArray;
     //[SerializeField]private Material[] _matArray;
@@ -19,11 +20,18 @@ public class ObjectDropperInteraction : MonoBehaviour
     private void Start()
     {
         MainObject = GetComponentInChildren<ObjectInteraction>().gameObject;
-        _renderer = MainObject.GetComponentInChildren<Renderer>();
-        _originalColorArray = new Color[_renderer.materials.Length];
-        for (int i = 0; i < _renderer.materials.Length; ++i)
+        _rendererArray = MainObject.GetComponentsInChildren<Renderer>();
+        int count = _rendererArray.Sum(ren => ren.materials.Length);
+        _originalColorArray = new Color[count];
+        int j = 0;
+        foreach (Renderer ren in _rendererArray)
         {
-            _originalColorArray[i] = _renderer.materials[i].color;
+            foreach (var t in ren.materials)
+            {
+                _originalColorArray[j] = t.color;
+                j++;
+            }
+            
         }
     }   
     
@@ -32,7 +40,9 @@ public class ObjectDropperInteraction : MonoBehaviour
         //foreach (Material mat in _renderer.materials) { ToTransparentMode(mat); }
 
         StartCoroutine(CubeFade(Time.time));
-        MainObject.GetComponent<Rigidbody>().useGravity = false;
+        var rb = MainObject.GetComponent<Rigidbody>();
+        rb.velocity *= 0.3f;
+        rb.useGravity = false;
     }
 
     private IEnumerator CubeFade(float startTime)
@@ -41,10 +51,13 @@ public class ObjectDropperInteraction : MonoBehaviour
         float alpha = (Time.time - startTime) / _fadeTimer;
         while (alpha <= 1)
         {
-            foreach (Material mat in _renderer.materials)
+            foreach (Renderer ren in _rendererArray)
             {
-                mat.color = Color.Lerp(mat.color, Color.black, alpha);
-                alpha = (Time.time - startTime) / _fadeTimer;
+                foreach (Material mat in ren.materials)
+                {
+                    mat.color = Color.Lerp(mat.color, Color.black, alpha);
+                    alpha = (Time.time - startTime) / _fadeTimer;
+                }
             }
             yield return null;
         }
@@ -52,9 +65,14 @@ public class ObjectDropperInteraction : MonoBehaviour
         //foreach (Material mat in _renderer.materials) { ToOpaqueMode(mat); }
         MainObject.transform.position = _objectSpawnTransform.position;
         MainObject.GetComponent<Rigidbody>().useGravity = true;
-        for (int i = 0; i < _renderer.materials.Length; ++i)
+        int j = 0;
+        foreach (Renderer ren in _rendererArray)
         {
-            _renderer.materials[i].color = _originalColorArray[i];
+            foreach (var t in ren.materials)
+            {
+                t.color = _originalColorArray[j];
+                j++;
+            }
         }
     }
     

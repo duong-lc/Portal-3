@@ -10,7 +10,7 @@ public class ActivationButtonInteractionEditor : Editor
     override public void OnInspectorGUI()
     {
         var buttonScript = target as ActivationButtonInteraction;
-        buttonScript.activationType = (ActivationButtonInteraction.ActivationType)
+        buttonScript!.activationType = (ActivationButtonInteraction.ActivationType)
             EditorGUILayout.EnumPopup("Activation Type: ", buttonScript.activationType);
 
         buttonScript.buttonObject = (GameObject) EditorGUILayout.ObjectField("Button Object: ",

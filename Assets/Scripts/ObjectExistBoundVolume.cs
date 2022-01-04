@@ -8,10 +8,7 @@ public class ObjectExistBoundVolume : MonoBehaviour
 {
     private void OnTriggerExit(Collider other)
     {
-        var dropper = transform.parent.GetComponent<ObjectDropperInteraction>();
-        if (other.gameObject == dropper.MainObject)
-        {
-            dropper.ResetCubeTransform();
-        }
+        if (!other.GetComponent<ObjectInteraction>()) return;
+        other.GetComponent<ObjectInteraction>().parentDropper.ResetCubeTransform();
     }
 }
