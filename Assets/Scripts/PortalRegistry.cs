@@ -44,7 +44,7 @@ public class PortalRegistry : MonoBehaviour
 
     public void DisableLaserOnAllPortal()
     {
-        print($"disable all");
+        //print($"disable all");
         foreach (PortalBehavior portal in portalArray)
         {
             if (!portal.gameObject.GetComponent<LaserLineRenderer>().enabled) continue;
