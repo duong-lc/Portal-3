@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Linq;
 
 [RequireComponent(typeof(Rigidbody))]
 [RequireComponent(typeof(Collider))]
@@ -13,12 +14,82 @@ public class ObjectInteraction : MonoBehaviour
     public bool pickedUp = false;
     [HideInInspector] public LayerMask trueLayer;
     [HideInInspector] public ObjectDropperInteraction parentDropper;
+    [SerializeField] private float _fadeTimer = 2f;
+    private MeshRenderer[] _rendererArray;
+    private Color[] _originalColorArray;
     
     private void Start()
     {
-        parentDropper = transform.parent.root.GetComponent<ObjectDropperInteraction>();
+        if(!GetComponent<TurretBehavior>())
+            parentDropper = transform.parent.root.GetComponent<ObjectDropperInteraction>();
+        
         trueLayer = gameObject.layer;
+        
+        //MainObject = GetComponentInChildren<ObjectInteraction>().gameObject;
+        _rendererArray = GetComponentsInChildren<MeshRenderer>();
+        int count = _rendererArray.Sum(ren => ren.materials.Length);
+        _originalColorArray = new Color[count];
+        int j = 0;
+        foreach (MeshRenderer ren in _rendererArray)
+        {
+            foreach (var t in ren.materials)
+            {
+                _originalColorArray[j] = t.color;
+                j++;
+            }
+            
+        }
+    }   
+    
+    public void ResetObjectTransform(bool toDestroy)
+    {
+        //foreach (Material mat in _renderer.materials) { ToTransparentMode(mat); }
+        PlayerController.Instance.gameObject.GetComponent<PlayerInteraction>().BreakConnection(this);
+        StartCoroutine(ObjectFade(Time.time, toDestroy));
+        var rb = GetComponent<Rigidbody>();
+        rb.velocity *= 0.3f;
+        rb.useGravity = false;
     }
+
+    private IEnumerator ObjectFade(float startTime, bool toDestroy)
+    {
+        //Color _black = Color.black;
+        float alpha = (Time.time - startTime) / _fadeTimer;
+        while (alpha <= 1)
+        {
+            foreach (MeshRenderer ren in _rendererArray)
+            {
+                foreach (Material mat in ren.materials)
+                {
+                    mat.color = Color.Lerp(mat.color, Color.black, alpha);
+                    alpha = (Time.time - startTime) / _fadeTimer;
+                }
+            }
+            yield return null;
+        }
+
+        if (!toDestroy)
+        {
+            //foreach (Material mat in _renderer.materials) { ToOpaqueMode(mat); }
+            transform.position = parentDropper._objectSpawnTransform.position;
+            GetComponent<Rigidbody>().useGravity = true;
+            int j = 0;
+            foreach (MeshRenderer ren in _rendererArray)
+            {
+                foreach (var t in ren.materials)
+                {
+                    t.color = _originalColorArray[j];
+                    j++;
+                }
+            }
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
+    }
+    
+    
     //this is used to prevent the connection from breaking when you just picked up the object as it sometimes fires a collision with the ground or whatever it is touching
     public IEnumerator PickUp()
     {
@@ -26,7 +97,7 @@ public class ObjectInteraction : MonoBehaviour
         pickedUp = true;
 
     }
-
+    
     private void OnDrawGizmosSelected()
     {
         Gizmos.color = Color.magenta;

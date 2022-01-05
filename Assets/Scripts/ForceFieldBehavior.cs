@@ -11,7 +11,10 @@ public class ForceFieldBehavior : MonoBehaviour
             StartCoroutine(ResetTrigger());
             return;
         }
-        other.GetComponent<ObjectInteraction>().parentDropper.ResetCubeTransform();
+        if(other.GetComponent<TurretBehavior>())
+            other.GetComponent<ObjectInteraction>().ResetObjectTransform(true);
+        else 
+            other.GetComponent<ObjectInteraction>().ResetObjectTransform(false);
     }
 
     private IEnumerator ResetTrigger()

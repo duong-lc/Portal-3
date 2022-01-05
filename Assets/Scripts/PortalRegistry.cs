@@ -39,7 +39,7 @@ public class PortalRegistry : MonoBehaviour
         int inputIndex = Array.IndexOf(portalArray, inputPortal);
         PortalBehavior outputPortal = inputIndex == 1 ? portalArray[0] : portalArray[1];
         outputPortal.gameObject.GetComponent<LaserLineRenderer>().enabled = outputPortal.gameObject.GetComponent<BoxCollider>().enabled;
-        print($"{outputPortal.gameObject.GetComponent<LaserLineRenderer>().enabled}");
+        //print($"{outputPortal.gameObject.GetComponent<LaserLineRenderer>().enabled}");
     }
 
     public void DisableLaserOnAllPortal()

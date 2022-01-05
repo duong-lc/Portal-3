@@ -12,16 +12,15 @@ public class TurretBehavior : MonoBehaviour
     void Start()
     {
         _lineRenderer = GetComponentInChildren<LineRenderer>();
-        
-        _laserArray[0] = _laserStartPoint.position;
-        _laserArray[1] = (_laserStartPoint.position + _laserStartPoint.forward) * _laserLength;
         _lineRenderer.positionCount = 2;
-        
+
     }
 
     // Update is called once per frame
     void Update()
     {
+        _laserArray[0] = _laserStartPoint.position;
+        _laserArray[1] = _laserStartPoint.position + _laserStartPoint.forward * _laserLength;
         _lineRenderer.SetPositions(_laserArray);
     }
 }

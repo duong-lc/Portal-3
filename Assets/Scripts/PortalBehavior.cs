@@ -117,6 +117,10 @@ public class PortalBehavior : MonoBehaviour
     private void OnTriggerExit(Collider other)
     {
         if ((!other.CompareTag(PortalObjTag) && !other.CompareTag(PlayerTag))) return;
+        
+        if(other.GetComponent<ObjectInteraction>())
+            print($"{other.GetComponent<ObjectInteraction>().trueLayer.value}");
+        
         other.gameObject.layer = other.CompareTag(PortalObjTag) ? other.GetComponent<ObjectInteraction>().trueLayer : other.GetComponent<PlayerController>().trueLayer;
         
         //reenable the collision between player layer and map geometry layer
