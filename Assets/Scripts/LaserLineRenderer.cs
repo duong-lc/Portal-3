@@ -16,10 +16,12 @@ public class LaserLineRenderer : MonoBehaviour
     //[SerializeField] private Transform _nose;//point where laser should start
 
     private Vector3 _pos, _dir;
+    [SerializeField] private LayerMask _triggerVolume = 15; 
 
     // Start is called before the first frame update
     private void Start()
     {
+        //_triggerVolume = 15;
         _lineRenderer = GetComponentInChildren<LineRenderer>();
         _lineRenderer.numCornerVertices = 10;
         _lineRenderer.numCapVertices = 10;
@@ -49,7 +51,7 @@ public class LaserLineRenderer : MonoBehaviour
         bool isInf = true;
         while (isInf)
         {
-            Physics.Raycast(_pos, _dir, out var hit,  Mathf.Infinity);
+            Physics.Raycast(_pos, _dir, out var hit,  Mathf.Infinity, ~_triggerVolume);
             if (hit.collider == null)
             {
                 if(gameObject.CompareTag("LaserBlaster") || gameObject.CompareTag("Portal"))

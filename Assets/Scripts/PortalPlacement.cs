@@ -64,7 +64,7 @@ public class PortalPlacement : MonoBehaviour
     private void FireProjectile(int portalID)
     {
         if(!Physics.Raycast(_playerCam.transform.position, _playerCam.transform.forward, out var hit, Mathf.Infinity, ~_triggerVolume)) { return; }
-        print($"{hit.collider.name}");
+        //print($"{hit.collider.name}");
 
         //Debug.DrawLine(_playerCam.transform.position, hit.point, Color.red, 5f);
         //Destroy any same type bullet if that's in the scene if there's a new one about to spawn.
