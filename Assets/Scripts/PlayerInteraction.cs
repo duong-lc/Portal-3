@@ -121,7 +121,7 @@ public class PlayerInteraction : MonoBehaviour
     public void BreakConnection(ObjectInteraction obj)
     {
         isPickingUp = false;
-        
+        if (_currPickedUpObj == null) return;
         //Return the obj's original after being dropped
         _currPickedUpObj.transform.parent = _originalParent;
         //Release all constraints of rigid body

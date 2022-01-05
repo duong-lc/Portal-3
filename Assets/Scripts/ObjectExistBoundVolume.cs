@@ -6,9 +6,16 @@ using UnityEngine;
 [RequireComponent(typeof(Collider))]
 public class ObjectExistBoundVolume : MonoBehaviour
 {
+    private Transform _dropperParent;
+
+    private void Start()
+    {
+        _dropperParent = transform.root;
+    }
     private void OnTriggerExit(Collider other)
     {
         if (!other.GetComponent<ObjectInteraction>()) return;
-        other.GetComponent<ObjectInteraction>().ResetObjectTransform(false);
+        if(other.GetComponent<ObjectInteraction>().parentDropper.transform == _dropperParent)
+            other.GetComponent<ObjectInteraction>().ResetObjectTransform(false);
     }
 }

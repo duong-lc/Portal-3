@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
+using TMPro;
 
 [RequireComponent(typeof(Rigidbody))]
 [RequireComponent(typeof(Collider))]
@@ -17,9 +18,13 @@ public class ObjectInteraction : MonoBehaviour
     [SerializeField] private float _fadeTimer = 2f;
     private MeshRenderer[] _rendererArray;
     private Color[] _originalColorArray;
+    private Rigidbody _rb;
+    private bool isFading = false;
     
     private void Start()
     {
+        _rb = GetComponent<Rigidbody>();
+        _rb.collisionDetectionMode = CollisionDetectionMode.ContinuousDynamic;
         if(!GetComponent<TurretBehavior>())
             parentDropper = transform.parent.root.GetComponent<ObjectDropperInteraction>();
         
@@ -44,16 +49,17 @@ public class ObjectInteraction : MonoBehaviour
     public void ResetObjectTransform(bool toDestroy)
     {
         //foreach (Material mat in _renderer.materials) { ToTransparentMode(mat); }
+        if (isFading) return;
         PlayerController.Instance.gameObject.GetComponent<PlayerInteraction>().BreakConnection(this);
         StartCoroutine(ObjectFade(Time.time, toDestroy));
-        var rb = GetComponent<Rigidbody>();
-        rb.velocity *= 0.3f;
-        rb.useGravity = false;
+        _rb.velocity *= 0.3f;
+        _rb.useGravity = false;
     }
 
     private IEnumerator ObjectFade(float startTime, bool toDestroy)
     {
         //Color _black = Color.black;
+        isFading = true;
         float alpha = (Time.time - startTime) / _fadeTimer;
         while (alpha <= 1)
         {
@@ -68,6 +74,7 @@ public class ObjectInteraction : MonoBehaviour
             yield return null;
         }
 
+        isFading = false;
         if (!toDestroy)
         {
             //foreach (Material mat in _renderer.materials) { ToOpaqueMode(mat); }
