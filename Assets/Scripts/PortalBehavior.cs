@@ -118,8 +118,8 @@ public class PortalBehavior : MonoBehaviour
     {
         if ((!other.CompareTag(PortalObjTag) && !other.CompareTag(PlayerTag))) return;
         
-        if(other.GetComponent<ObjectInteraction>())
-            print($"{other.GetComponent<ObjectInteraction>().trueLayer.value}");
+        // if(other.GetComponent<ObjectInteraction>())
+        //     print($"{other.GetComponent<ObjectInteraction>().trueLayer.value}");
         
         other.gameObject.layer = other.CompareTag(PortalObjTag) ? other.GetComponent<ObjectInteraction>().trueLayer : other.GetComponent<PlayerController>().trueLayer;
         
