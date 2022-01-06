@@ -20,7 +20,12 @@ public class PlayerHealth : MonoBehaviour
         
         if(health <= 0) Destroy(gameObject);
     }
-    
-    
-    
+
+    private void OnParticleCollision(GameObject other)
+    {
+        if (other.transform.root.GetComponentInChildren<TurretBehavior>())
+        {
+            print($"hahahaha");
+        }
+    }
 }
