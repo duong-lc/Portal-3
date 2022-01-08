@@ -15,27 +15,38 @@ public class TurretFOVBehavior : MonoBehaviour
 
     [SerializeField] private LayerMask _targetMask;
     [SerializeField] private LayerMask[] _obstructionMaskArray;
-
+    private TurretBehavior _turretBehavior;
     public bool canSeePlayer;
 
     private void Start()
     {
+        _turretBehavior = GetComponent<TurretBehavior>();
         playerRef = GameObject.FindWithTag("Player");
         StartCoroutine(FOVRoutine());
     }
 
-    private IEnumerator FOVRoutine()
+    public IEnumerator FOVRoutine()
     {
         WaitForSeconds wait = new WaitForSeconds(0.2f);
 
         while (true)
         {
             yield return wait;
-            FieldOfViewCheck();
+            if (FieldOfViewCheck() == canSeePlayer) continue;
+            
+            if (canSeePlayer)
+                PlayerHealth.instance.turretDamageMultiplier -= 1;
+            else
+            {
+                _turretBehavior.PlayAudioDetect();
+                PlayerHealth.instance.turretDamageMultiplier += 1;
+            }
+
+            canSeePlayer = FieldOfViewCheck();
         }
     }
 
-    private void FieldOfViewCheck()
+    private bool FieldOfViewCheck()
     {
         Collider[] rangeChecks = Physics.OverlapSphere(transform.position, radius, _targetMask);
 
@@ -49,13 +60,15 @@ public class TurretFOVBehavior : MonoBehaviour
                 float distanceToTarget = Vector3.Distance(transform.position, target.position);
                 foreach (LayerMask obstructionMask in _obstructionMaskArray)
                 {
-                    canSeePlayer = !Physics.Raycast(transform.position, directionToTarget, distanceToTarget, obstructionMask);
+                    return !Physics.Raycast(transform.position, directionToTarget, distanceToTarget, obstructionMask);
                 }
             }
             else
-                canSeePlayer = false;
+                return false;
         }
         else if (canSeePlayer)
-            canSeePlayer = false;
+            return false;
+
+        return false;
     }
 }

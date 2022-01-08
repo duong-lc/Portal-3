@@ -51,6 +51,7 @@ public class ObjectInteraction : MonoBehaviour
         //foreach (Material mat in _renderer.materials) { ToTransparentMode(mat); }
         if (isFading) return;
         PlayerController.Instance.gameObject.GetComponent<PlayerInteraction>().BreakConnection(this);
+        if (GetComponent<TurretBehavior>()) { GetComponent<TurretBehavior>().PlayAudioDeath(); }
         StartCoroutine(ObjectFade(Time.time, toDestroy));
         _rb.velocity *= 0.3f;
         _rb.useGravity = false;
