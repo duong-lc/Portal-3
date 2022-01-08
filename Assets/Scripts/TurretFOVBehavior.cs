@@ -17,6 +17,7 @@ public class TurretFOVBehavior : MonoBehaviour
     [SerializeField] private LayerMask[] _obstructionMaskArray;
     private TurretBehavior _turretBehavior;
     public bool canSeePlayer;
+    public Vector3 playerDir;
 
     private void Start()
     {
@@ -32,17 +33,38 @@ public class TurretFOVBehavior : MonoBehaviour
         while (true)
         {
             yield return wait;
-            if (FieldOfViewCheck() == canSeePlayer) continue;
-            
-            if (canSeePlayer)
-                PlayerHealth.instance.turretDamageMultiplier -= 1;
+            if (FieldOfViewCheck() != canSeePlayer)
+            {
+                if (canSeePlayer)
+                {
+                    _turretBehavior.bulletSpawner.SetActive(false);
+                    _turretBehavior.StopAudioShoot();
+                    PlayerHealth.instance.turretDamageMultiplier -= 1;
+                } 
+                else
+                {
+                    _turretBehavior.bulletSpawner.SetActive(true);
+                    _turretBehavior.PlayAudioDetect();
+                    PlayerHealth.instance.turretDamageMultiplier += 1;
+                }
+
+                canSeePlayer = FieldOfViewCheck();
+            }
             else
             {
-                _turretBehavior.PlayAudioDetect();
-                PlayerHealth.instance.turretDamageMultiplier += 1;
+                if(canSeePlayer)
+                {
+                    Vector3 playerPos = playerRef.transform.position;
+                    playerDir = _turretBehavior.bulletSpawner.transform.forward = (new Vector3(playerPos.x, playerPos.y-1, playerPos.z) - transform.position).normalized;
+                    if(_turretBehavior.audioSource.clip != _turretBehavior._turretShoot)
+                        _turretBehavior.PlayAudioShoot();
+                }
+                // if(canSeePlayer)
+                // {
+                //     _turretBehavior.PlayAudioShoot();
+                // }
             }
-
-            canSeePlayer = FieldOfViewCheck();
+            
         }
     }
 

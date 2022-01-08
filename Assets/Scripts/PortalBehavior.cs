@@ -64,6 +64,12 @@ public class PortalBehavior : MonoBehaviour
             gameObject.GetComponent<Collider>().enabled = false;
     }
 
+    public bool isPortalActive()
+    {
+        if(_outline.activeInHierarchy && _viewport.activeInHierarchy) return true;
+        return false;
+    }
+
     /// <summary>
     /// Coroutine class that deactivate teleportation mechanic for "_cooldownTimer" amount of time then turn it back on
     /// </summary>

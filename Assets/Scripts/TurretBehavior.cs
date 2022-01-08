@@ -12,19 +12,26 @@ public class TurretBehavior : MonoBehaviour
     private TurretFOVBehavior _fovBehavior;
 
     [Header("Sound Effects")] 
-    private AudioSource _audioSource;
+    public AudioSource audioSource;
     [SerializeField] private AudioClip _turretDetect;
     [SerializeField] private AudioClip _turretDeath;
-    [SerializeField] private AudioClip _turretShoot;
+    public AudioClip _turretShoot;
+
+    [Header("Combat Properties")]
+    public GameObject bulletSpawner;
+    [SerializeField] private GameObject _muzzleFlash;
+    [SerializeField] private float _fireRate = 0.02f; 
+    [HideInInspector] public bool isAlive = true;
+
     
     // Start is called before the first frame update
     void Start()
     {
         _fovBehavior = GetComponent<TurretFOVBehavior>();
-        _audioSource = GetComponent<AudioSource>();
+        audioSource = GetComponent<AudioSource>();
         _lineRenderer = GetComponentInChildren<LineRenderer>();
         
-        _audioSource.Stop();
+        audioSource.Stop();
         _lineRenderer.positionCount = 2;
         StartCoroutine(LaserLineUpdateRoutine());
 
@@ -36,8 +43,21 @@ public class TurretBehavior : MonoBehaviour
         while (true)
         {
             _laserArray[0] = _laserStartPoint.position;
-            _laserArray[1] = _laserStartPoint.position + _laserStartPoint.forward * _laserLength;
+            _laserArray[1] = _fovBehavior.canSeePlayer ? _laserArray[1] =_laserStartPoint.position +  _fovBehavior.playerDir : _laserStartPoint.position + _laserStartPoint.forward * _laserLength;
             _lineRenderer.SetPositions(_laserArray);
+            yield return wait;
+        }
+    }
+
+    private IEnumerator MuzzleFlashRoutine()
+    {
+        WaitForSeconds wait = new WaitForSeconds(_fireRate);
+        WaitForSeconds waitFire = new WaitForSeconds(0.01f);
+        while (_fovBehavior.canSeePlayer)
+        {
+            _muzzleFlash.SetActive(true);
+            yield return waitFire;
+            _muzzleFlash.SetActive(false);
             yield return wait;
         }
     }
@@ -53,28 +73,34 @@ public class TurretBehavior : MonoBehaviour
 
     public void PlayAudioDetect()
     {
-        //AudioSource.PlayClipAtPoint(_turretDetect, transform.position);
-        _audioSource.Stop();
-        _audioSource.clip = _turretDetect;
-        _audioSource.loop = false;
+        if(!isAlive) return;
+        audioSource.clip = _turretDetect;
+        audioSource.loop = false;
         AudioSource.PlayClipAtPoint(_turretDetect, transform.position);
         
     }
     public void PlayAudioDeath()
     {
-       // AudioSource.PlayClipAtPoint(_turretDeath, transform.position);
-       StopCoroutine(GetComponent<TurretFOVBehavior>().FOVRoutine());
-       _audioSource.Stop();
-       _audioSource.clip = _turretDeath;
-       _audioSource.loop = false;
-       AudioSource.PlayClipAtPoint(_turretDeath, transform.position);
+        isAlive = false;
+        StopCoroutine(GetComponent<TurretFOVBehavior>().FOVRoutine());
+        audioSource.Stop();
+        audioSource.clip = _turretDeath;
+        audioSource.loop = false;
+        AudioSource.PlayClipAtPoint(_turretDeath, transform.position);
     }
     public void PlayAudioShoot()
     {
-       // AudioSource.PlayClipAtPoint(_turretShoot, transform.position);
-       _audioSource.Stop();
-       _audioSource.clip = _turretShoot;
-       _audioSource.loop = true;
-       _audioSource.Play();
+        if(!isAlive) return;
+        audioSource.Stop();
+        StartCoroutine(MuzzleFlashRoutine());
+        audioSource.clip = _turretShoot;
+        audioSource.loop = true;
+        audioSource.Play();
+    }
+
+    public void StopAudioShoot()
+    {
+        audioSource.Stop();
+        StopCoroutine(MuzzleFlashRoutine());
     }
 }
