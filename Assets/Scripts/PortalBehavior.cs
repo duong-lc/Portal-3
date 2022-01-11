@@ -51,8 +51,7 @@ public class PortalBehavior : MonoBehaviour
 
         //Disable portal and Deactivate visual of portal at start
         canTeleport = true;
-        _outline.SetActive(false);
-        _viewport.SetActive(false);
+        TogglePortal(false);
     }
 
     private void Update()
@@ -323,6 +322,12 @@ public class PortalBehavior : MonoBehaviour
         col.transform.GetComponent<Rigidbody>().velocity = endTransform.TransformDirection(relativeVel);
     }
 
+    public void TogglePortal(bool toggleState)
+    {
+        _outline.SetActive(toggleState);    
+        _viewport.SetActive(toggleState);
+
+    }
    
     #region PortalPlacement
     /// <summary>
@@ -343,11 +348,12 @@ public class PortalBehavior : MonoBehaviour
             edgeChecker.transform.position = transform.position;
             edgeChecker.transform.rotation = transform.rotation;
             //enable components to display the portal
-            _outline.SetActive(true);
+            //enable the swirling shader viewport
             //activate the particle system
+            TogglePortal(true);
             _outline.GetComponentInChildren<ParticleSystem>().Simulate(0.1f, false, true, false);
             _outline.GetComponentInChildren<ParticleSystem>().Play();
-            _viewport.SetActive(true);//enable the swirling shader viewport
+
 
         }else{//if the portal can't be placed, shake screen to warn
             _cam.GetComponent<CameraShake>().Shake(0.2f,0.1f);
@@ -382,7 +388,9 @@ public class PortalBehavior : MonoBehaviour
             Vector3 edgePos = edgeChecker.transform.TransformPoint(posPerimList[i]);
             //Check if the edge touches a portal-able surface
             Collider[] hitCol = Physics.OverlapSphere(edgePos, 0.1f, PlayerController.Instance.GetComponent<PortalPlacement>().portalableSurfaceLayer);
-
+            //Debug.DrawLine(edgePos, edgePos + Vector3.forward, Color.red, 3f);
+            
+            
             if(hitCol.Length == 0 && i != posPerimList.Count-1)//has no portal-able surface on that point
             {
                 //based on the edge checker position, get 4 directional vectors to check the surround max distance if
@@ -399,20 +407,16 @@ public class PortalBehavior : MonoBehaviour
                     canPlace = false;
             }   
             
-            var portalCol = Physics.OverlapSphere(edgePos, 0.2f);
-
-            for(int j = 0; j < portalCol.Length; ++j)
-            {
-                if(portalCol[j].tag == PortalTag)
-                {
-                    portalCol[j].gameObject.GetComponent<PortalBehavior>()._viewport.SetActive(false);
-                    portalCol[j].gameObject.GetComponent<PortalBehavior>()._outline.SetActive(false);
-                }
-            }
+            // var portalCol = Physics.OverlapSphere(edgePos, 0.2f);
+            //
+            // for(int j = 0; j < portalCol.Length; ++j)
+            // {
+            //     if(portalCol[j].tag == PortalTag)
+            //     {
+            //         portalCol[j].gameObject.GetComponent<PortalBehavior>().TogglePortal(false);
+            //     }
+            // }
         }
-       
-        
-
         if(!canPlace)
             print($"can't place here");
         return canPlace;

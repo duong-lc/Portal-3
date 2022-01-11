@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class PortalProjectileBehavior : MonoBehaviour
@@ -14,6 +15,8 @@ public class PortalProjectileBehavior : MonoBehaviour
     [SerializeField] private Color _blueColor;
     [SerializeField] private Color _redColor;
 
+    [SerializeField] private LayerMask[] _ignoreLayerArray;
+
     private void Start()
     {
         //Setting the material for the projectile
@@ -22,6 +25,13 @@ public class PortalProjectileBehavior : MonoBehaviour
 
     public void OnTouchSurface(PortalPlacement placementScript, RaycastHit hit)
     {
+        if (_ignoreLayerArray.Any(layer => hit.collider.gameObject.layer == layer) || (hit.collider.isTrigger && hit.collider.CompareTag("Portal")))
+        {
+            SpawnParticle();
+            Destroy(gameObject);
+            return;
+        }
+       
         placementScript.CreatePortal(portalID, hit);
         SpawnParticle();
         Destroy(gameObject);

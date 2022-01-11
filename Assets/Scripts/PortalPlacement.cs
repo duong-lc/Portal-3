@@ -17,6 +17,7 @@ public class PortalPlacement : MonoBehaviour
     [SerializeField] private Transform _spawnTransform;
     [SerializeField] private float _bulletSpeed;
     [SerializeField] private LayerMask _triggerVolume;
+    [SerializeField] private LayerMask _portalLayer;
     private void Awake()
     {
         _controller = GetComponent<PlayerController>();
@@ -63,8 +64,7 @@ public class PortalPlacement : MonoBehaviour
 
     private void FireProjectile(int portalID)
     {
-        if(!Physics.Raycast(_playerCam.transform.position, _playerCam.transform.forward, out var hit, Mathf.Infinity, ~_triggerVolume)) { return; }
-        //print($"{hit.collider.name}");
+        if(!Physics.Raycast(_playerCam.transform.position, _playerCam.transform.forward, out var hit, Mathf.Infinity, ~_triggerVolume|~_portalLayer)) { return; }
 
         //Debug.DrawLine(_playerCam.transform.position, hit.point, Color.red, 5f);
         //Destroy any same type bullet if that's in the scene if there's a new one about to spawn.

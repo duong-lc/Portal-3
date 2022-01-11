@@ -102,6 +102,15 @@ MonoBehaviour:
   _particlefx: {fileID: 6657932335151016352, guid: 521e378a70bfb4140bc822f120e03334, type: 3}
   _blueColor: {r: 0.29067284, g: 0.85684633, b: 0.8679245, a: 1}
   _redColor: {r: 0.745283, g: 0.20038268, b: 0.20038268, a: 1}
+  _ignoreLayerArray:
+  - serializedVersion: 2
+    m_Bits: 1
+  - serializedVersion: 2
+    m_Bits: 128
+  - serializedVersion: 2
+    m_Bits: 256
+  - serializedVersion: 2
+    m_Bits: 32768
 --- !u!135 &7256373831380818118
 SphereCollider:
   m_ObjectHideFlags: 0

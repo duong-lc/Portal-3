@@ -144,5 +144,6 @@ public class LaserLineRenderer : MonoBehaviour
         var temp = Array.Empty<Vector3>();
         _lineRenderer.positionCount = temp.Length;
         _lineRenderer.SetPositions(temp);
+        this.enabled = false;
     }
 }

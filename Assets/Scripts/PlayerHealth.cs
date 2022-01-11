@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.PlayerLoop;
+using TMPro;
 
 public class PlayerHealth : MonoBehaviour
 {
@@ -13,8 +14,12 @@ public class PlayerHealth : MonoBehaviour
     public int turretDamageMultiplier = 0;
     public static PlayerHealth instance;
 
+    [Header("TMP parameters")] 
+    [SerializeField] private TMP_Text _healthText;
+    
     private void Start()
     {
+        _healthText.text = "lulmao";
         instance = this;
         health = _maxHealth;
         StartCoroutine(TurretDamageCheckerRoutine());
