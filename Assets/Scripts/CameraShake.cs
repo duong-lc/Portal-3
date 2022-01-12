@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class CameraShake : MonoBehaviour
 {  
-   [HideInInspector] public CameraShake instance;
+   [HideInInspector] public static CameraShake instance;
 
     private Vector3 _originalPos;
     private float _timeAtCurrentFrame;
