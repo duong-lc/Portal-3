@@ -80,10 +80,21 @@ public class TurretFOVBehavior : MonoBehaviour
             if (Vector3.Angle(transform.forward, directionToTarget) < angle / 2)
             {
                 float distanceToTarget = Vector3.Distance(transform.position, target.position);
-                foreach (LayerMask obstructionMask in _obstructionMaskArray)
+                //print($"{distanceToTarget}");
+                // foreach (LayerMask obstructionMask in _obstructionMaskArray)
+                // { 
+                //     print($"{Physics.Raycast(transform.position, directionToTarget, distanceToTarget, obstructionMask)}");
+                //     return !Physics.Raycast(transform.position, directionToTarget, distanceToTarget, obstructionMask);
+                // }
+                var hitArray = Physics.RaycastAll(transform.position, directionToTarget, distanceToTarget);
+                foreach (RaycastHit hit in hitArray)
                 {
-                    return !Physics.Raycast(transform.position, directionToTarget, distanceToTarget, obstructionMask);
+                    if (!hit.collider.isTrigger && !hit.collider.CompareTag("Player"))
+                        return false;
                 }
+
+                return true;
+
             }
             else
                 return false;

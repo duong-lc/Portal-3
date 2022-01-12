@@ -27,6 +27,7 @@ public class PortalProjectileBehavior : MonoBehaviour
     {
         if (_ignoreLayerArray.Any(layer => hit.collider.gameObject.layer == layer) || (hit.collider.isTrigger && hit.collider.CompareTag("Portal")))
         {
+            //print($"{hit.collider.gameObject.layer}");
             SpawnParticle();
             Destroy(gameObject);
             return;
@@ -39,7 +40,7 @@ public class PortalProjectileBehavior : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        print($"{other.gameObject.name}");
+        //print($"{other.gameObject.name}");
         if (other.gameObject.GetComponent<Collider>().isTrigger) return;
         
         SpawnParticle();

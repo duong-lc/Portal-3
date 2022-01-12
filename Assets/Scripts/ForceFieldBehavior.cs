@@ -11,7 +11,7 @@ public class ForceFieldBehavior : MonoBehaviour
             StartCoroutine(ResetTrigger());
             return;
         }
-        print($"touch field");
+        //print($"touch field");
         other.GetComponent<ObjectInteraction>().ResetObjectTransform(other.GetComponent<TurretBehavior>());
     }
 

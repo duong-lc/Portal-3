@@ -62,15 +62,6 @@ public class TurretBehavior : MonoBehaviour
         }
     }
     
-    // Update is called once per frame
-    private void Update()
-    {
-        if (_fovBehavior.canSeePlayer)
-        {
-            print($"fire");
-        }
-    }
-
     public void PlayAudioDetect()
     {
         if(!isAlive) return;

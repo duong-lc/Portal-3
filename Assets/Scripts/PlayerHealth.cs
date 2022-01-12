@@ -93,7 +93,7 @@ public class PlayerHealth : MonoBehaviour
     private IEnumerator HealingRoutine()
     {
         WaitForSeconds wait = new WaitForSeconds(_healingInterval);
-        while (health < _maxHealth)
+        while (health < _maxHealth && _runOnce)
         {
             DamagePlayer(-_healAmount);
             yield return wait;
