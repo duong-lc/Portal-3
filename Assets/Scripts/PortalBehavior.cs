@@ -62,12 +62,7 @@ public class PortalBehavior : MonoBehaviour
         else
             gameObject.GetComponent<Collider>().enabled = false;
     }
-
-    public bool isPortalActive()
-    {
-        if(_outline.activeInHierarchy && _viewport.activeInHierarchy) return true;
-        return false;
-    }
+    
 
     /// <summary>
     /// Coroutine class that deactivate teleportation mechanic for "_cooldownTimer" amount of time then turn it back on
@@ -326,9 +321,26 @@ public class PortalBehavior : MonoBehaviour
     {
         _outline.SetActive(toggleState);    
         _viewport.SetActive(toggleState);
-
+        if (toggleState)
+        {
+            StartCoroutine(ExistConditionCheckRoutine());
+        }
     }
-   
+
+    private IEnumerator ExistConditionCheckRoutine()
+    {
+        WaitForSeconds wait = new WaitForSeconds(0.5f);
+        while (_outline.activeInHierarchy && _viewport.activeInHierarchy)
+        {
+            if (CheckPerimeter() && CheckNormalOverlap())
+                yield return wait;
+            else
+                TogglePortal(false);
+        }
+       
+    }
+    
+    
     #region PortalPlacement
     /// <summary>
     /// <para>  Checks for if it is possible to enable a portal at the current position set by PortalPlacement class<br/>
