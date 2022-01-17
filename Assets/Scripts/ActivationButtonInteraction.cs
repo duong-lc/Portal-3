@@ -30,11 +30,14 @@ public class ActivationButtonInteraction : MonoBehaviour
     public Vector3 endPos;
     public GameObject objectToMove;
     public float timeFromAToB;
+
+    private ActivationButtonGuideNodes _guideNodes;
     
 
     private void Start()
     {
         _unactivatedMat = buttonObject.GetComponent<Renderer>().material;
+        _guideNodes = GetComponent<ActivationButtonGuideNodes>();
     }
     
     private void OnTriggerEnter(Collider other)
@@ -45,6 +48,7 @@ public class ActivationButtonInteraction : MonoBehaviour
         if(_colliderList.Count > 1) {return;}
         
         buttonObject.GetComponent<Renderer>().material = activationMat;
+        _guideNodes.ToggleGuideNodes(true);
         if(_moveAToBTrue != null) StopCoroutine(_moveAToBTrue);
         switch (activationType)
         {
@@ -66,6 +70,7 @@ public class ActivationButtonInteraction : MonoBehaviour
         if (_colliderList.Contains(other)) { _colliderList.Remove(other);}
         if (_colliderList.Count > 0) { return;}
 
+        _guideNodes.ToggleGuideNodes(false);
         buttonObject.GetComponent<Renderer>().material = _unactivatedMat;
         StopCoroutine(_moveAToBFalse);
         switch (activationType)
