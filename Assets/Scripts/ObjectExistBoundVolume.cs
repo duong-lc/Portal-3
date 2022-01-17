@@ -15,6 +15,7 @@ public class ObjectExistBoundVolume : MonoBehaviour
     private void OnTriggerExit(Collider other)
     {
         if (!other.GetComponent<ObjectInteraction>()) return;
+        if (other.GetComponent<ObjectInteraction>().parentDropper.transform == null) return;
         if(other.GetComponent<ObjectInteraction>().parentDropper.transform == _dropperParent)
             other.GetComponent<ObjectInteraction>().ResetObjectTransform(false);
     }

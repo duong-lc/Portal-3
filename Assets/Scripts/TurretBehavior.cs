@@ -31,6 +31,8 @@ public class TurretBehavior : MonoBehaviour
         audioSource = GetComponent<AudioSource>();
         _lineRenderer = GetComponentInChildren<LineRenderer>();
         
+        _lineRenderer.gameObject.SetActive(true);
+        _lineRenderer.enabled = true;
         audioSource.Stop();
         _lineRenderer.positionCount = 2;
         StartCoroutine(LaserLineUpdateRoutine());

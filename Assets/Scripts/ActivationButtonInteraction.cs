@@ -4,7 +4,9 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Numerics;
 using UnityEngine;
+using UnityEngine.Animations;
 using UnityEngine.UIElements;
+using Quaternion = UnityEngine.Quaternion;
 using Vector3 = UnityEngine.Vector3;
 
 public class ActivationButtonInteraction : MonoBehaviour
@@ -28,6 +30,7 @@ public class ActivationButtonInteraction : MonoBehaviour
     public Vector3 endPos;
     public GameObject objectToMove;
     public float timeFromAToB;
+    
 
     private void Start()
     {
@@ -106,6 +109,7 @@ public class ActivationButtonInteraction : MonoBehaviour
             }
         }
     }
+    
 
     private void OnDrawGizmosSelected()
     {
