@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.ProBuilder;
 
 public class PortalProjectileBehavior : MonoBehaviour
 {
@@ -16,9 +17,11 @@ public class PortalProjectileBehavior : MonoBehaviour
     [SerializeField] private Color _redColor;
 
     [SerializeField] private LayerMask[] _ignoreLayerArray;
+    [HideInInspector] public RaycastHit hitData;
 
     private void Start()
     {
+        surfaceNormal = hitData.normal;
         //Setting the material for the projectile
         gameObject.GetComponent<MeshRenderer>().material = portalID == 0 ? _blueMat : _redMat;
     }
@@ -42,7 +45,7 @@ public class PortalProjectileBehavior : MonoBehaviour
     {
         //print($"{other.gameObject.name}");
         if (other.gameObject.GetComponent<Collider>().isTrigger) return;
-        
+        if (other == hitData.collider) return;
         SpawnParticle();
         Destroy(gameObject);
         //spawn a cool hit particle fx

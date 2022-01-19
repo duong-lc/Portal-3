@@ -74,7 +74,8 @@ public class PortalPlacement : MonoBehaviour
         //Instantiate the bullet
         var proj = Instantiate(_projectile, _playerCam.gameObject.transform.position, Quaternion.identity);
         proj.GetComponent<PortalProjectileBehavior>().portalID = portalID;
-        proj.GetComponent<PortalProjectileBehavior>().surfaceNormal = hit.normal;
+        //proj.GetComponent<PortalProjectileBehavior>().surfaceNormal = hit.normal;
+        proj.GetComponent<PortalProjectileBehavior>().hitData = hit;
         proj.transform.forward = _spawnTransform.forward;//update rotation
         StartCoroutine(IEProjectileLerp(hit, Time.time, proj));
         

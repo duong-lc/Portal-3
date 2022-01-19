@@ -16,7 +16,9 @@ public class LaserLineRenderer : MonoBehaviour
     //[SerializeField] private Transform _nose;//point where laser should start
 
     private Vector3 _pos, _dir;
-    [SerializeField] private LayerMask _triggerVolume = 15; 
+    [SerializeField] private LayerMask _triggerVolume = 15;
+    private ActivationButtonInteraction _laserReceiver;
+    private bool _touchReceiver = false;
 
     // Start is called before the first frame update
     private void Start()
@@ -33,6 +35,7 @@ public class LaserLineRenderer : MonoBehaviour
         //Reset the list
         _posList = new List<Vector3> {transform.position};
         _colList = new List<Collider> {GetComponent<Collider>()};
+        //_laserReceiver = null;
         
         if (gameObject.CompareTag("LaserBlaster"))
         {
@@ -92,6 +95,15 @@ public class LaserLineRenderer : MonoBehaviour
                     isInf = false;
                     break;
                 }
+                // case true when hit.collider.CompareTag("LaserReceiver"):
+                // {
+                //     _laserReceiver = hit.collider.GetComponent<ActivationButtonInteraction>();
+                //     Vector3 positionToAdd = hit.point;
+                //     _posList.Add(positionToAdd);
+                //     _colList.Add(colliderToAdd);
+                //     isInf = false;
+                //     break;
+                // }
                 case true:
                 {
                     Vector3 positionToAdd = hit.point;
@@ -106,13 +118,32 @@ public class LaserLineRenderer : MonoBehaviour
         Collider portal1 = PortalRegistry.Instance.portalArray[0].transform.GetComponent<Collider>();
         Collider portal2 = PortalRegistry.Instance.portalArray[1].transform.GetComponent<Collider>();
 
-        if (!_colList.Contains(portal1) && !_colList.Contains(portal2))//TODO fix this crap
+        if (!_colList.Contains(portal1) && !_colList.Contains(portal2))
         {
             PortalRegistry.Instance.DisableLaserOnAllPortal();
         }
-        
+
         _lineRenderer.positionCount = _posList.Count;
         _lineRenderer.SetPositions(_posList.ToArray());
+
+        //_touchReceiver = false;
+        foreach (Collider col in _colList)
+        {
+            if (col.CompareTag("LaserReceiver") && _laserReceiver == null && !_touchReceiver)
+            {
+                print($"ahaha");
+                _laserReceiver = col.GetComponent<ActivationButtonInteraction>();
+                _laserReceiver.EnableActivation();
+                _touchReceiver = true;
+                return;
+            }
+        }
+
+        if (!_touchReceiver && _laserReceiver != null)
+        {
+            _laserReceiver.DisableActivation();
+            _laserReceiver = null;
+        }
     }
     
 

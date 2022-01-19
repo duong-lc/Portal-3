@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 7707848964610835772}
   - component: {fileID: 7707848964610835771}
   - component: {fileID: 7707848964610835770}
+  - component: {fileID: 6891232300076416143}
   m_Layer: 0
   m_Name: LaserReceiver
   m_TagString: LaserReceiver
@@ -70,6 +71,19 @@ MonoBehaviour:
   _unActivatedMat: {fileID: 0}
   _activatedMat: {fileID: 0}
   _guideNodePrefab: {fileID: 0}
+--- !u!65 &6891232300076416143
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7707848964610835769}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 33.39649, y: 7.5775146, z: 33.53033}
+  m_Center: {x: 0.28550982, y: -28.089142, z: -15.817366}
 --- !u!1001 &7707848965511575545
 PrefabInstance:
   m_ObjectHideFlags: 0
