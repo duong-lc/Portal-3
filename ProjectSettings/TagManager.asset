@@ -9,6 +9,7 @@ TagManager:
   - MainMapGeom
   - DropperButton
   - LaserBlaster
+  - LaserReceiver
   layers:
   - Default
   - TransparentFX
