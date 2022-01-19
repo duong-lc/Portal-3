@@ -138,6 +138,8 @@ public class LaserLineRenderer : MonoBehaviour
                 return;
             }
             if(col.CompareTag("LaserReceiver")) return;
+
+            
         }
         print($"{_touchReceiver} {_laserReceiver}");
         if (_touchReceiver && _laserReceiver != null)
