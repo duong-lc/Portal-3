@@ -15140,7 +15140,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh22582
+  m_Name: pb_Mesh26392
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -21755,7 +21755,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh-38280
+  m_Name: pb_Mesh27132
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -22439,7 +22439,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 600256274}
   m_LocalRotation: {x: -0, y: -0.043565746, z: -0, w: -0.99905056}
-  m_LocalPosition: {x: 24.6, y: 49.45, z: -22.581}
+  m_LocalPosition: {x: 33.96, y: 39.71, z: 8.9}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1550597760}
@@ -28391,8 +28391,8 @@ MonoBehaviour:
   activationType: 0
   buttonObject: {fileID: 0}
   activationMat: {fileID: 0}
-  startPos: {x: 23, y: 46, z: -24}
-  endPos: {x: 23, y: 41, z: -24}
+  startPos: {x: 23, y: 41, z: -24}
+  endPos: {x: 23, y: 46, z: -24}
   objectToMove: {fileID: 2012140429}
   timeFromAToB: 1
 --- !u!4 &970988524

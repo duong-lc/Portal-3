@@ -40,8 +40,8 @@ public class ActivationButtonInteraction : MonoBehaviour
         if(!gameObject.CompareTag("LaserReceiver"))
             _unactivatedMat = buttonObject.GetComponent<Renderer>().material;
         _guideNodes = GetComponent<ActivationButtonGuideNodes>();
-        _moveAToBTrue = MoveAToB(Time.time, true);
-        _moveAToBFalse = MoveAToB(Time.time, false);
+        //_moveAToBTrue = MoveAToB(Time.time, true);
+        //_moveAToBFalse = MoveAToB(Time.time, false);
     }
     
     private void OnTriggerEnter(Collider other)
@@ -66,7 +66,7 @@ public class ActivationButtonInteraction : MonoBehaviour
         switch (activationType)
         {
             case ActivationType.MoveAToB:
-                //_moveAToBFalse = MoveAToB(Time.time, false);
+                _moveAToBFalse = MoveAToB(Time.time, false);
                 StartCoroutine(_moveAToBFalse);
                 break;
             case ActivationType.PingPongAToB:
@@ -83,11 +83,11 @@ public class ActivationButtonInteraction : MonoBehaviour
         print($"not activate");
         
         _guideNodes.ToggleGuideNodes(false);
-        StopCoroutine(_moveAToBFalse);
+        if(_moveAToBFalse != null) StopCoroutine(_moveAToBFalse);
         switch (activationType)
         {
             case ActivationType.MoveAToB:
-                //_moveAToBTrue = MoveAToB(Time.time, true);
+                _moveAToBTrue = MoveAToB(Time.time, true);
                 StartCoroutine(_moveAToBTrue);
                 break;
             case ActivationType.PingPongAToB:
@@ -110,7 +110,7 @@ public class ActivationButtonInteraction : MonoBehaviour
         switch (activationType)
         {
             case ActivationType.MoveAToB:
-                //_moveAToBFalse = MoveAToB(Time.time, false);
+                _moveAToBFalse = MoveAToB(Time.time, false);
                 StartCoroutine(_moveAToBFalse);
                 break;
             case ActivationType.PingPongAToB:
@@ -119,7 +119,6 @@ public class ActivationButtonInteraction : MonoBehaviour
                 break;
         }
     }
-
     public void DisableActivation(Collider other)
     {
         if (!other.GetComponent<ObjectInteraction>() && !other.GetComponent<PlayerController>()) return;
@@ -132,7 +131,7 @@ public class ActivationButtonInteraction : MonoBehaviour
         switch (activationType)
         {
             case ActivationType.MoveAToB:
-                //_moveAToBTrue = MoveAToB(Time.time, true);
+                _moveAToBTrue = MoveAToB(Time.time, true);
                 StartCoroutine(_moveAToBTrue);
                 break;
             case ActivationType.PingPongAToB:
