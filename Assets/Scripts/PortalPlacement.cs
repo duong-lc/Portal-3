@@ -26,6 +26,7 @@ public class PortalPlacement : MonoBehaviour
 
     private void Update()
     {
+        if(!GetComponent<PlayerController>().canMove) return;
         //Mouse input handle
         if (Input.GetMouseButtonDown(0))
             FireProjectile(0);

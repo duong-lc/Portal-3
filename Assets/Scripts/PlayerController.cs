@@ -47,6 +47,7 @@ public class PlayerController : MonoBehaviour
 
     private void Start()
     {
+        canMove = true;
         Instance = this;
         _rgbd = GetComponent<Rigidbody>();
         trueLayer = gameObject.layer;

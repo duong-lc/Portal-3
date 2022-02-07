@@ -24,6 +24,7 @@ public class WeaponMovement : MonoBehaviour
     }
     private void Update()
     {
+        if(!GetComponent<PlayerController>().canMove) return;
         WeaponBob();
         WeaponSway();
     }

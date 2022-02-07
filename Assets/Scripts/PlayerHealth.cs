@@ -89,6 +89,8 @@ public class PlayerHealth : MonoBehaviour
             _healthDisplayObject.SetActive(false);
             _DeathScreenObject.SetActive(true);
             Time.timeScale = 0;
+            GetComponent<PlayerController>().canMove = false;
+            Cursor.visible = true;
         }
     }
     
