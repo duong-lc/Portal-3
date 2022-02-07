@@ -9,6 +9,12 @@ using UnityEditor.SearchService;
 
 public class PlayerHealth : MonoBehaviour
 {
+    [Header("Canvas GameObjects")]
+    [SerializeField] private GameObject _DeathScreenObject;
+    [SerializeField] private GameObject _healthDisplayObject;
+    
+    
+    [Header("Other Health Parameters")]
     [SerializeField] private float _maxHealth = 100;
     public float health = 100;
     [SerializeField] private float _turretDamageCheckInterval = 0.2f;
@@ -48,13 +54,11 @@ public class PlayerHealth : MonoBehaviour
 
     private void Update()
     {
-        if (!_runOnce)
+        if (_runOnce) return;
+        if (Time.time - _damageTakenTime >= _waitTimeToHeal)
         {
-            if (Time.time - _damageTakenTime >= _waitTimeToHeal)
-            {
-                _runOnce = true;
-                StartCoroutine(HealingCountDownRoutine());
-            }
+            _runOnce = true;
+            StartCoroutine(HealingCountDownRoutine());
         }
     }
     
@@ -78,9 +82,14 @@ public class PlayerHealth : MonoBehaviour
         if (health > _maxHealth) health = _maxHealth;
         //show health in UI
         _healthText.text = health.ToString(CultureInfo.CurrentCulture);
-        
-        
-        if(health <= 0) print($"you're ded ajjaja");
+
+
+        if (health <= 0)
+        {
+            _healthDisplayObject.SetActive(false);
+            _DeathScreenObject.SetActive(true);
+            Time.timeScale = 0;
+        }
     }
     
     //countdown since the last time taking damage to be able to heal automatically
