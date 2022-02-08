@@ -6,6 +6,7 @@ using UnityEngine;
 using UnityEngine.PlayerLoop;
 using TMPro;
 using UnityEditor.SearchService;
+using UnityEngine.UI;
 
 public class PlayerHealth : MonoBehaviour
 {
@@ -36,6 +37,7 @@ public class PlayerHealth : MonoBehaviour
     
     private void Start()
     {
+        ToggleHealthUI(true);
         _healthText.text = health.ToString(CultureInfo.CurrentCulture);
         instance = this;
         health = _maxHealth;
@@ -86,12 +88,17 @@ public class PlayerHealth : MonoBehaviour
 
         if (health <= 0)
         {
-            _healthDisplayObject.SetActive(false);
+            ToggleHealthUI(false);
             _DeathScreenObject.SetActive(true);
             Time.timeScale = 0;
             GetComponent<PlayerController>().canMove = false;
-            Cursor.visible = true;
+            GetComponent<PlayerController>().ReleaseMouseCursor();
         }
+    }
+
+    public void ToggleHealthUI(bool isOn)
+    {
+        _healthDisplayObject.SetActive(isOn);
     }
     
     //countdown since the last time taking damage to be able to heal automatically

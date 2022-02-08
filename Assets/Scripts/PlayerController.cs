@@ -12,8 +12,7 @@ public class PlayerController : MonoBehaviour
 {
     public static PlayerController Instance;
     [SerializeField] private GameObject _capsule;
-
-    [Space]
+    
     [Header("Movement Settings")]
     [SerializeField] private float _walkingSpeed = 10f;
     [Space]
@@ -56,18 +55,39 @@ public class PlayerController : MonoBehaviour
 
         _rgbd.useGravity = false;
         // Lock cursor
+        LockMouseCursor();
+        
+    }
+
+    public void LockMouseCursor()
+    {
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
     }
 
+    public void ReleaseMouseCursor()
+    {
+        Cursor.lockState = CursorLockMode.None;
+        Cursor.visible = true;
+    }
     private void Update()
     {
         //basic movements
         CheckGround();
         PlayerLook();
         PlayerMovement();
+        
+        //CheckPauseInput
     }
 
+    private void EnablePauseScreen()
+    {
+        if (GetComponent<PlayerHealth>().health <= 0 && Input.GetKeyDown(KeyCode.Escape))
+        {
+            GetComponent<PlayerHealth>().ToggleHealthUI(false);
+        }
+    }
+    
     private void LateUpdate() 
     {
         CustomGravity();
