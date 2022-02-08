@@ -10,9 +10,7 @@ using UnityEngine.UI;
 
 public class PlayerHealth : MonoBehaviour
 {
-    [Header("Canvas GameObjects")]
-    [SerializeField] private GameObject _DeathScreenObject;
-    [SerializeField] private GameObject _healthDisplayObject;
+
     
     
     [Header("Other Health Parameters")]
@@ -37,7 +35,7 @@ public class PlayerHealth : MonoBehaviour
     
     private void Start()
     {
-        ToggleHealthUI(true);
+
         _healthText.text = health.ToString(CultureInfo.CurrentCulture);
         instance = this;
         health = _maxHealth;
@@ -88,18 +86,15 @@ public class PlayerHealth : MonoBehaviour
 
         if (health <= 0)
         {
-            ToggleHealthUI(false);
-            _DeathScreenObject.SetActive(true);
+            GetComponent<PlayerUIHandler>().ToggleHealthUI(false);
+            GetComponent<PlayerUIHandler>().ToggleDeathScreenUI(true);
             Time.timeScale = 0;
             GetComponent<PlayerController>().canMove = false;
             GetComponent<PlayerController>().ReleaseMouseCursor();
         }
     }
 
-    public void ToggleHealthUI(bool isOn)
-    {
-        _healthDisplayObject.SetActive(isOn);
-    }
+
     
     //countdown since the last time taking damage to be able to heal automatically
     private IEnumerator HealingCountDownRoutine()

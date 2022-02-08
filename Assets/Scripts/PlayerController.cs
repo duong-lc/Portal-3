@@ -78,13 +78,29 @@ public class PlayerController : MonoBehaviour
         PlayerMovement();
         
         //CheckPauseInput
+        EnablePauseScreen();
     }
 
     private void EnablePauseScreen()
     {
-        if (GetComponent<PlayerHealth>().health <= 0 && Input.GetKeyDown(KeyCode.Escape))
+        if (GetComponent<PlayerHealth>().health > 0 && Input.GetKeyDown(KeyCode.Escape))
         {
-            GetComponent<PlayerHealth>().ToggleHealthUI(false);
+            if (Time.timeScale != 0)
+            {
+                print($"no");
+                GetComponent<PlayerUIHandler>().ToggleHealthUI(false);
+                GetComponent<PlayerUIHandler>().TogglePauseScreen(true);
+                canMove = false;
+                ReleaseMouseCursor();
+            }
+            else
+            {
+                print($"smt");
+                GetComponent<PlayerUIHandler>().ToggleHealthUI(true);
+                GetComponent<PlayerUIHandler>().TogglePauseScreen(false);
+                canMove = true;
+                LockMouseCursor();
+            }
         }
     }
     
