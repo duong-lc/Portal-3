@@ -47,6 +47,7 @@ public class ObjectInteraction : MonoBehaviour
     
     public void ResetObjectTransform(bool toDestroy)
     {
+        //transform.root.GetComponent<ObjectDropperInteraction>().OnButtonInteract();
         //foreach (Material mat in _renderer.materials) { ToTransparentMode(mat); }
         if (isFading) return;
         PlayerController.Instance.gameObject.GetComponent<PlayerInteraction>().BreakConnection(this);

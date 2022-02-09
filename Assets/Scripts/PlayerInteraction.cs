@@ -77,8 +77,9 @@ public class PlayerInteraction : MonoBehaviour
     {
         if (Physics.Raycast(mainCamera.transform.position, mainCamera.transform.forward, out var hit, _castDistance, _buttonLayer))
         {
-            print($"{hit.collider.name}");
-            hit.collider.transform.GetComponentInChildren<ObjectInteraction>().ResetObjectTransform(false);
+            Transform root = hit.collider.transform.root;
+            //root.GetComponent<ObjectDropperInteraction>().OnButtonInteract();
+            root.GetComponentInChildren<ObjectInteraction>().ResetObjectTransform(false);
         }
     }
     

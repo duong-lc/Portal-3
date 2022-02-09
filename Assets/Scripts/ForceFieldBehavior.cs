@@ -8,6 +8,14 @@ public class ForceFieldBehavior : MonoBehaviour
     {
         if (!other.GetComponent<ObjectInteraction>() )
         {
+            if (other.CompareTag("Player"))
+            {
+                foreach (var portal in PortalRegistry.Instance.portalArray)
+                {
+                    portal.TogglePortal(false);
+                }
+               
+            }
             StartCoroutine(ResetTrigger());
             return;
         }
