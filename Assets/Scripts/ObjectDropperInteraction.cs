@@ -8,25 +8,12 @@ public class ObjectDropperInteraction : MonoBehaviour
     [field: Header("Cube Properties")]
     public GameObject MainObject {private set; get; }
     public Transform _objectSpawnTransform;
-    
-    [Header("Sound fx")]
-    [SerializeField] private AudioClip _buttonSound;
-    private AudioSource _audioSource;
-    private void Start()
-    {
-        _audioSource = GetComponent<AudioSource>();
-    }
 
+   
+    
     private void OnDrawGizmosSelected()
     {
         Gizmos.color = Color.green;
-    }
-
-    public void OnButtonInteract()
-    {
-        _audioSource.clip = _buttonSound;
-        _audioSource.loop = false;
-        AudioSource.PlayClipAtPoint(_buttonSound, transform.position);
     }
     
     // private static void ToOpaqueMode(Material material)
