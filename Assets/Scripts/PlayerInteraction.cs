@@ -121,6 +121,7 @@ public class PlayerInteraction : MonoBehaviour
     //Release the object
     public void BreakConnection(ObjectInteraction obj)
     {
+        
         isPickingUp = false;
         if (_currPickedUpObj == null) return;
         //Return the obj's original after being dropped
@@ -133,6 +134,7 @@ public class PlayerInteraction : MonoBehaviour
         _currPickedUpObj = null;
         //Set pickup status of object to false
         obj.pickedUp = false;
+        print($"break");
         //set Current Dist to 0
         _currentDist = 0;
     }
@@ -163,8 +165,13 @@ public class PlayerInteraction : MonoBehaviour
         _currPickedUpObj.transform.position = pickupParent.transform.position;
         _pickupRB.velocity = Vector3.zero;
         StartCoroutine(CannotBreak());
-        PickUpObject(_currPickedUpObj.GetComponent<ObjectInteraction>(), true);
+        PickUpObject(GetCurrPickedUpObj(), true);
         
+    }
+
+    public ObjectInteraction GetCurrPickedUpObj()
+    {
+        return _currPickedUpObj ? _currPickedUpObj.GetComponent<ObjectInteraction>() : null;
     }
 
     private IEnumerator CannotBreak()

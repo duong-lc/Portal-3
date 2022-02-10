@@ -17,7 +17,10 @@ public class ObjectExistBoundVolume : MonoBehaviour
         if (!other.GetComponent<ObjectInteraction>()) return;
         if (other.GetComponent<TurretBehavior>()) return;
         if (other.GetComponent<ObjectInteraction>().parentDropper.transform == _dropperParent)
+        {
+            print($"cube out");
             other.GetComponent<ObjectInteraction>().ResetObjectTransform(false);
+        }
         else return;
     }
 }

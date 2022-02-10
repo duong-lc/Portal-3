@@ -25,7 +25,7 @@ public class ObjectInteraction : MonoBehaviour
         _rb = GetComponent<Rigidbody>();
         _rb.collisionDetectionMode = CollisionDetectionMode.ContinuousDynamic;
         if(!GetComponent<TurretBehavior>())
-            parentDropper = transform.parent.root.GetComponent<ObjectDropperInteraction>();
+            parentDropper = transform.root.GetComponent<ObjectDropperInteraction>();
         
         trueLayer = gameObject.layer;
         
@@ -49,7 +49,9 @@ public class ObjectInteraction : MonoBehaviour
     {
         //foreach (Material mat in _renderer.materials) { ToTransparentMode(mat); }
         if (isFading) return;
-        PlayerController.Instance.gameObject.GetComponent<PlayerInteraction>().BreakConnection(this);
+        
+        if(this == PlayerController.Instance.gameObject.GetComponent<PlayerInteraction>().GetCurrPickedUpObj())
+            PlayerController.Instance.gameObject.GetComponent<PlayerInteraction>().BreakConnection(this);
         if (GetComponent<TurretBehavior>()) { GetComponent<TurretBehavior>().PlayAudioDeath(); }
         StartCoroutine(ObjectFade(Time.time, toDestroy));
         _rb.velocity *= 0.3f;
@@ -77,6 +79,7 @@ public class ObjectInteraction : MonoBehaviour
         isFading = false;
         if (!toDestroy)
         {
+            print($"reset");
             //foreach (Material mat in _renderer.materials) { ToOpaqueMode(mat); }
             transform.position = parentDropper._objectSpawnTransform.position;
             GetComponent<Rigidbody>().useGravity = true;

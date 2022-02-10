@@ -40,7 +40,7 @@ public class PlayerUIHandler : MonoBehaviour
         else 
             controller.LockMouseCursor();
         
-        print($"{Time.timeScale}");
+       //print($"{Time.timeScale}");
     }
     
 }

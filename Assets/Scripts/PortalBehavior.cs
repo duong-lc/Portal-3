@@ -429,8 +429,8 @@ public class PortalBehavior : MonoBehaviour
             //     }
             // }
         }
-        if(!canPlace)
-            print($"can't place here");
+        //if(!canPlace)
+            //print($"can't place here");
         return canPlace;
     }
     public bool CheckNormalOverlap()    
