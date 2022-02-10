@@ -87,7 +87,6 @@ public class PlayerController : MonoBehaviour
         {
             if (Time.timeScale != 0)
             {
-                print($"no");
                 GetComponent<PlayerUIHandler>().ToggleHealthUI(false);
                 GetComponent<PlayerUIHandler>().TogglePauseScreen(true);
                 canMove = false;
@@ -95,7 +94,6 @@ public class PlayerController : MonoBehaviour
             }
             else
             {
-                print($"smt");
                 GetComponent<PlayerUIHandler>().ToggleHealthUI(true);
                 GetComponent<PlayerUIHandler>().TogglePauseScreen(false);
                 canMove = true;
