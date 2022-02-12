@@ -17,8 +17,8 @@ public class LaserLineRenderer : MonoBehaviour
 
     private Vector3 _pos, _dir;
     [SerializeField] private LayerMask _triggerVolume = 15;
-    private ActivationButtonInteraction _laserReceiver;
-    private bool _touchReceiver = false;
+    //private ActivationButtonInteraction _laserReceiver;
+    //private bool _touchReceiver = false;
 
     // Start is called before the first frame update
     private void Start()
@@ -85,25 +85,6 @@ public class LaserLineRenderer : MonoBehaviour
                     _dir = hit.collider.transform.forward;
                     break;
                 }
-                case true when hit.collider.GetComponent<PortalBehavior>():
-                {
-                    //Activate line renderer on the other portal
-                    PortalRegistry.Instance.EnableLaserOnPortal(hit.collider.GetComponent<PortalBehavior>());
-                    Vector3 positionToAdd = hit.point;
-                    _posList.Add(positionToAdd);
-                    _colList.Add(colliderToAdd);
-                    isInf = false;
-                    break;
-                }
-                // case true when hit.collider.CompareTag("LaserReceiver"):
-                // {
-                //     _laserReceiver = hit.collider.GetComponent<ActivationButtonInteraction>();
-                //     Vector3 positionToAdd = hit.point;
-                //     _posList.Add(positionToAdd);
-                //     _colList.Add(colliderToAdd);
-                //     isInf = false;
-                //     break;
-                // }
                 case true:
                 {
                     Vector3 positionToAdd = hit.point;
@@ -115,56 +96,32 @@ public class LaserLineRenderer : MonoBehaviour
             }
         }
         
-        Collider portal1 = PortalRegistry.Instance.portalArray[0].transform.GetComponent<Collider>();
-        Collider portal2 = PortalRegistry.Instance.portalArray[1].transform.GetComponent<Collider>();
-
-        if (!_colList.Contains(portal1) && !_colList.Contains(portal2))
-        {
-            PortalRegistry.Instance.DisableLaserOnAllPortal();
-        }
+        
+        //Adding all the collider lists from laser blaster to portal registry singleton to
+        //check all active laser blasters in scene to see if their lasers touching the portal
+        PortalRegistry.Instance.registryColList.AddRange(_colList);
+        
 
         _lineRenderer.positionCount = _posList.Count;
         _lineRenderer.SetPositions(_posList.ToArray());
-
-        //_touchReceiver = false;
+        
         foreach (Collider col in _colList)
         {
-            if (col.CompareTag("LaserReceiver") && _laserReceiver == null && !_touchReceiver)
-            {
-                print($"ahaha");
-                _laserReceiver = col.GetComponent<ActivationButtonInteraction>();
-                _laserReceiver.EnableActivation();
-                _touchReceiver = true;
-                return;
-            }
             if(col.CompareTag("LaserReceiver")) return;
-
             
-        }
-       //print($"{_touchReceiver} {_laserReceiver}");
-        if (_touchReceiver && _laserReceiver != null)
-        {
-            _laserReceiver.DisableActivation();
-            _laserReceiver = null;
-            _touchReceiver = false;
+            if (col.GetComponent<TurretBehavior>())
+            {
+                col.GetComponent<ObjectInteraction>().ResetObjectTransform(true);
+            }
+            if (col.GetComponent<PlayerController>())
+            {
+                CameraShake.instance.Shake(0.1f, 0.3f);
+            }
         }
     }
-    
 
-    // private static int GetClosestObject(IReadOnlyList<RaycastHit> hitArray)
-    // {
-    //     int closestObjIndex = 0;
-    //     float minDist = 0;
-    //     var distArray = new float[hitArray.Count];
-    //     for (int j = 0; j < hitArray.Count; j++)
-    //     {
-    //         distArray[j] = hitArray[j].distance;
-    //     }
-    //     minDist = distArray.Min();
-    //     closestObjIndex = Array.IndexOf(distArray, minDist);
-    //     return closestObjIndex;
-    // }
-    
+
+
     private void OnDrawGizmosSelected()
     {
         Gizmos.color = Color.blue;

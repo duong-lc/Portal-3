@@ -7,7 +7,7 @@ public class UIPauseScreen : MonoBehaviour
 {
     public void ResumeLevel()
     {
-        PlayerController.Instance.GetComponent<PlayerUIHandler>().TogglePauseScreen(false);
+        PlayerController.Instance.GetComponent<PlayerUIHandler>().TogglePauseScreenUI(false);
         //Time.timeScale = 1;
     }
     public void RestartLevel()

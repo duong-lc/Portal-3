@@ -10,6 +10,7 @@ public class CameraShake : MonoBehaviour
     private float _timeAtCurrentFrame;
     private float _timeAtLastFrame;
     private float _fakeDelta;
+    private bool _isShaking = false;
 
     private void Awake() {
         instance = this;
@@ -22,7 +23,9 @@ public class CameraShake : MonoBehaviour
         _timeAtLastFrame = _timeAtCurrentFrame; 
     }
 
-    public void Shake (float duration, float amount) {
+    public void Shake (float duration, float amount)
+    {
+        if (_isShaking || !PlayerController.Instance.canMove) return;
         instance._originalPos = instance.gameObject.transform.localPosition;
         instance.StopAllCoroutines();
         instance.StartCoroutine(instance.CamShake(duration, amount));
@@ -30,7 +33,7 @@ public class CameraShake : MonoBehaviour
 
     public IEnumerator CamShake (float duration, float amount) {
         var endTime = Time.time + duration;
-
+        _isShaking = true;
         while (duration > 0) {
             transform.localPosition = _originalPos + Random.insideUnitSphere * amount;
 
@@ -39,6 +42,7 @@ public class CameraShake : MonoBehaviour
             yield return null;
         }
 
+        _isShaking = false;
         transform.localPosition = _originalPos;
     }
 }

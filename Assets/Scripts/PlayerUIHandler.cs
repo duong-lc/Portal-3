@@ -10,11 +10,15 @@ public class PlayerUIHandler : MonoBehaviour
     [SerializeField] private GameObject _deathScreenObject;
     [SerializeField] private GameObject _healthDisplayObject;
     [SerializeField] private GameObject _pauseScreenObject;
+    [SerializeField] private GameObject _winScreenObject;
+    private PlayerController _controller;
 
     public void Start()
     {
-        TogglePauseScreen(false);
+        _controller = PlayerController.Instance;
+        TogglePauseScreenUI(false);
         ToggleDeathScreenUI(false);
+        ToggleWinScreenUI(false);
         ToggleHealthUI(true);
     }
 
@@ -25,22 +29,36 @@ public class PlayerUIHandler : MonoBehaviour
 
     public void ToggleDeathScreenUI(bool isOn)
     {
+        ToggleHealthUI(!isOn);
+        Time.timeScale = isOn ? 0 : 1;
+        _controller.canMove = !isOn;
+        ToggleMouseCursorOnScreen(isOn);
         _deathScreenObject.SetActive(isOn);
     }
 
-    public void TogglePauseScreen(bool isOn)
+    public void TogglePauseScreenUI(bool isOn)
     {
-        var controller = PlayerController.Instance;
-        _pauseScreenObject.SetActive(isOn);
+        ToggleHealthUI(!isOn);
         Time.timeScale = isOn ? 0 : 1;
-        controller.canMove = !isOn;
-        
-        if (isOn)
-            controller.ReleaseMouseCursor();
-        else 
-            controller.LockMouseCursor();
-        
-       //print($"{Time.timeScale}");
+        _controller.canMove = !isOn;
+        ToggleMouseCursorOnScreen(isOn);
+        _pauseScreenObject.SetActive(isOn);
     }
-    
+
+    public void ToggleWinScreenUI(bool isOn)
+    {
+        ToggleHealthUI(!isOn);
+        Time.timeScale = isOn ? 0 : 1;
+        _controller.canMove = !isOn;
+        ToggleMouseCursorOnScreen(isOn);
+        _winScreenObject.SetActive(isOn);
+    }
+
+    public void ToggleMouseCursorOnScreen(bool isOn)
+    {
+        if (isOn)
+            _controller.ReleaseMouseCursor();
+        else 
+            _controller.LockMouseCursor();
+    }
 }

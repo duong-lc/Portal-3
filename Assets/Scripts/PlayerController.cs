@@ -47,6 +47,7 @@ public class PlayerController : MonoBehaviour
     private void Start()
     {
         canMove = true;
+        Time.timeScale = 1;
         Instance = this;
         _rgbd = GetComponent<Rigidbody>();
         trueLayer = gameObject.layer;
@@ -85,20 +86,7 @@ public class PlayerController : MonoBehaviour
     {
         if (GetComponent<PlayerHealth>().health > 0 && Input.GetKeyDown(KeyCode.Escape))
         {
-            if (Time.timeScale != 0)
-            {
-                GetComponent<PlayerUIHandler>().ToggleHealthUI(false);
-                GetComponent<PlayerUIHandler>().TogglePauseScreen(true);
-                canMove = false;
-                ReleaseMouseCursor();
-            }
-            else
-            {
-                GetComponent<PlayerUIHandler>().ToggleHealthUI(true);
-                GetComponent<PlayerUIHandler>().TogglePauseScreen(false);
-                canMove = true;
-                LockMouseCursor();
-            }
+            GetComponent<PlayerUIHandler>().TogglePauseScreenUI(Time.timeScale != 0);
         }
     }
     

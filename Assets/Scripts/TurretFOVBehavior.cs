@@ -1,6 +1,9 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Rendering;
+
 /// <summary>
 /// Field of View for the turret the player
 ///
@@ -14,7 +17,6 @@ public class TurretFOVBehavior : MonoBehaviour
     public GameObject playerRef;
 
     [SerializeField] private LayerMask _targetMask;
-    [SerializeField] private LayerMask[] _obstructionMaskArray;
     private TurretBehavior _turretBehavior;
     public bool canSeePlayer;
     public Vector3 playerDir;
@@ -24,8 +26,29 @@ public class TurretFOVBehavior : MonoBehaviour
         _turretBehavior = GetComponent<TurretBehavior>();
         playerRef = GameObject.FindWithTag("Player");
         StartCoroutine(FOVRoutine());
+        StartCoroutine(StandingCheckRoutine());
     }
 
+    private IEnumerator StandingCheckRoutine()
+    {   
+        WaitForSeconds wait = new WaitForSeconds(0.3f);
+        Vector3 objectRot = transform.rotation.eulerAngles;
+        while (true)
+        {
+            objectRot = transform.rotation.eulerAngles;
+            //print($"{objectRot.x} {objectRot.y} {objectRot.z}");
+            if (((objectRot.x >= 1 || objectRot.x <= -1)
+                || (objectRot.z >= 1 || objectRot.z <= -1))
+                && GetComponent<Rigidbody>().velocity.magnitude == 0)
+            {
+                break;
+            }
+            yield return wait;
+        }
+        GetComponent<ObjectInteraction>().ResetObjectTransform(true);
+    }
+    
+    
     public IEnumerator FOVRoutine()
     {
         WaitForSeconds wait = new WaitForSeconds(0.2f);
@@ -104,4 +127,10 @@ public class TurretFOVBehavior : MonoBehaviour
 
         return false;
     }
+
+    // private void OnDrawGizmosSelected()
+    // {
+    //     Gizmos.color = Color.red;
+    //     Gizmos.DrawRay(transform.position, Vector3.down * 0.3f );
+    // }
 }

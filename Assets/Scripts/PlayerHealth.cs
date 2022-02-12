@@ -5,7 +5,6 @@ using System.Globalization;
 using UnityEngine;
 using UnityEngine.PlayerLoop;
 using TMPro;
-using UnityEditor.SearchService;
 using UnityEngine.UI;
 
 public class PlayerHealth : MonoBehaviour
@@ -86,11 +85,8 @@ public class PlayerHealth : MonoBehaviour
 
         if (health <= 0)
         {
-            GetComponent<PlayerUIHandler>().ToggleHealthUI(false);
             GetComponent<PlayerUIHandler>().ToggleDeathScreenUI(true);
-            Time.timeScale = 0;
-            GetComponent<PlayerController>().canMove = false;
-            GetComponent<PlayerController>().ReleaseMouseCursor();
+
         }
     }
 

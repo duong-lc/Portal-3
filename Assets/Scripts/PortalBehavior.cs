@@ -325,6 +325,10 @@ public class PortalBehavior : MonoBehaviour
         {
             StartCoroutine(ExistConditionCheckRoutine());
         }
+        else
+        {
+            PortalRegistry.Instance.DisableLaserOnAllPortal();
+        }
     }
 
     private IEnumerator ExistConditionCheckRoutine()
@@ -368,7 +372,7 @@ public class PortalBehavior : MonoBehaviour
 
 
         }else{//if the portal can't be placed, shake screen to warn
-            _cam.GetComponent<CameraShake>().Shake(0.2f,0.1f);
+            CameraShake.instance.Shake(0.2f,0.1f);
         }
     }
     public bool CheckPerimeter()

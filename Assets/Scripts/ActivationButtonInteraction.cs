@@ -20,7 +20,7 @@ public class ActivationButtonInteraction : MonoBehaviour
     }
 
     private IEnumerator _moveAToBFalse, _moveAToBTrue;
-    private List<Collider> _colliderList = new List<Collider>();
+    private List<Collider> _colliderList = new List<Collider>();//number of objects pushing on button
     private Material _unactivatedMat;
     
     public ActivationType activationType = ActivationType.MoveAToB;
@@ -33,6 +33,7 @@ public class ActivationButtonInteraction : MonoBehaviour
     public float timeFromAToB;
 
     private ActivationButtonGuideNodes _guideNodes;
+    public bool isEnabled = false;
     
 
     private void Start()
@@ -40,9 +41,12 @@ public class ActivationButtonInteraction : MonoBehaviour
         if(!gameObject.CompareTag("LaserReceiver"))
             _unactivatedMat = buttonObject.GetComponent<Renderer>().material;
         _guideNodes = GetComponent<ActivationButtonGuideNodes>();
+
+        //StartCoroutine(CheckIfActivatedRoutine());
         //_moveAToBTrue = MoveAToB(Time.time, true);
         //_moveAToBFalse = MoveAToB(Time.time, false);
     }
+    
     
     private void OnTriggerEnter(Collider other)
     {
@@ -58,6 +62,12 @@ public class ActivationButtonInteraction : MonoBehaviour
     {
         if (objectToMove.transform.position == endPos) return;
         if(_colliderList.Count > 1) {return;}
+        
+        //Calling the function once so it doesn't stack the coroutine on update call
+        if (!isEnabled)
+            isEnabled = true;
+        else
+            return;
         
         print($"activate");
         
@@ -79,7 +89,13 @@ public class ActivationButtonInteraction : MonoBehaviour
     public void DisableActivation()
     {
         if (_colliderList.Count > 0) { return;}
-
+        
+        //Calling the function once so it doesn't stack the coroutine on update call
+        if (isEnabled)
+            isEnabled = false;
+        else
+            return;
+        
         print($"not activate");
         
         _guideNodes.ToggleGuideNodes(false);

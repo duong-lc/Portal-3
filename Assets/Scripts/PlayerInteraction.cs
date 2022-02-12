@@ -61,7 +61,14 @@ public class PlayerInteraction : MonoBehaviour
         if (_currPickedUpObj == null)
         {
             //and we are looking an interactable object
-            if (_targetObj != null) { PickUpObject(_targetObj.GetComponentInChildren<ObjectInteraction>(), false); }
+            if (_targetObj != null)
+            {
+                Physics.Raycast(mainCamera.transform.position, mainCamera.transform.forward, out var hit1, _maxDistance);
+                //print($"{hit1.collider.name}");
+                if((hit1.collider == null || hit1.collider.isTrigger)|| (hit1.collider == hit.collider))
+                    PickUpObject(_targetObj.GetComponentInChildren<ObjectInteraction>(), false);
+                
+            }
         }
         else
         {
@@ -70,15 +77,14 @@ public class PlayerInteraction : MonoBehaviour
             _currPickedUpObj.GetComponent<Collider>().enabled = true;
             //Break the connection
             BreakConnection(_currPickedUpObj.GetComponent<ObjectInteraction>()); 
-                
+            //dropping object while portaling will now drop the obj on the other side of the portal and not fall into the abyss 
         }
     }
     private void AttemptObjectSpawnButtonInteraction()
     {
         if (Physics.Raycast(mainCamera.transform.position, mainCamera.transform.forward, out var hit, _castDistance, _buttonLayer))
         {
-            print($"{hit.collider.name}");
-            hit.collider.transform.GetComponentInChildren<ObjectInteraction>().ResetObjectTransform(false);
+            hit.collider.transform.root.GetComponentInChildren<ObjectInteraction>().ResetObjectTransform(false);
         }
     }
     
