@@ -29,9 +29,15 @@ public class PortalPlacement : MonoBehaviour
         if(!GetComponent<PlayerController>().canMove) return;
         //Mouse input handle
         if (Input.GetMouseButtonDown(0))
+        {
             FireProjectile(0);
+            PlayerSoundManager.Instance.PlayPlayerFireLmbAudio();
+        }
         else if (Input.GetMouseButtonDown(1))
+        {
             FireProjectile(1);
+            PlayerSoundManager.Instance.PlayPlayerFireRmbAudio();
+        }
     }
     
     public void CreatePortal(int portalID, RaycastHit hit)
@@ -59,7 +65,7 @@ public class PortalPlacement : MonoBehaviour
             //portal.transform.forward = -hit.normal;//print($"wall");   
             portal.edgeChecker.transform.forward = -hit.normal;
         }
-        portalPair.portalArray[portalID].AttemptPlacingPortal();
+        portalPair.portalArray[portalID].AttemptPlacingPortal(hit);
         //portal.transform.position = new Vector3 ( Mathf.Round(portal.transform.position.x), Mathf.Round(portal.transform.position.y), Mathf.Round(portal.transform.position.z));
     }
 

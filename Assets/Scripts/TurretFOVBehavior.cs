@@ -62,13 +62,13 @@ public class TurretFOVBehavior : MonoBehaviour
                 {
                     _turretBehavior.bulletSpawner.SetActive(false);
                     _turretBehavior.StopAudioShoot();
-                    PlayerHealth.instance.turretDamageMultiplier -= 1;
+                    PlayerHealth.Instance.turretDamageMultiplier -= 1;
                 } 
                 else
                 {
                     _turretBehavior.bulletSpawner.SetActive(true);
                     _turretBehavior.PlayAudioDetect();
-                    PlayerHealth.instance.turretDamageMultiplier += 1;
+                    PlayerHealth.Instance.turretDamageMultiplier += 1;
                 }
 
                 canSeePlayer = FieldOfViewCheck();

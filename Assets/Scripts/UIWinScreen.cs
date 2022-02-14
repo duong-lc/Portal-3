@@ -7,6 +7,7 @@ public class UIWinScreen : MonoBehaviour
 {
     public void NextLevel()
     {
+        PlayerSoundManager.Instance.PlayHudButtonSelectAudio();
         if(SceneManager.GetActiveScene().name != "Level 5")
             SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
         else
@@ -14,6 +15,7 @@ public class UIWinScreen : MonoBehaviour
     }
     public void RestartLevel()
     {
+        PlayerSoundManager.Instance.PlayHudButtonSelectAudio();
         Time.timeScale = 1;
         PlayerController.Instance.LockMouseCursor();
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
@@ -21,6 +23,7 @@ public class UIWinScreen : MonoBehaviour
 
     public void LoadMainMenu()
     {
+        PlayerSoundManager.Instance.PlayHudButtonSelectAudio();
         SceneManager.LoadScene(0);
     }
 }

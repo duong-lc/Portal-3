@@ -7,6 +7,7 @@ public class UIDeathScreen : MonoBehaviour
 {
     public void RestartLevel()
     {
+        PlayerSoundManager.Instance.PlayHudButtonSelectAudio();
         Time.timeScale = 1;
         PlayerController.Instance.LockMouseCursor();
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
@@ -14,6 +15,7 @@ public class UIDeathScreen : MonoBehaviour
 
     public void LoadMainMenu()
     {
+        PlayerSoundManager.Instance.PlayHudButtonSelectAudio();
         SceneManager.LoadScene(0);
     }
 }

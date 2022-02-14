@@ -19,7 +19,8 @@ public class ObjectInteraction : MonoBehaviour
     private Color[] _originalColorArray;
     private Rigidbody _rb;
     private bool isFading = false;
-    
+
+
     private void Start()
     {
         _rb = GetComponent<Rigidbody>();
@@ -53,6 +54,11 @@ public class ObjectInteraction : MonoBehaviour
         if(this == PlayerController.Instance.gameObject.GetComponent<PlayerInteraction>().GetCurrPickedUpObj())
             PlayerController.Instance.gameObject.GetComponent<PlayerInteraction>().BreakConnection(this);
         if (GetComponent<TurretBehavior>()) { GetComponent<TurretBehavior>().PlayAudioDeath(); }
+        else
+        {
+            PlayerSoundManager.Instance.PlayCubeDestroyAudio(transform.position);
+        }
+
         StartCoroutine(ObjectFade(Time.time, toDestroy));
         _rb.velocity *= 0.3f;
         _rb.useGravity = false;
@@ -79,9 +85,10 @@ public class ObjectInteraction : MonoBehaviour
         isFading = false;
         if (!toDestroy)
         {
-            print($"reset");
             //foreach (Material mat in _renderer.materials) { ToOpaqueMode(mat); }
             transform.position = parentDropper._objectSpawnTransform.position;
+            //play audio after respawn
+            PlayerSoundManager.Instance.PlayCubeRespawnAudio(transform.position);
             GetComponent<Rigidbody>().useGravity = true;
             int j = 0;
             foreach (MeshRenderer ren in _rendererArray)

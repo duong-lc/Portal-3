@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,7 +12,7 @@ using UnityEngine;
 public class PlayerController : MonoBehaviour
 {
     public static PlayerController Instance;
-    [SerializeField] private GameObject _capsule;
+    //[SerializeField] private GameObject _capsule;
     
     [Header("Movement Settings")]
     [SerializeField] private float _walkingSpeed = 10f;
@@ -42,13 +43,17 @@ public class PlayerController : MonoBehaviour
     public GameObject mainMapGeom;
     private Rigidbody _rgbd;
     [HideInInspector] public LayerMask trueLayer;
-    
+    private Vector3 _moveVector;
+    private void Awake()
+    {
+        //declaring instance
+        Instance = this;
+    }
 
     private void Start()
     {
-        canMove = true;
         Time.timeScale = 1;
-        Instance = this;
+        canMove = true;
         _rgbd = GetComponent<Rigidbody>();
         trueLayer = gameObject.layer;
         //mainMapGeom = GameObject.FindWithTag("MainMapGeom");
@@ -71,13 +76,19 @@ public class PlayerController : MonoBehaviour
         Cursor.lockState = CursorLockMode.None;
         Cursor.visible = true;
     }
-    private void Update()
+    private void FixedUpdate()
     {
         //basic movements
+        _moveVector = PlayerMovement();
+    }
+
+    private void Update()
+    {
+        //Ground Check
         CheckGround();
+        PlayerJump(_moveVector);
+        //FPS camera movement
         PlayerLook();
-        PlayerMovement();
-        
         //CheckPauseInput
         EnablePauseScreen();
     }
@@ -87,13 +98,17 @@ public class PlayerController : MonoBehaviour
         if (GetComponent<PlayerHealth>().health > 0 && Input.GetKeyDown(KeyCode.Escape))
         {
             GetComponent<PlayerUIHandler>().TogglePauseScreenUI(Time.timeScale != 0);
+            if (Time.timeScale != 0)
+                PlayerSoundManager.Instance.PlayPauseScreenEnableAudio();
+            else
+                PlayerSoundManager.Instance.PlayPauseScreenDisableAudio();
         }
     }
     
     private void LateUpdate() 
     {
         CustomGravity();
-        CapsuleReadjustment();
+        //CapsuleReadjustment();
     }
 
     #region Basic Movement
@@ -120,7 +135,7 @@ public class PlayerController : MonoBehaviour
         else
             return;
     }
-    private void PlayerMovement()
+    private Vector3 PlayerMovement()
     {   
         var moveVector = transform.TransformDirection(canMove ? new Vector3(_walkingSpeed * Input.GetAxis("Horizontal"), 0f, _walkingSpeed * Input.GetAxis("Vertical")) : Vector3.zero);
         if(_canJump)
@@ -130,14 +145,18 @@ public class PlayerController : MonoBehaviour
             moveVector.z = 0;
             _rgbd.AddForce(moveVector.normalized * _inertiaForce * _airControl_Intensity, ForceMode.Acceleration);
         }
+        return moveVector;
+    }
 
-
+    private void PlayerJump(Vector3 moveVector)
+    {
         if(Input.GetKeyDown(KeyCode.Space) && _canJump)
         {
             _rgbd.AddForce(Vector3.up * _jumpForce, ForceMode.Impulse);
             _rgbd.AddForce(moveVector.normalized * _inertiaForce, ForceMode.Impulse);
         }
     }
+
     #endregion
     #region Custom Realignment
     private void CustomGravity()
@@ -145,11 +164,15 @@ public class PlayerController : MonoBehaviour
         Vector3 gravityVector = -_gravityAcceleration * _gravityScale * Vector3.up;
         _rgbd.AddForce(gravityVector, ForceMode.Acceleration);
     }
-    private void CapsuleReadjustment()
-    {
-        _capsule.transform.localPosition = new Vector3(0,0,0);
-        _capsule.transform.localRotation = Quaternion.identity;
-    }
+    
+    
+    //NOTE: *Already fixed within teleportation process, no need to call anymore*
+    //Retain upright rotation after any rotation changes on main body (after teleporting from tilted surface)
+    // private void CapsuleReadjustment()
+    // {
+    //     _capsule.transform.localPosition = new Vector3(0,0,0);
+    //     _capsule.transform.localRotation = Quaternion.identity;
+    // }
     #endregion
     
 

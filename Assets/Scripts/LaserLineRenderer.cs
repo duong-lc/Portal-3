@@ -115,12 +115,12 @@ public class LaserLineRenderer : MonoBehaviour
             }
             if (col.GetComponent<PlayerController>())
             {
-                CameraShake.instance.Shake(0.1f, 0.3f);
+                CameraShake.instance.Shake(0.1f, 0.3f, true);
             }
         }
     }
 
-
+    
 
     private void OnDrawGizmosSelected()
     {

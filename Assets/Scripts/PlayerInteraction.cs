@@ -65,13 +65,16 @@ public class PlayerInteraction : MonoBehaviour
             {
                 Physics.Raycast(mainCamera.transform.position, mainCamera.transform.forward, out var hit1, _maxDistance);
                 //print($"{hit1.collider.name}");
-                if((hit1.collider == null || hit1.collider.isTrigger)|| (hit1.collider == hit.collider))
+                if ((hit1.collider == null || hit1.collider.isTrigger) || (hit1.collider == hit.collider))
+                {
+                    PlayerSoundManager.Instance.PlayCubeInteractAudio();
                     PickUpObject(_targetObj.GetComponentInChildren<ObjectInteraction>(), false);
-                
+                }
             }
         }
         else
         {
+            PlayerSoundManager.Instance.PlayCubeInteractAudio();
             //Reset collider to re-trigger portal's trigger volume should object be released inside portal
             _currPickedUpObj.GetComponent<Collider>().enabled = false;
             _currPickedUpObj.GetComponent<Collider>().enabled = true;
@@ -84,6 +87,7 @@ public class PlayerInteraction : MonoBehaviour
     {
         if (Physics.Raycast(mainCamera.transform.position, mainCamera.transform.forward, out var hit, _castDistance, _buttonLayer))
         {
+            PlayerSoundManager.Instance.PlaySpawnButtonAudio(hit.collider.transform.position);
             hit.collider.transform.root.GetComponentInChildren<ObjectInteraction>().ResetObjectTransform(false);
         }
     }
@@ -130,6 +134,7 @@ public class PlayerInteraction : MonoBehaviour
         
         isPickingUp = false;
         if (_currPickedUpObj == null) return;
+
         //Return the obj's original after being dropped
         _currPickedUpObj.transform.parent = _originalParent;
         //Release all constraints of rigid body

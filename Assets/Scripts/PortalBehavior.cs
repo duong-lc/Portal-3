@@ -44,6 +44,8 @@ public class PortalBehavior : MonoBehaviour
     ///<summary>Registry of all the portal</summary>
     private PortalRegistry _registry;
 
+    private RaycastHit _objectPortalOn;
+
 
     private void Start()
     {
@@ -90,9 +92,15 @@ public class PortalBehavior : MonoBehaviour
         if (_registry.portalArray[0] == this &&
             _registry.portalArray[1].GetComponent<Collider>().enabled) //portal blue
         {
-            other.gameObject.layer = tpLayer;
+            //other.gameObject.layer = tpLayer;
             //Disable collision between player layer and map geometry layer
-            Physics.IgnoreLayerCollision(tpLayer, PlayerController.Instance.mainMapGeom.layer, true);
+            //Physics.IgnoreLayerCollision(tpLayer, PlayerController.Instance.mainMapGeom.layer, true);
+            foreach (Collider entityCol in other.transform.root.GetComponentsInChildren<Collider>())
+            {
+                print($"{entityCol.name}");
+                if(entityCol!=null && _objectPortalOn.collider!= null)
+                    Physics.IgnoreCollision(entityCol, _objectPortalOn.collider, true);
+            }
             
             //Call teleport method to teleport
             if (!canTeleport) return;
@@ -101,8 +109,13 @@ public class PortalBehavior : MonoBehaviour
         else if (_registry.portalArray[1] == this &&
                  _registry.portalArray[0].GetComponent<Collider>().enabled) //portal red
         {
-            other.gameObject.layer = tpLayer;
-            Physics.IgnoreLayerCollision(tpLayer, PlayerController.Instance.mainMapGeom.layer, true);
+            //other.gameObject.layer = tpLayer;
+            //Physics.IgnoreLayerCollision(tpLayer, PlayerController.Instance.mainMapGeom.layer, true);
+            foreach (Collider entityCol in other.transform.root.GetComponentsInChildren<Collider>())
+            {
+                if(entityCol!=null && _objectPortalOn.collider!= null)
+                    Physics.IgnoreCollision(entityCol, _objectPortalOn.collider, true);
+            }
             if (!canTeleport) return;
             Teleport(1, 0, other, _registry);
         }
@@ -117,14 +130,16 @@ public class PortalBehavior : MonoBehaviour
     private void OnTriggerExit(Collider other)
     {
         if ((!other.CompareTag(PortalObjTag) && !other.CompareTag(PlayerTag))) return;
-        
-        // if(other.GetComponent<ObjectInteraction>())
-        //     print($"{other.GetComponent<ObjectInteraction>().trueLayer.value}");
-        
+
         other.gameObject.layer = other.CompareTag(PortalObjTag) ? other.GetComponent<ObjectInteraction>().trueLayer : other.GetComponent<PlayerController>().trueLayer;
         
         //reenable the collision between player layer and map geometry layer
-        Physics.IgnoreLayerCollision(other.gameObject.layer, PlayerController.Instance.mainMapGeom.layer, false);
+        //Physics.IgnoreLayerCollision(other.gameObject.layer, PlayerController.Instance.mainMapGeom.layer, false);
+        foreach (Collider entityCol in other.transform.root.GetComponentsInChildren<Collider>())
+        {
+            if(entityCol!=null && _objectPortalOn.collider!= null)
+                Physics.IgnoreCollision(entityCol, _objectPortalOn.collider, false);
+        }
     }
 
     /// <summary>
@@ -207,14 +222,17 @@ public class PortalBehavior : MonoBehaviour
                 - One for when the object is on a 90 wall or on the floor
                 - Other is for when the object is on a != 90 degree wall
             */
-            if ((dotValueEnd > .99f || dotValueEnd < -.99f) ||
-                (dotValueEnd < .01f && dotValueEnd > -.01f)) //on 90 degree wall or on floor respectively
+            if ((dotValueEnd > .99f || dotValueEnd < -.99f) 
+                || (dotValueEnd < .01f && dotValueEnd > -.01f)
+                ) //on 90 degree wall or on floor respectively
             {
                 SetVelocityUpdateTP(beginTransform, endTransform, col);
             }
             else //if on a tilted surface
             {
+                //PlayerController.Instance.ForceSetPlayerMovement(0f, 0f);
                 float velocityMagnitude = col.transform.GetComponent<Rigidbody>().velocity.magnitude;
+                
                 //this section to find direction is relatively dumb, i should go to programmer's hell for this line
                 Vector3 velocityDir = ((endTransform.position + -endTransform.forward * 3) - endTransform.position)
                     .normalized;
@@ -226,10 +244,14 @@ public class PortalBehavior : MonoBehaviour
                 //and properly guide player around the mechanic in terms of manipulating air strafing. 
                 if (Input.GetAxis("Vertical") > .1f ||
                     Input.GetAxis("Vertical") < -.1f) //if player holding down w or s key while moving through
+                {
                     col.transform.GetComponent<Rigidbody>().velocity = (velocityDir * velocityMagnitude * 1.2f);
+                    
+                }
                 else
-                    col.transform.GetComponent<Rigidbody>().AddForce(velocityDir * velocityMagnitude * 1.6f,
-                        ForceMode.VelocityChange);
+                {
+                    col.transform.GetComponent<Rigidbody>().AddForce(velocityDir * velocityMagnitude * 1.6f, ForceMode.VelocityChange);
+                }
             }
 
             var temp = col.GetComponent<PlayerInteraction>();
@@ -353,10 +375,11 @@ public class PortalBehavior : MonoBehaviour
     ///         portal.<br/>
     ///         Checks by calling CheckPerimeter() and CheckNormalOverlap() 
     /// </para></summary>
-    public void AttemptPlacingPortal()
+    public void AttemptPlacingPortal(RaycastHit hit)
     {
         if(CheckPerimeter() && CheckNormalOverlap())//if the portal is qualified to be placed
         {
+            _objectPortalOn = hit;
             //assigning portal transform if edge checker valid
             transform.position = edgeChecker.transform.position;  
             transform.rotation = edgeChecker.transform.rotation;
@@ -372,7 +395,8 @@ public class PortalBehavior : MonoBehaviour
 
 
         }else{//if the portal can't be placed, shake screen to warn
-            CameraShake.instance.Shake(0.2f,0.1f);
+            _objectPortalOn = new RaycastHit();
+            CameraShake.instance.Shake(0.2f,0.1f, false);
         }
     }
     public bool CheckPerimeter()

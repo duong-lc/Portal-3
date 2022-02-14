@@ -82,6 +82,9 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 0
   parentDropper: {fileID: 0}
+  _fadeTimer: 2
+  _soundCubeDestroy: {fileID: 8300000, guid: da417f4ac7118bf428fe8bfd103da5d5, type: 3}
+  _soundCubeRespawn: {fileID: 8300000, guid: c9f5ba292d65c7549864786d35d153f8, type: 3}
 --- !u!114 &7417899549105407354
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -318,7 +321,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _objectSpawnTransform: {fileID: 7417899550143005347}
-  _fadeTimer: 1
 --- !u!1 &7417899550143005344
 GameObject:
   m_ObjectHideFlags: 0

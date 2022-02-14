@@ -23,10 +23,12 @@ public class CameraShake : MonoBehaviour
         _timeAtLastFrame = _timeAtCurrentFrame; 
     }
 
-    public void Shake (float duration, float amount)
+    public void Shake (float duration, float amount, bool isTakingDamage)
     {
         if (_isShaking || !PlayerController.Instance.canMove) return;
         instance._originalPos = instance.gameObject.transform.localPosition;
+        if(isTakingDamage)
+            PlayerSoundManager.Instance.PlayPlayerDamageAudio();
         instance.StopAllCoroutines();
         instance.StartCoroutine(instance.CamShake(duration, amount));
     }

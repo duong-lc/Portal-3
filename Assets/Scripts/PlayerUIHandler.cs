@@ -16,6 +16,8 @@ public class PlayerUIHandler : MonoBehaviour
     public void Start()
     {
         _controller = PlayerController.Instance;
+        if(_controller == null)
+            print($"xd");
         TogglePauseScreenUI(false);
         ToggleDeathScreenUI(false);
         ToggleWinScreenUI(false);
@@ -43,6 +45,8 @@ public class PlayerUIHandler : MonoBehaviour
         _controller.canMove = !isOn;
         ToggleMouseCursorOnScreen(isOn);
         _pauseScreenObject.SetActive(isOn);
+        
+        
     }
 
     public void ToggleWinScreenUI(bool isOn)
@@ -52,6 +56,9 @@ public class PlayerUIHandler : MonoBehaviour
         _controller.canMove = !isOn;
         ToggleMouseCursorOnScreen(isOn);
         _winScreenObject.SetActive(isOn);
+        
+        if(isOn)
+            PlayerSoundManager.Instance.PlayPlayerWinAudio();
     }
 
     public void ToggleMouseCursorOnScreen(bool isOn)

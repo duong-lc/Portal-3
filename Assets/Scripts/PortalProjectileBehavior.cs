@@ -28,14 +28,30 @@ public class PortalProjectileBehavior : MonoBehaviour
 
     public void OnTouchSurface(PortalPlacement placementScript, RaycastHit hit)
     {
-        if (_ignoreLayerArray.Any(layer => hit.collider.gameObject.layer == layer) || (hit.collider.isTrigger && hit.collider.CompareTag("Portal")))
+        //If the Projectile touches any collider surfaces that isn't fit to spawn portal on
+        bool condition1 = false;
+        foreach (var layer in _ignoreLayerArray)
         {
-            //print($"{hit.collider.gameObject.layer}");
+            if (hit.collider != null)
+            {
+                if (hit.collider.gameObject.layer != layer) continue;
+                condition1 = true;
+                break;
+            }
+            else
+            {
+                condition1 = true;
+                break;
+            }
+        }
+        
+        if (condition1)
+        {
             SpawnParticle();
             Destroy(gameObject);
             return;
         }
-       
+        //If projectile touches valid portalable surface.
         placementScript.CreatePortal(portalID, hit);
         SpawnParticle();
         Destroy(gameObject);
@@ -46,10 +62,8 @@ public class PortalProjectileBehavior : MonoBehaviour
         //print($"{other.gameObject.name}");
         if (other.gameObject.GetComponent<Collider>().isTrigger) return;
         if (other == hitData.collider) return;
-        SpawnParticle();
-        Destroy(gameObject);
-        //spawn a cool hit particle fx
-        //destroy self
+        SpawnParticle();//spawn a cool hit particle fx
+        Destroy(gameObject);  //destroy self
     }
 
     private void SpawnParticle()

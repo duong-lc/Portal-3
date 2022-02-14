@@ -9,9 +9,6 @@ using UnityEngine.UI;
 
 public class PlayerHealth : MonoBehaviour
 {
-
-    
-    
     [Header("Other Health Parameters")]
     [SerializeField] private float _maxHealth = 100;
     public float health = 100;
@@ -27,16 +24,20 @@ public class PlayerHealth : MonoBehaviour
     [Header("Turret Damage Parameters")]
     public float turretDamage = 5f;
     public int turretDamageMultiplier = 0;
-    public static PlayerHealth instance;
+    public static PlayerHealth Instance;
 
     [Header("TMP Parameters")] 
     [SerializeField] private TMP_Text _healthText;
-    
+
+    private void Awake()
+    {
+        Instance = this;
+    }
+
     private void Start()
     {
 
         _healthText.text = health.ToString(CultureInfo.CurrentCulture);
-        instance = this;
         health = _maxHealth;
         StartCoroutine(TurretDamageCheckerRoutine());
     }
@@ -70,9 +71,10 @@ public class PlayerHealth : MonoBehaviour
         {
             StopCoroutine(HealingRoutine());
             StopCoroutine(HealingCountDownRoutine());
+            
             _runOnce = false;
             _damageTakenTime = Time.time;
-            CameraShake.instance.Shake(0.15f, 0.3f);
+            CameraShake.instance.Shake(0.15f, 0.3f, true);
         }
 
         //apply damage
@@ -85,6 +87,7 @@ public class PlayerHealth : MonoBehaviour
 
         if (health <= 0)
         {
+            PlayerSoundManager.Instance.PlayPlayerDeathAudio();
             GetComponent<PlayerUIHandler>().ToggleDeathScreenUI(true);
 
         }

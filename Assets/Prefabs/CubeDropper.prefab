@@ -211,6 +211,7 @@ MonoBehaviour:
     m_Bits: 0
   parentDropper: {fileID: 0}
   _fadeTimer: 2
+  _soundCubeDestroy: {fileID: 8300000, guid: da417f4ac7118bf428fe8bfd103da5d5, type: 3}
 --- !u!1 &4187617967749469823
 GameObject:
   m_ObjectHideFlags: 0

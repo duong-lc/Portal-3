@@ -64,10 +64,12 @@
      <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\Benchmark01_UGUI.cs" />
      <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\TMP_TextSelector_A.cs" />
      <Compile Include="Assets\Scripts\ActivationButtonGuideNodes.cs" />
+     <Compile Include="Assets\Scripts\UIWinScreen.cs" />
      <Compile Include="Assets\Scripts\PortalPlacement.cs" />
      <Compile Include="Assets\Scripts\ObjectDropperInteraction.cs" />
      <Compile Include="Assets\Scripts\ObjectInteraction.cs" />
      <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\VertexShakeA.cs" />
+     <Compile Include="Assets\Scripts\ExitDoor.cs" />
      <Compile Include="Assets\Scripts\PlayerInteraction.cs" />
      <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\Benchmark04.cs" />
      <Compile Include="Assets\Scripts\WeaponMovement.cs" />
@@ -95,6 +97,7 @@
      <Compile Include="Assets\Scripts\ActivationButtonInteraction.cs" />
      <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\Benchmark03.cs" />
      <Compile Include="Assets\Scripts\PortalProjectileBehavior.cs" />
+     <Compile Include="Assets\Scripts\PlayerSoundManager.cs" />
      <Compile Include="Assets\Scripts\TurretFOVBehavior.cs" />
      <Compile Include="Assets\Scripts\ObjectLaserInteraction.cs" />
      <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\TMP_FrameRateCounter.cs" />
@@ -115,8 +118,6 @@
      <Compile Include="Assets\Scripts\PortalRegistry.cs" />
      <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\Benchmark01.cs" />
      <Compile Include="Assets\Scripts\TurretFOVEditor.cs" />
-     <Compile Include="Assets\Scripts\ExitDoor.cs" />
-     <Compile Include="Assets\Scripts\UIWInScreen.cs" />
      <None Include="Assets\TextMesh Pro\Shaders\TMPro.cginc" />
      <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF-Mobile Overlay.shader" />
      <None Include="Assets\TextMesh Pro\Shaders\TMP_Bitmap.shader" />

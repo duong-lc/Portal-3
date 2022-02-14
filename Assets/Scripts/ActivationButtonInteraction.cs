@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Diagnostics.Contracts;
 using System.Numerics;
+using System.Runtime.CompilerServices;
 using UnityEngine;
 using UnityEngine.Animations;
 using UnityEngine.UIElements;
@@ -34,7 +35,7 @@ public class ActivationButtonInteraction : MonoBehaviour
 
     private ActivationButtonGuideNodes _guideNodes;
     public bool isEnabled = false;
-    
+
 
     private void Start()
     {
@@ -69,8 +70,8 @@ public class ActivationButtonInteraction : MonoBehaviour
         else
             return;
         
-        print($"activate");
-        
+        //print($"activate");
+        PlayerSoundManager.Instance.PlayBigButtonAudio(transform.position);
         _guideNodes.ToggleGuideNodes(true);
         if(_moveAToBTrue != null) StopCoroutine(_moveAToBTrue);
         switch (activationType)
@@ -120,6 +121,7 @@ public class ActivationButtonInteraction : MonoBehaviour
         if(!_colliderList.Contains(other)) {_colliderList.Add(other);}
         if(_colliderList.Count > 1) {return;}
         
+        PlayerSoundManager.Instance.PlayBigButtonAudio(transform.position);
         buttonObject.GetComponent<Renderer>().material = activationMat;
         _guideNodes.ToggleGuideNodes(true);
         if(_moveAToBTrue != null) StopCoroutine(_moveAToBTrue);

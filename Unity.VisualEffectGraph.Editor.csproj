@@ -418,10 +418,10 @@
      <Compile Include="Library\PackageCache\com.unity.visualeffectgraph@10.6.0\Editor\Models\Blocks\Implementations\Velocity\VelocityTangent.cs" />
      <Compile Include="Library\PackageCache\com.unity.visualeffectgraph@10.6.0\Editor\Models\Slots\Implementations\VFXSlotTextureCubeArray.cs" />
      <Compile Include="Library\PackageCache\com.unity.visualeffectgraph@10.6.0\Editor\Utilities\DotGraph\DotGraph.cs" />
-     <Compile Include="Library\PackageCache\com.unity.visualeffectgraph@10.6.0\Editor\Models\Blocks\Implementations\Forces\ForceHelper.cs" />
-     <Compile Include="Library\PackageCache\com.unity.visualeffectgraph@10.6.0\Editor\Controls\VFXEnumValuePopup.cs" />
-     <Compile Include="Library\PackageCache\com.unity.visualeffectgraph@10.6.0\Editor\Inspector\VFXContextEditor.cs" />
      <Compile Include="Library\PackageCache\com.unity.visualeffectgraph@10.6.0\Editor\Expressions\VFXExpressionSampleTextureCube.cs" />
+     <Compile Include="Library\PackageCache\com.unity.visualeffectgraph@10.6.0\Editor\Controls\VFXEnumValuePopup.cs" />
+     <Compile Include="Library\PackageCache\com.unity.visualeffectgraph@10.6.0\Editor\Models\Blocks\Implementations\Forces\ForceHelper.cs" />
+     <Compile Include="Library\PackageCache\com.unity.visualeffectgraph@10.6.0\Editor\Inspector\VFXContextEditor.cs" />
      <Compile Include="Library\PackageCache\com.unity.visualeffectgraph@10.6.0\Editor\Models\Operators\Implementations\MeshVertexCount.cs" />
      <Compile Include="Library\PackageCache\com.unity.visualeffectgraph@10.6.0\Editor\Models\Operators\Implementations\Step.cs" />
      <Compile Include="Library\PackageCache\com.unity.visualeffectgraph@10.6.0\Editor\Compiler\VFXCodeGenerator.cs" />
