@@ -76,8 +76,12 @@ public class PlayerInteraction : MonoBehaviour
         {
             PlayerSoundManager.Instance.PlayCubeInteractAudio();
             //Reset collider to re-trigger portal's trigger volume should object be released inside portal
-            _currPickedUpObj.GetComponent<Collider>().enabled = false;
-            _currPickedUpObj.GetComponent<Collider>().enabled = true;
+            PortalBehavior[] arr = PortalRegistry.Instance.portalArray;
+            foreach (PortalBehavior portal in arr)
+            {
+                portal.transform.root.GetComponentInChildren<Collider>().enabled = false;
+                portal.transform.root.GetComponentInChildren<Collider>().enabled = true;
+            }
             //Break the connection
             BreakConnection(_currPickedUpObj.GetComponent<ObjectInteraction>()); 
             //dropping object while portaling will now drop the obj on the other side of the portal and not fall into the abyss 
@@ -88,7 +92,17 @@ public class PlayerInteraction : MonoBehaviour
         if (Physics.Raycast(mainCamera.transform.position, mainCamera.transform.forward, out var hit, _castDistance, _buttonLayer))
         {
             PlayerSoundManager.Instance.PlaySpawnButtonAudio(hit.collider.transform.position);
-            hit.collider.transform.root.GetComponentInChildren<ObjectInteraction>().ResetObjectTransform(false);
+
+            if (hit.collider.transform.root.GetComponentInChildren<ActivationButtonInteraction>())
+            {
+                print($"samy smt");
+                hit.collider.GetComponentInChildren<ActivationButtonInteraction>().EnableActivation();
+            }
+            else
+            {
+                hit.collider.transform.root.GetComponentInChildren<ObjectInteraction>().ResetObjectTransform(false);
+            }
+            
         }
     }
     

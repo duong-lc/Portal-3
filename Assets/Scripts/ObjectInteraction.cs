@@ -53,7 +53,17 @@ public class ObjectInteraction : MonoBehaviour
         
         if(this == PlayerController.Instance.gameObject.GetComponent<PlayerInteraction>().GetCurrPickedUpObj())
             PlayerController.Instance.gameObject.GetComponent<PlayerInteraction>().BreakConnection(this);
-        if (GetComponent<TurretBehavior>()) { GetComponent<TurretBehavior>().PlayAudioDeath(); }
+        if (GetComponent<TurretBehavior>())
+        {
+            if (toDestroy)
+            {
+                print($"lol");
+                GetComponent<TurretFOVBehavior>().StopCoroutine(GetComponent<TurretFOVBehavior>().FOVRoutine());
+                GetComponent<TurretFOVBehavior>().enabled = false;
+                GetComponent<TurretBehavior>().enabled = false;
+            }
+            GetComponent<TurretBehavior>().PlayAudioDeath();
+        }
         else
         {
             PlayerSoundManager.Instance.PlayCubeDestroyAudio(transform.position);

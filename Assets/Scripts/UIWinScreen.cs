@@ -8,7 +8,7 @@ public class UIWinScreen : MonoBehaviour
     public void NextLevel()
     {
         PlayerSoundManager.Instance.PlayHudButtonSelectAudio();
-        if(SceneManager.GetActiveScene().name != "Level 5")
+        if(SceneManager.GetActiveScene().name != "Level 3")
             SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
         else
             SceneManager.LoadScene("Level Selection");

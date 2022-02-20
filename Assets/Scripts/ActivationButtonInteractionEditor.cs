@@ -22,7 +22,7 @@ public class ActivationButtonInteractionEditor : Editor
         switch (buttonScript.activationType)
         {
             case ActivationButtonInteraction.ActivationType.MoveAToB:
-                EditorGUILayout.Space(2);
+                EditorGUILayout.Space(5);
                 buttonScript.startPos =  EditorGUILayout.Vector3Field("Starting Position: ", buttonScript.startPos);
                 buttonScript.endPos = EditorGUILayout.Vector3Field("Ending Position: ", buttonScript.endPos);
                 buttonScript.timeFromAToB =
@@ -33,6 +33,19 @@ public class ActivationButtonInteractionEditor : Editor
                 
                 break;
             case ActivationButtonInteraction.ActivationType.PingPongAToB:
+                break;
+            case ActivationButtonInteraction.ActivationType.ToggleForceField:
+                EditorGUILayout.Space(5);
+                buttonScript.objectToMove = (GameObject)EditorGUILayout.ObjectField(
+                    "Force Field to Toggle: ", buttonScript.objectToMove, typeof(GameObject), true);
+                buttonScript.hasTimer = (bool) EditorGUILayout.Toggle("Has Timer", buttonScript.hasTimer);
+
+                if (buttonScript.hasTimer)
+                {
+                    buttonScript.countdownAmount = EditorGUILayout.Slider(
+                        "Countdown Timer", buttonScript.countdownAmount, 1, 5f);
+                    EditorGUILayout.Space(2);
+                }
                 break;
             default:
                 break;

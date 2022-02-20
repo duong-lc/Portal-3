@@ -133,4 +133,10 @@ public class TurretFOVBehavior : MonoBehaviour
     //     Gizmos.color = Color.red;
     //     Gizmos.DrawRay(transform.position, Vector3.down * 0.3f );
     // }
+
+    private void OnDestroy()
+    {
+        if(canSeePlayer)
+            PlayerHealth.Instance.turretDamageMultiplier--;
+    }
 }

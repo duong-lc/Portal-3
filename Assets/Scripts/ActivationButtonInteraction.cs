@@ -17,7 +17,8 @@ public class ActivationButtonInteraction : MonoBehaviour
     public enum ActivationType
     {
         MoveAToB,
-        PingPongAToB
+        PingPongAToB,
+        ToggleForceField
     }
 
     private IEnumerator _moveAToBFalse, _moveAToBTrue;
@@ -33,15 +34,19 @@ public class ActivationButtonInteraction : MonoBehaviour
     public GameObject objectToMove;
     public float timeFromAToB;
 
-    private ActivationButtonGuideNodes _guideNodes;
+    private ActivationButtonGuideNodes[] _guideNodesArr;
     public bool isEnabled = false;
+
+    public bool hasTimer;
+    public float countdownAmount;
+    private bool _isActivated = false;
 
 
     private void Start()
     {
-        if(!gameObject.CompareTag("LaserReceiver"))
+        if(!gameObject.CompareTag("LaserReceiver") && !gameObject.CompareTag("DropperButton"))
             _unactivatedMat = buttonObject.GetComponent<Renderer>().material;
-        _guideNodes = GetComponent<ActivationButtonGuideNodes>();
+        _guideNodesArr = GetComponents<ActivationButtonGuideNodes>();
 
         //StartCoroutine(CheckIfActivatedRoutine());
         //_moveAToBTrue = MoveAToB(Time.time, true);
@@ -72,7 +77,8 @@ public class ActivationButtonInteraction : MonoBehaviour
         
         //print($"activate");
         PlayerSoundManager.Instance.PlayBigButtonAudio(transform.position);
-        _guideNodes.ToggleGuideNodes(true);
+        foreach(ActivationButtonGuideNodes t in _guideNodesArr)
+            t.ToggleGuideNodes(true);
         if(_moveAToBTrue != null) StopCoroutine(_moveAToBTrue);
         switch (activationType)
         {
@@ -81,6 +87,10 @@ public class ActivationButtonInteraction : MonoBehaviour
                 StartCoroutine(_moveAToBFalse);
                 break;
             case ActivationType.PingPongAToB:
+                break;
+            case ActivationType.ToggleForceField:
+                _isActivated = true;
+                ToggleForceField(true);
                 break;
             default:
                 break;
@@ -99,7 +109,8 @@ public class ActivationButtonInteraction : MonoBehaviour
         
         print($"not activate");
         
-        _guideNodes.ToggleGuideNodes(false);
+        foreach(ActivationButtonGuideNodes t in _guideNodesArr)
+            t.ToggleGuideNodes(false);
         if(_moveAToBFalse != null) StopCoroutine(_moveAToBFalse);
         switch (activationType)
         {
@@ -109,12 +120,16 @@ public class ActivationButtonInteraction : MonoBehaviour
                 break;
             case ActivationType.PingPongAToB:
                 break;
+            case ActivationType.ToggleForceField:
+                _isActivated = false;
+                ToggleForceField(false);
+                break;
             default:
                 break;
         }
     }
     
-    public void EnableActivation(Collider other)
+    private void EnableActivation(Collider other)
     {
         if (!other.GetComponent<ObjectInteraction>() && !other.GetComponent<PlayerController>()) return;
         if (objectToMove.transform.position == endPos) return;
@@ -123,7 +138,8 @@ public class ActivationButtonInteraction : MonoBehaviour
         
         PlayerSoundManager.Instance.PlayBigButtonAudio(transform.position);
         buttonObject.GetComponent<Renderer>().material = activationMat;
-        _guideNodes.ToggleGuideNodes(true);
+        foreach(ActivationButtonGuideNodes t in _guideNodesArr)
+            t.ToggleGuideNodes(true);
         if(_moveAToBTrue != null) StopCoroutine(_moveAToBTrue);
         switch (activationType)
         {
@@ -133,19 +149,25 @@ public class ActivationButtonInteraction : MonoBehaviour
                 break;
             case ActivationType.PingPongAToB:
                 break;
+            case ActivationType.ToggleForceField:
+                print($"enable");
+                _isActivated = true;
+                ToggleForceField(true);
+                break;
             default:
                 break;
         }
     }
-    public void DisableActivation(Collider other)
+    private void DisableActivation(Collider other)
     {
         if (!other.GetComponent<ObjectInteraction>() && !other.GetComponent<PlayerController>()) return;
         if (_colliderList.Contains(other)) { _colliderList.Remove(other);}
         if (_colliderList.Count > 0) { return;}
 
-        _guideNodes.ToggleGuideNodes(false);
+        foreach(ActivationButtonGuideNodes t in _guideNodesArr)
+            t.ToggleGuideNodes(false);
         buttonObject.GetComponent<Renderer>().material = _unactivatedMat;
-        StopCoroutine(_moveAToBFalse);
+        if(_moveAToBFalse != null) StopCoroutine(_moveAToBFalse);
         switch (activationType)
         {
             case ActivationType.MoveAToB:
@@ -154,9 +176,39 @@ public class ActivationButtonInteraction : MonoBehaviour
                 break;
             case ActivationType.PingPongAToB:
                 break;
+            case ActivationType.ToggleForceField:
+                print($"disable");
+                ToggleForceField(false);
+                _isActivated = false;
+                break;
             default:
                 break;
         }
+    }
+
+    private void ToggleForceField(bool isTurnOn)
+    {
+        if (isTurnOn && !_isActivated) return;
+        
+        objectToMove.SetActive(!objectToMove.activeInHierarchy);
+        
+        if (!isTurnOn) return;
+        if (!hasTimer) return;
+        StartCoroutine(TickDownRoutine());
+    }
+
+    private IEnumerator TickDownRoutine()
+    {
+        float counter = countdownAmount;
+        while (counter > 0)
+        {
+            print($"{counter}");
+            counter--;
+            PlayerSoundManager.Instance.PlayTickAudio();
+            yield return new WaitForSeconds(1f);
+        }
+        DisableActivation();
+
     }
     
     private IEnumerator MoveAToB(float startTime, bool isReverted)

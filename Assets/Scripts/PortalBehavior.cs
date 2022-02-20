@@ -45,6 +45,7 @@ public class PortalBehavior : MonoBehaviour
     private PortalRegistry _registry;
 
     private RaycastHit _objectPortalOn;
+    public bool IsActive { private set; get;}
 
 
     private void Start()
@@ -341,6 +342,7 @@ public class PortalBehavior : MonoBehaviour
 
     public void TogglePortal(bool toggleState)
     {
+        IsActive = toggleState;
         _outline.SetActive(toggleState);    
         _viewport.SetActive(toggleState);
         if (toggleState)

@@ -52,28 +52,30 @@ public class PortalRegistry : MonoBehaviour
             if (registryColList.Contains(obj.GetComponent<Collider>()))
             {
                 obj.GetComponent<ActivationButtonInteraction>().EnableActivation();
-            }else
+            }
+            else
                 obj.GetComponent<ActivationButtonInteraction>().DisableActivation();
         }
-
-        for (int i = 0; i <= portalArray.Length; i++)
+        //clear the list after each iteration so the next check order have a fresh list 
+        registryColList = new List<Collider>();
+    }
+    
+    private void Update()
+    {
+        for (int i = 0; i < portalArray.Length; i++)
         {
-            if (i == portalArray.Length)
-            {
-                DisableLaserOnAllPortal();
-                break;
-            }
+            
             if (registryColList.Contains(portalArray[i].gameObject.GetComponent<Collider>()))
             {
                 EnableLaserOnPortal(portalArray[i]);
                 break;
             }
-            
-            
+            if (i == portalArray.Length-1)
+            {
+                DisableLaserOnAllPortal();
+                //continue;
+            }
         }
-        
-        //clear the list after each iteration so the next check order have a fresh list 
-        registryColList = new List<Collider>();
     }
 
     public bool GetIsAnyOnCoolDown()

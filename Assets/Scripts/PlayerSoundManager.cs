@@ -14,7 +14,7 @@ public class PlayerSoundManager : MonoBehaviour
     [SerializeField] private AudioClip _soundSpawnButtonInteract;//buttons/button3
     [SerializeField] private AudioClip _soundCubeInteract;//buttons/lightswitch2
     [SerializeField] private AudioClip _soundBigButtonActivation;//plats/elevbell1
-   
+    [SerializeField] private AudioClip _soundButtonTimerTick;//UI/buttonclick
     
     [Header("Player Sounds")]
     [SerializeField] private AudioClip _soundPlayerDeath; //common/bodysplat
@@ -59,6 +59,11 @@ public class PlayerSoundManager : MonoBehaviour
     public void PlayBigButtonAudio(Vector3 pos)
     {
         AudioSource.PlayClipAtPoint(_soundBigButtonActivation, pos);
+    }
+    
+    public void PlayTickAudio()
+    {
+        _audioSource.PlayOneShot(_soundButtonTimerTick, 0.4f);
     }
 
     public void PlayPlayerDeathAudio()
